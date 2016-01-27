@@ -1,0 +1,31 @@
+{
+  "name": "superunvait",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wailorman/superunvait.git"
+  },
+  "author": "wailorman@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wailorman/superunvait/issues"
+  },
+  "homepage": "https://github.com/wailorman/superunvait",
+  "dependencies": {
+    "jquery": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.2.1",
+    "babel-plugin-transform-runtime": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+
+    "babel-loader": "^6.2.0",
+    "webpack": "^1.12.9"
+  }
+}
