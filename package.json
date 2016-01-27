@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:www:unit": "node ./node_modules/.bin/mocha --harmony --require ./public/test/requirements/mocha.js ./public/test/unit/**/*.js",
+    "test:www:integration": "node ./node_modules/.bin/karma start",
+
+    "serve:webpack": "node ./node_modules/.bin/webpack-dev-server --content-base public/dist/",
+    "serve:browser-sync": "node ./node_modules/.bin/browser-sync start --server --files \"public/dist/*\"",
+
+    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch"
   },
   "repository": {
     "type": "git",
