@@ -14,7 +14,7 @@ setInterval(function () {
     if ($(controlPanelSelector).length == 0) {
 
         // inject control panel
-        $('#hook_Form_OnSiteNowUsersRBFormForm').append('<div id="inviterControlPanel"><center><button id="gotoBabyli">Перейти к бабулям (^.^)</button></center><br><center><button id="sk_auto">НАЧАТЬ UHBAUTUNG!</button><br><br><span>Пригласили: <span id="invitedDiv">0</span></span></center></div>');
+        $('#hook_Form_OnSiteNowUsersRBFormForm').append('<div id="inviterControlPanel"><center><button id="gotoBabyli">Перейти к бабулям ----(^.^)</button></center><br><center><button id="sk_auto">НАЧАТЬ UHBAUTUNG!</button><br><br><span>Пригласили: <span id="invitedDiv">0</span></span></center></div>');
 
         $('#gotoBabyli').click(function () {
             // set filter to target audience (grannies)

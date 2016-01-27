@@ -2,10 +2,14 @@ const NODE_ENV = process.env.NODE_ENV == 'production' ? 'production' : 'developm
 var webpack = require('webpack');
 
 var webpackConfig = {
-    entry: './public/src/main.js',
+    entry: {
+        'page_script': './public/src/page_script.js',
+        'content_script': './public/src/content_script.js'
+    },
     output: {
         path: __dirname + '/public/dist',
-        filename: './bundle.js'
+        filename: '[name].build.js',
+        library: "[name]"
     },
 
     module: {
@@ -16,7 +20,7 @@ var webpackConfig = {
                 exclude: /(node_modules)/,
                 loader: 'babel',
                 query: {
-                    presets: ['es2015', 'react'],
+                    presets: ['es2015'],
                     plugins: ['transform-runtime']
                 }
             }
@@ -26,7 +30,7 @@ var webpackConfig = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            '$': 'jquery'
+            '$': 'jquery/dist/jquery.min'
         })
     ]
 };

@@ -17,16 +17,14 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*/*"
+        "*://ok.ru/online"
       ],
       "js": [
-        "jq.js",
-        "content_script.js"
+        "content_script.build.js"
       ]
     }
   ],
   "web_accessible_resources": [
-    "jq.js",
-    "pagescript.js"
+    "page_script.build.js"
   ]
 }
