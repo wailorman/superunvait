@@ -1,3 +1,5 @@
+import '../vendor/jquery-comments'
+
 let isInvitingProceed = false;
 let invitedCounter = 0;
 
@@ -76,6 +78,7 @@ function startInviting() {
                 return userAvatar;
             };
 
+            let userDataFromComments = JSON.parse( userContainer.find('.hookData').comments().html() );
 
             let userAvatar = getUserAvatarByWrapper(userContainer);
 
