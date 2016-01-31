@@ -1,4 +1,3 @@
 .idea/
 node_modules/
-public/dist/content_script.build.js
-public/dist/page_script.build.js
+public/dist/*.build.js
