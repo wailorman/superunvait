@@ -4,7 +4,8 @@ var webpack = require('webpack');
 var webpackConfig = {
     entry: {
         'page_script': './public/src/page_script.js',
-        'content_script': './public/src/content_script.js'
+        'content_script': './public/src/content_script.js',
+        'background': './public/src/background.js'
     },
     output: {
         path: __dirname + '/public/dist',
