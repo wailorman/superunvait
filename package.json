@@ -24,7 +24,8 @@
   "homepage": "https://github.com/wailorman/superunvait",
   "dependencies": {
     "jquery": "^2.2.0",
-    "lodash": "^4.1.0"
+    "lodash": "^4.1.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",

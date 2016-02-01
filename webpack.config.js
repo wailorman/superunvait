@@ -31,7 +31,9 @@ var webpackConfig = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            '$': 'jquery/dist/jquery.min'
+            '$': 'jquery/dist/jquery.min',
+            '_': 'lodash',
+            'Q': 'q'
         })
     ]
 };
