@@ -63,31 +63,45 @@ var likes = {};
 const postSelector = '.feed.h-mod';
 const likeCounterSelector = '.post_like_count';
 
-$(postSelector).each(function(i, elem){
-    var id = elem.id;
-    var likesAmount = $(elem).find(likeCounterSelector).html();
-    likes[id] = parseInt(likesAmount);
+var likesArray = [],
+    likesAmount;
+
+$('.feed.h-mod .controls-list_lk .widget_count.js-count').each(function (i, elem) {
+
+    likesAmount = parseInt($(elem).html());
+    likesArray.push(likesAmount);
+
 });
 
-var likesArray = _.values(likes);
+//$(postSelector).each(function(i, elem){
+//    var id = elem.id;
+//    var likesAmount = $(elem).find(likeCounterSelector).html();
+//    likes[id] = parseInt(likesAmount);
+//});
+
+//var likesArray = _.values(likes);
 var sortedLikes = _.sortBy(likesArray);
-var splitedLikes = splitArray(sortedLikes, 10);
+//var splitedLikes = splitArray(sortedLikes, 10);
 
 var likesRanges = splitArrayToNRanges(sortedLikes, 10);
 
 console.log(likesRanges);
 
-$(postSelector).each(function(i, elem){
-    var id = elem.id;
-    var likesAmount = $(elem).find(likeCounterSelector).html();
+var likesAmount2, postScore, bgColor;
 
-    var postScore = getScoreByLikesAmountAndRanges( likesAmount, likesRanges );
+$('.feed.h-mod').each(function(i, elem){
+    likesAmount2 = parseInt($(elem).find('.controls-list_lk .widget_count.js-count').html());
+    postScore = getScoreByLikesAmountAndRanges(likesAmount2, likesRanges);
 
     // console.log(`${likesAmount}\n
     //              ${postScore}\n
     //              ---------------`);
 
-    $(elem).css({'opacity': `${postScore*0.5})`});
+    bgColor = `rgba(255,0,0,${postScore})`;
+
+    //debugger;
+
+    $(elem).css({'background-color': bgColor});
 });
 
 // var likesRanges = splitedLikes.map(function(likesRange){
