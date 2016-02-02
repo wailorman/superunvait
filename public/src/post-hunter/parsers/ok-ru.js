@@ -1,13 +1,13 @@
-import { getScoreByLikesAmountAndRanges } from '../sorting'
+import { getScoreByLikesAmountAndRanges, splitArrayToNRanges } from '../sorting'
 
-const LIKES_ELEM_SELECTOR = '.feed.h-mod .controls-list_lk .widget_count.js-count';
-const POSTS_SELECTOR = '.feed.h-mod';
+export const LIKES_ELEM_SELECTOR = '.feed.h-mod .controls-list_lk .widget_count.js-count';
+export const POSTS_SELECTOR = '.feed.h-mod';
+export const NUMBER_OF_RANGES_TO_SPLIT = 10;
 
 let likesArray,
     likesAmount;
 
 export function getArrayOfLikes() {
-    const deferred = Q.defer();
 
     likesArray = [];
 
@@ -18,13 +18,10 @@ export function getArrayOfLikes() {
 
     });
 
-    deferred.resolve(likesArray);
-
-    return deferred.promise;
+    return likesArray;
 }
 
 export function paintPosts(likesRanges) {
-    const deferred = Q.defer();
 
     let likesAmount, postScore, bgColor;
 
@@ -37,9 +34,6 @@ export function paintPosts(likesRanges) {
         $(elem).css({'background-color': bgColor});
     });
 
-    deferred.resolve();
-
-    return deferred.promise;
 }
 
 // ok ibb likes: [4,1,7,15,5,29,10,4,4,11,9,8,12,20,9,11,11,3,11,15,4,48,31,17,4,5,38,10,3,25,29,17,12,8,8,8,17,5,36,18,9,35,21,68,19,27,6,7,6,3,1,2,2,1,55,44,53,60,60,49,37,40,31,56,58,65,66,37,29,35,21,59,105,15,131,63,12,67,87,39,105,29,26,11,47,14,54,58,37,27,15,15,27,155,28,43,46,20,46,86,18,19,48,15,66,27,8,22,13,35,59,52,13,39,20,32,47,23,45,56,70,54,26,17,24,69,18,20,32,37,42,13,52,13,7,23,16,27,18,26]
