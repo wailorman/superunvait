@@ -11,7 +11,9 @@
     "serve:browser-sync": "node ./node_modules/.bin/browser-sync start --server --files \"public/dist/*\"",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch",
-    "start:dev": "node node_modules/babel-cli/bin/babel-node.js app.js",
+    "start": "NODE_ENV=production node app.js",
+    "start:production:win": "set NODE_ENV=production&& node app.js",
+    "start:dev": "node app.js",
     "migrate": "node node_modules/sequelize-cli/bin/sequelize db:migrate"
   },
   "repository": {
