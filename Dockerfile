@@ -1,5 +1,5 @@
-MAINTAINER Sergey Popov <wailorman@gmail.com>
 FROM node
+MAINTAINER Sergey Popov <wailorman@gmail.com>
 
 RUN mkdir /ibb
 ADD . /ibb
