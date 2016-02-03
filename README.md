@@ -4,5 +4,5 @@
 3. Pull and start mysql and API `./start.sh` containers
 
 ##To download crx:
-Master branch: [https://github.com/wailorman/superunvait/raw/master/public/ibb-tools.crx]
-Dev branch: [https://github.com/wailorman/superunvait/raw/dev/public/ibb-tools.crx]
+[From **MASTER** branch](https://github.com/wailorman/superunvait/raw/master/public/ibb-tools.crx)
+[From **DEV** branch](https://github.com/wailorman/superunvait/raw/dev/public/ibb-tools.crx)
