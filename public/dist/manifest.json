@@ -41,6 +41,6 @@
     }
   ],
   "web_accessible_resources": [
-    "page_script.build.js"
+    "inviter.build.js"
   ]
 }

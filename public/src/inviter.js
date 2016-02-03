@@ -54,7 +54,7 @@ setInterval(() => {
 }, 500);
 
 
-function startInviting() {
+export function startInviting() {
 
     const userContainerSelector = 'div.photoWrapper';
     
@@ -163,5 +163,4 @@ function incrementInvitedCounter() {
     $('#invitedDiv').text(invitedCounter);
 }
 
-
-
+export default startInviting;

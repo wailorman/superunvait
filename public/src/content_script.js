@@ -25,6 +25,6 @@ $(document).ready(function(){
     };
 
     if (pageIs.online) {
-		$('head').append('<script src="'+chrome.extension.getURL('page_script.build.js')+'"></script>');
+		$('head').append('<script src="'+chrome.extension.getURL('inviter.build.js')+'"></script>');
     }
 });
