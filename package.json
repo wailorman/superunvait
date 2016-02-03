@@ -51,6 +51,8 @@
     "babel-preset-react": "^6.1.18",
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",
+    "gulp": "^3.9.0",
+    "gulp-crx-pack": "^1.0.1",
     "jsdom": "^8.0.2",
     "karma": "^0.13.15",
     "karma-chrome-launcher": "^0.2.2",
