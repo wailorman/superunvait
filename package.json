@@ -11,9 +11,10 @@
     "serve:browser-sync": "node ./node_modules/.bin/browser-sync start --server --files \"public/dist/*\"",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch",
-    "start": "NODE_ENV=production node app.js",
+    "start:docker": "NODE_ENV=production node_modules/forever/bin/forever start app.js && node node_modules/forever/bin/forever --fifo logs 0",
+    "start": "NODE_ENV=production node --harmony app.js",
     "start:production:win": "set NODE_ENV=production&& node app.js",
-    "start:dev": "node app.js",
+    "start:dev": "node --harmony app.js",
     "migrate": "node node_modules/sequelize-cli/bin/sequelize db:migrate"
   },
   "repository": {
@@ -31,6 +32,7 @@
     "babel-cli": "^6.4.5",
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
+    "forever": "^0.15.1",
     "fs": "0.0.2",
     "jquery": "^2.2.0",
     "lodash": "^4.1.0",
