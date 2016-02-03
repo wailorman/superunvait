@@ -41,7 +41,6 @@
     "sequelize-cli": "^2.3.1"
   },
   "devDependencies": {
-    "supertest": "^1.1.0",
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-core": "^6.2.1",
@@ -65,6 +64,8 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
     "sinon": "^1.17.3",
+    "sqlite3": "^3.1.1",
+    "supertest": "^1.1.0",
     "webpack": "^1.12.9"
   }
 }
