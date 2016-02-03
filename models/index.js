@@ -8,6 +8,11 @@ var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + `/../config/${env}.json`);
 var db = {};
 
+if (process.env.IBB_API_DB_HOST) config.host = process.env.IBB_API_DB_HOST;
+if (process.env.IBB_API_DB_NAME) config.database = process.env.IBB_API_DB_NAME;
+if (process.env.IBB_API_DB_USER) config.username = process.env.IBB_API_DB_USER;
+if (process.env.IBB_API_DB_PASS) config.password = process.env.IBB_API_DB_PASS;
+
 var sequelize;
 if (config.use_env_variable) {
     sequelize = new Sequelize(process.env[config.use_env_variable]);
