@@ -19,7 +19,8 @@ var allowCrossDomain = function (req, res, next) {
     next();
 };
 
-app.user(allowCrossDomain);
+app.use(allowCrossDomain);
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const Invite = models.invite;
