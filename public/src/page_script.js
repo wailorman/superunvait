@@ -114,6 +114,25 @@ function startInviting() {
                     userAvatar.css({border: "solid 10px red"});
                 } else {
                     userAvatar.css({border: "solid 10px blue"});
+
+                    const city = $('#oSNCN').html();
+
+                    console.log(`User invited. Sending data to analytics server...`);
+                    $.post('http://beverly.wailorman.ru:8050/invites', {
+                        invite: {
+                            userId: userId,
+                            city: city
+                        }
+                    }, {dataType: 'json'})
+                    .done((data)=> {
+                        console.log(`Success`);
+                        console.log(data);
+                    })
+                    .fail((data)=> {
+                        console.log(`FAIL`);
+                        console.log(data);
+                    });
+
                     incrementInvitedCounter();
                 }
             });
