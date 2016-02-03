@@ -1,6 +1,6 @@
 {
   "name": "SUPER UNVAITE",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Приглашает в группы!",
   "icons": {
     "19": "19.png",
@@ -8,16 +8,32 @@
     "128": "128.png"
   },
   "permissions": [
-    "*://*/*",
+    "*://ok.ru/*",
     "activeTab",
-    "tabs"
+    "tabs",
+    "background"
   ],
+  "background": {
+    "scripts": [
+      "background.build.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_icon": {
+      "19": "19.png",
+      "38": "38.png"
+    },
+    "default_title": "IBB Tools",
+    "default_popup": "post-hunter/page-action.html"
+  },
+
   "manifest_version": 2,
-  "content_security_policy": "default-src 'none'; style-src 'self'; script-src 'self';",
+  "content_security_policy": "script-src 'unsafe-inline'",
   "content_scripts": [
     {
       "matches": [
-        "*://ok.ru/online"
+        "*://ok.ru/*"
       ],
       "js": [
         "content_script.build.js"

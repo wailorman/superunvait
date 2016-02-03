@@ -1,3 +1,5 @@
 .idea/
 node_modules/
-public/dist/bundle.js
+public/dist/*.build.js
+/db/development.sqlite
+bin/db-config.sh
