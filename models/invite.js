@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('invite', {
-    userId: DataTypes.INTEGER,
+    userId: DataTypes.STRING,
     city: DataTypes.STRING
   }, {
     classMethods: {
