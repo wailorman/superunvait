@@ -10,6 +10,16 @@ const models = require('./models/');
 
 const app = express();
 
+//CORS middleware
+var allowCrossDomain = function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+
+    next();
+};
+
+app.user(allowCrossDomain);
 app.use(bodyParser.json());
 
 const Invite = models.invite;
