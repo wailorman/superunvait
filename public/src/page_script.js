@@ -82,7 +82,7 @@ function startInviting() {
 
             let userAvatar = getUserAvatarByWrapper(userContainer);
 
-            userId = userContainer.find('a').attr('href').split('/')[2];
+            userId = userDataFromComments.userId;
             $(window).scrollTop(userContainer.offset().top - 150); // scroll to inviting target
 
             $.ajax({
