@@ -21,7 +21,7 @@ app.post('/invites', (req, res) => {
     if (req.body.invite) {
         invite = req.body.invite;
     } else {
-        return res.status(400).json({message: `Invalid format. You should pass {invite:{...}} to POST body`});
+        return res.status(400).json({message: 'Invalid format. You should pass {invite:{...}} to POST body'});
     }
 
 
@@ -64,4 +64,5 @@ app.get('/invites/:id', (req, res) => {
 
 app.listen(8050, function () {
     console.log(`server started`);
+    console.log(process.env.NODE_ENV);
 });
