@@ -1,0 +1,2 @@
+export const RUN_POST_HUNTER = 'RUN_POST_HUNTER';
+export const RUN_TRAGOMETR = 'RUN_TRAGOMETR';
