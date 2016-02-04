@@ -54,6 +54,45 @@ setInterval(() => {
 }, 500);
 
 
+export function sendInvitationToOkApi(userId, gwtHash, token) {
+
+    return $.ajax({
+        url: 'http://ok.ru/dk?st.cmd=userFriendLive&cmd=InviteUserToGroups&st.layer.cmd=InviteUserToGroupsOuter&st.layer.friendId=' + userId + '&gwt.requested=' + gwtHash + '&p_sId=0',
+        data: {
+            'gwt.requested': pageCtx.gwtHash,
+            'st.layer.posted': 'set',
+            'selid': '53396058603765',
+            'button_invite': 'clickOverGWT'
+        },
+        type: "POST",
+        beforeSend: xhr => {
+            xhr.setRequestHeader('TKN', token);
+        }
+    });
+
+}
+
+export function tellApiAboutInvitation(userId, city) {
+
+    const INVITES_RESOURCE_URL = 'http://stool.wailorman.ru:8050/invites';
+
+    return $.post(INVITES_RESOURCE_URL, {
+            invite: {
+                userId: userId,
+                city: city
+            }
+        }, {dataType: 'json'})
+        .done((data)=> {
+            console.log(`Success`);
+            console.log(data);
+        })
+        .fail((data)=> {
+            console.log(`FAIL`);
+            console.log(data);
+        });
+
+}
+
 export function startInviting() {
 
     const userContainerSelector = 'div.photoWrapper';
@@ -85,19 +124,10 @@ export function startInviting() {
             userId = userDataFromComments.userId;
             $(window).scrollTop(userContainer.offset().top - 150); // scroll to inviting target
 
-            $.ajax({
-                url: 'http://ok.ru/dk?st.cmd=userFriendLive&cmd=InviteUserToGroups&st.layer.cmd=InviteUserToGroupsOuter&st.layer.friendId=' + userId + '&gwt.requested=' + pageCtx.gwtHash + '&p_sId=0',
-                data: {
-                    'gwt.requested': pageCtx.gwtHash,
-                    'st.layer.posted': 'set',
-                    'selid': '53396058603765',
-                    'button_invite': 'clickOverGWT'
-                },
-                type: "POST",
-                beforeSend: xhr => {
-                    xhr.setRequestHeader('TKN', OK.tkn.get());
-                }
-            }).success(data => {
+            const gwtHash = pageCtx.gwtHash;
+            const token = OK.tkn.get();
+
+            sendInvitationToOkApi(userId, gwtHash, token).success(data => {
 
                 let tooOften = data.indexOf('слишком часто') > -1;
                 let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
@@ -118,20 +148,7 @@ export function startInviting() {
                     const city = $('#oSNCN').html();
 
                     console.log(`User invited. Sending data to analytics server...`);
-                    $.post('http://stool.wailorman.ru:8050/invites', {
-                        invite: {
-                            userId: userId,
-                            city: city
-                        }
-                    }, {dataType: 'json'})
-                    .done((data)=> {
-                        console.log(`Success`);
-                        console.log(data);
-                    })
-                    .fail((data)=> {
-                        console.log(`FAIL`);
-                        console.log(data);
-                    });
+                    tellApiAboutInvitation(userId, city);
 
                     incrementInvitedCounter();
                 }
