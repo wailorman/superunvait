@@ -7,6 +7,10 @@ const ROW__COLUMN = '.charts_list_i_cell';
 
 const ROW__COLUMN__COUNTER = '.charts_count.__overview';
 
+const topicsStat = '/stat/topics';
+export const matchUrl = ()=> {
+    return document.location.href.indexOf(topicsStat) > -1;
+};
 
 export function calculateTragocent(feedback = 0, reach = 0) {
 
@@ -16,6 +20,8 @@ export function calculateTragocent(feedback = 0, reach = 0) {
 }
 
 export function assignTragocentsToPosts(){
+
+    console.log(`Running tragometr post assigning`);
 
     // fix columns width
     $(ROW__untouched).css({minWidth: 105});
@@ -35,7 +41,6 @@ export function assignTragocentsToPosts(){
             let feedback = parseInt(_.join(feedbackDirty.match(/\d/g), ''));
 
             let tragocent = calculateTragocent( feedback, reach );
-            debugger;
             $(row).append(`<div class="charts_list_i_cell tragometr" style="width:50px;min-width:0;">${tragocent}</div>`);
         }
 

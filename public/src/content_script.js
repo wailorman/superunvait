@@ -4,16 +4,16 @@ import {
 
 
 import paintPosts from './post-hunter/parsers/ok-ru'
-import assignTragocentsToPosts from './tragometr/tragometr'
+import * as tragometr from './tragometr/tragometr'
 
 console.log(`content_script`);
 
-chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     const action = message.action;
     if (action == RUN_POST_HUNTER) {
         paintPosts();
-    } else if (action == RUN_TRAGOMETR) {
-        assignTragocentsToPosts();
+    } else if (action == RUN_TRAGOMETR && tragometr.matchUrl()) {
+        tragometr.assignTragocentsToPosts();
     }
 });
 
