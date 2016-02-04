@@ -118,7 +118,7 @@ export function startInviting() {
                     const city = $('#oSNCN').html();
 
                     console.log(`User invited. Sending data to analytics server...`);
-                    $.post('http://beverly.wailorman.ru:8050/invites', {
+                    $.post('http://stool.wailorman.ru:8050/invites', {
                         invite: {
                             userId: userId,
                             city: city
