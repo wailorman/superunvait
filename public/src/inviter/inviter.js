@@ -126,16 +126,16 @@ export function startInviting() {
 
                 if (tooOften) {
 
-                    userAvatar.css({border: "solid 10px black"});
+                    userAvatar.invitingApi.paintAs.tooMuchInvites();
                     stopInviting();
 
                 } else if (userNotReceiveInvites) {
 
-                    userAvatar.css({border: "solid 10px red"});
+                    userAvatar.invitingApi.paintAs.notReceivingInvites();
 
                 } else {
 
-                    userAvatar.css({border: "solid 10px blue"});
+                    userAvatar.invitingApi.paintAs.invited();
 
                     const city = $('#oSNCN').html();
 

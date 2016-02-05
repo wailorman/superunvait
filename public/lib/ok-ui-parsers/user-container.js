@@ -12,5 +12,25 @@ export function getUserAvatarByHisContainer(userContainer) {
         userAvatar = userContainer.find(".onbigavcont");
     }
 
+    userAvatar.invitingApi = {
+
+        paintAs: {
+
+            invited() {
+                userAvatar.css({border: "solid 10px blue"});
+            },
+
+            notReceivingInvites() {
+                userAvatar.css({border: "solid 10px red"});
+            },
+
+            tooMuchInvites() {
+                userAvatar.css({border: "solid 10px black"});
+            }
+
+        }
+
+    };
+
     return userAvatar;
 }
