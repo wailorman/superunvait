@@ -190,6 +190,9 @@ export const inviting = {
                         stopInviting();
                         break;
 
+                    case INVITING_RESULT.NOT_RECEIVING:
+                        break;
+
                     case INVITING_RESULT.SUCCESS:
                         this.tellApiAboutInvitation(userId, city);
                         controlPanel.incrementInvitedCounter();
