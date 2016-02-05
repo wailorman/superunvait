@@ -50,9 +50,9 @@ export const controlPanel = {
 
             $(TOGGLE_INVITING).click(() => {
                 if (isInvitingProceed == false) {
-                    startInviting();
+                    invitingController.startInviting();
                 } else {
-                    stopInviting();
+                    invitingController.stopInviting();
                 }
             });
 
@@ -103,68 +103,72 @@ function scrollToInvitee(userContainer) {
     $(window).scrollTop(userContainer.offset().top - 150);
 }
 
-export function startInviting() {
+export const invitingController = {
 
-    isInvitingProceed = true;
-    $(TOGGLE_INVITING).text("ОСТАНОВИТЬ ИНВАЙТИНГ!");
+    startInviting() {
 
-    invitingInterval = setInterval(() => {
+        isInvitingProceed = true;
+        $(TOGGLE_INVITING).text("ОСТАНОВИТЬ ИНВАЙТИНГ!");
 
-        let userContainer = $($(USER_CONTAINER)[userContainerIndex]);
+        invitingInterval = setInterval(() => {
 
-        let userAvatar = getUserAvatarByHisContainer(userContainer);
-        let userInfo = getUserInfoByHisContainer(userContainer);
-        let userId = userInfo.userId;
+            let userContainer = $($(USER_CONTAINER)[userContainerIndex]);
 
-        scrollToInvitee(userContainer);
+            let userAvatar = getUserAvatarByHisContainer(userContainer);
+            let userInfo = getUserInfoByHisContainer(userContainer);
+            let userId = userInfo.userId;
 
-        sendInvitationToOkApi(userId, gwtHash, token)
-            .success(data => {
+            scrollToInvitee(userContainer);
 
-                let tooOften = data.indexOf('слишком часто') > -1;
-                let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
+            sendInvitationToOkApi(userId, gwtHash, token)
+                .success(data => {
 
-                if (tooOften) {
+                    let tooOften = data.indexOf('слишком часто') > -1;
+                    let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
 
-                    userAvatar.invitingApi.paintAs.tooMuchInvites();
-                    stopInviting();
+                    if (tooOften) {
 
-                } else if (userNotReceiveInvites) {
+                        userAvatar.invitingApi.paintAs.tooMuchInvites();
+                        stopInviting();
 
-                    userAvatar.invitingApi.paintAs.notReceivingInvites();
+                    } else if (userNotReceiveInvites) {
 
-                } else {
+                        userAvatar.invitingApi.paintAs.notReceivingInvites();
 
-                    userAvatar.invitingApi.paintAs.invited();
+                    } else {
+                        // user was successfully invited
 
-                    const city = $('#oSNCN').html();
+                        userAvatar.invitingApi.paintAs.invited();
 
-                    console.log(`User invited. Sending data to analytics server...`);
-                    tellApiAboutInvitation(userId, city);
+                        const city = $('#oSNCN').html();
 
-                    controlPanel.incrementInvitedCounter();
-                }
-            });
+                        console.log(`User invited. Sending data to analytics server...`);
+                        tellApiAboutInvitation(userId, city);
 
-
-        let userContainersAmount = $(USER_CONTAINER).length;
-        let noMoreUsers = userContainerIndex == userContainersAmount;
-
-        if (noMoreUsers) {
-            stopInviting();
-        } else {
-            userContainerIndex += 1;
-        }
-
-    }, 1000);
-}
+                        controlPanel.incrementInvitedCounter();
+                    }
+                });
 
 
-function stopInviting() {
-    clearInterval(invitingInterval);
-    isInvitingProceed = false;
-    $(TOGGLE_INVITING).text("НАЧАТЬ UHBAUTUNG!");
-}
+            let userContainersAmount = $(USER_CONTAINER).length;
+            let noMoreUsers = userContainerIndex == userContainersAmount;
+
+            if (noMoreUsers) {
+                stopInviting();
+            } else {
+                userContainerIndex += 1;
+            }
+
+        }, 1000);
+    },
+
+    stopInviting() {
+        clearInterval(invitingInterval);
+        isInvitingProceed = false;
+        $(TOGGLE_INVITING).text("НАЧАТЬ UHBAUTUNG!");
+    }
+
+};
 
 //////////////
 // WILL RUN WHEN SCRIPT WILL BE LOADED
@@ -172,5 +176,3 @@ function stopInviting() {
 assignScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanel.mount);
 
 //////////////
-
-export default startInviting;
