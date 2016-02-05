@@ -15,6 +15,12 @@ let invitingInterval = null;
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
 
+const INVITING_RESULT = {
+    SUCCESS: 'SUCCESS',
+    NOT_RECEIVING: 'NOT_RECEIVING',
+    TOO_OFTEN: 'TOO_OFTEN'
+};
+
 const CONTROL_PANEL__TOGGLE_INVITING = '#sk_auto';
 const USER_CONTAINER = 'div.photoWrapper';
 const CONTROL_PANEL = '#inviterControlPanel';
@@ -108,6 +114,21 @@ export const inviting = {
         $(window).scrollTop(userContainer.offset().top - 150);
     },
 
+    paintAvatar(userAvatar, resultOfInvitation) {
+
+        if ( resultOfInvitation === INVITING_RESULT.TOO_OFTEN ){
+            userAvatar.invitingApi.paintAs.tooMuchInvites();
+        } else if ( resultOfInvitation === INVITING_RESULT.NOT_RECEIVING ) {
+            userAvatar.invitingApi.paintAs.notReceivingInvites();
+        } else if ( resultOfInvitation === INVITING_RESULT.SUCCESS ) {
+            userAvatar.invitingApi.paintAs.invited();
+        } else {
+            console.error(`Invalid invitation result`);
+        }
+
+
+    },
+
     //////////////////////////////////////////////////////
 
     startInviting() {
@@ -129,36 +150,41 @@ export const inviting = {
         let userAvatar = getUserAvatarByHisContainer(userContainer);
         let userInfo = getUserInfoByHisContainer(userContainer);
         let userId = userInfo.userId;
+        const city = $('#oSNCN').html();
 
         this.scrollToInvitee(userContainer);
 
         this.sendInvitationToOkApi(userId, gwtHash, token)
             .success(data => {
 
-                let tooOften = data.indexOf('слишком часто') > -1;
-                let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
+                let resultOfInvitation;
 
-                if (tooOften) {
+                if (data.indexOf('слишком часто') > -1)
+                    resultOfInvitation = INVITING_RESULT.TOO_OFTEN;
+                else if (data.indexOf('не принимает приглашения') > -1)
+                    resultOfInvitation = INVITING_RESULT.NOT_RECEIVING;
+                else
+                    resultOfInvitation = INVITING_RESULT.SUCCESS;
 
-                    userAvatar.invitingApi.paintAs.tooMuchInvites();
-                    stopInviting();
+                this.paintAvatar(userAvatar, resultOfInvitation);
 
-                } else if (userNotReceiveInvites) {
 
-                    userAvatar.invitingApi.paintAs.notReceivingInvites();
+                switch (resultOfInvitation) {
+                    case INVITING_RESULT.TOO_OFTEN:
+                        stopInviting();
+                        break;
 
-                } else {
-                    // user was successfully invited
+                    case INVITING_RESULT.SUCCESS:
+                        this.tellApiAboutInvitation(userId, city);
+                        controlPanel.incrementInvitedCounter();
+                        break;
 
-                    userAvatar.invitingApi.paintAs.invited();
-
-                    const city = $('#oSNCN').html();
-
-                    console.log(`User invited. Sending data to analytics server...`);
-                    this.tellApiAboutInvitation(userId, city);
-
-                    controlPanel.incrementInvitedCounter();
+                    default:
+                        console.error(`Unexpected invitation result:`);
+                        console.log(data);
+                        break;
                 }
+
             });
 
 
