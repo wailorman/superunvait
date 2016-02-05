@@ -50,9 +50,9 @@ export const controlPanel = {
 
             $(TOGGLE_INVITING).click(() => {
                 if (isInvitingProceed == false) {
-                    invitingController.startInviting();
+                    inviting.startInviting();
                 } else {
-                    invitingController.stopInviting();
+                    inviting.stopInviting();
                 }
             });
 
@@ -103,7 +103,7 @@ function scrollToInvitee(userContainer) {
     $(window).scrollTop(userContainer.offset().top - 150);
 }
 
-export const invitingController = {
+export const inviting = {
 
     startInviting() {
 
@@ -114,52 +114,58 @@ export const invitingController = {
 
             let userContainer = $($(USER_CONTAINER)[userContainerIndex]);
 
-            let userAvatar = getUserAvatarByHisContainer(userContainer);
-            let userInfo = getUserInfoByHisContainer(userContainer);
-            let userId = userInfo.userId;
-
-            scrollToInvitee(userContainer);
-
-            sendInvitationToOkApi(userId, gwtHash, token)
-                .success(data => {
-
-                    let tooOften = data.indexOf('слишком часто') > -1;
-                    let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
-
-                    if (tooOften) {
-
-                        userAvatar.invitingApi.paintAs.tooMuchInvites();
-                        stopInviting();
-
-                    } else if (userNotReceiveInvites) {
-
-                        userAvatar.invitingApi.paintAs.notReceivingInvites();
-
-                    } else {
-                        // user was successfully invited
-
-                        userAvatar.invitingApi.paintAs.invited();
-
-                        const city = $('#oSNCN').html();
-
-                        console.log(`User invited. Sending data to analytics server...`);
-                        tellApiAboutInvitation(userId, city);
-
-                        controlPanel.incrementInvitedCounter();
-                    }
-                });
-
-
-            let userContainersAmount = $(USER_CONTAINER).length;
-            let noMoreUsers = userContainerIndex == userContainersAmount;
-
-            if (noMoreUsers) {
-                stopInviting();
-            } else {
-                userContainerIndex += 1;
-            }
+            this.doInvite(userContainer);
 
         }, 1000);
+    },
+
+    doInvite(userContainer) {
+
+        let userAvatar = getUserAvatarByHisContainer(userContainer);
+        let userInfo = getUserInfoByHisContainer(userContainer);
+        let userId = userInfo.userId;
+
+        scrollToInvitee(userContainer);
+
+        sendInvitationToOkApi(userId, gwtHash, token)
+            .success(data => {
+
+                let tooOften = data.indexOf('слишком часто') > -1;
+                let userNotReceiveInvites = data.indexOf('не принимает приглашения') > -1;
+
+                if (tooOften) {
+
+                    userAvatar.invitingApi.paintAs.tooMuchInvites();
+                    stopInviting();
+
+                } else if (userNotReceiveInvites) {
+
+                    userAvatar.invitingApi.paintAs.notReceivingInvites();
+
+                } else {
+                    // user was successfully invited
+
+                    userAvatar.invitingApi.paintAs.invited();
+
+                    const city = $('#oSNCN').html();
+
+                    console.log(`User invited. Sending data to analytics server...`);
+                    tellApiAboutInvitation(userId, city);
+
+                    controlPanel.incrementInvitedCounter();
+                }
+            });
+
+
+        let userContainersAmount = $(USER_CONTAINER).length;
+        let noMoreUsers = userContainerIndex == userContainersAmount;
+
+        if (noMoreUsers) {
+            stopInviting();
+        } else {
+            userContainerIndex += 1;
+        }
+
     },
 
     stopInviting() {
