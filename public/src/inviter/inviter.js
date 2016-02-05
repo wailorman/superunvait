@@ -79,31 +79,36 @@ export const controlPanel = {
 
 };
 
-export function sendInvitationToOkApi(userId, gwtHash, token) {
-
-    return okApi.invites.send(userId, gwtHash, token);
-
-}
-
-export function tellApiAboutInvitation(userId, city) {
-
-    return ibbApi.invites.tell(userId, city)
-        .done((data)=> {
-            console.log(`Success`);
-            console.log(data);
-        })
-        .fail((data)=> {
-            console.log(`FAIL`);
-            console.log(data);
-        });
-
-}
-
-function scrollToInvitee(userContainer) {
-    $(window).scrollTop(userContainer.offset().top - 150);
-}
 
 export const inviting = {
+
+    ////    helpers:
+
+    sendInvitationToOkApi(userId, gwtHash, token) {
+
+        return okApi.invites.send(userId, gwtHash, token);
+
+    },
+
+    tellApiAboutInvitation(userId, city) {
+
+        return ibbApi.invites.tell(userId, city)
+            .done((data)=> {
+                console.log(`Success`);
+                console.log(data);
+            })
+            .fail((data)=> {
+                console.log(`FAIL`);
+                console.log(data);
+            });
+
+    },
+
+    scrollToInvitee(userContainer) {
+        $(window).scrollTop(userContainer.offset().top - 150);
+    },
+
+    //////////////////////////////////////////////////////
 
     startInviting() {
 
@@ -125,9 +130,9 @@ export const inviting = {
         let userInfo = getUserInfoByHisContainer(userContainer);
         let userId = userInfo.userId;
 
-        scrollToInvitee(userContainer);
+        this.scrollToInvitee(userContainer);
 
-        sendInvitationToOkApi(userId, gwtHash, token)
+        this.sendInvitationToOkApi(userId, gwtHash, token)
             .success(data => {
 
                 let tooOften = data.indexOf('слишком часто') > -1;
@@ -150,7 +155,7 @@ export const inviting = {
                     const city = $('#oSNCN').html();
 
                     console.log(`User invited. Sending data to analytics server...`);
-                    tellApiAboutInvitation(userId, city);
+                    this.tellApiAboutInvitation(userId, city);
 
                     controlPanel.incrementInvitedCounter();
                 }
