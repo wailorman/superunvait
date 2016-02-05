@@ -15,7 +15,7 @@ let invitingInterval = null;
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
 
-const TOGGLE_INVITING = '#sk_auto';
+const CONTROL_PANEL__TOGGLE_INVITING = '#sk_auto';
 const USER_CONTAINER = 'div.photoWrapper';
 const CONTROL_PANEL = '#inviterControlPanel';
 
@@ -48,7 +48,7 @@ export const controlPanel = {
                 $('#field_male').attr('checked', false).change();
             });
 
-            $(TOGGLE_INVITING).click(() => {
+            $(CONTROL_PANEL__TOGGLE_INVITING).click(() => {
                 if (isInvitingProceed == false) {
                     inviting.startInviting();
                 } else {
@@ -113,7 +113,7 @@ export const inviting = {
     startInviting() {
 
         isInvitingProceed = true;
-        $(TOGGLE_INVITING).text("ОСТАНОВИТЬ ИНВАЙТИНГ!");
+        $(CONTROL_PANEL__TOGGLE_INVITING).text("ОСТАНОВИТЬ ИНВАЙТИНГ!");
 
         invitingInterval = setInterval(() => {
 
@@ -176,7 +176,7 @@ export const inviting = {
     stopInviting() {
         clearInterval(invitingInterval);
         isInvitingProceed = false;
-        $(TOGGLE_INVITING).text("НАЧАТЬ UHBAUTUNG!");
+        $(CONTROL_PANEL__TOGGLE_INVITING).text("НАЧАТЬ UHBAUTUNG!");
     }
 
 };
