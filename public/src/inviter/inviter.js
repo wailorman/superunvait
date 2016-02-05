@@ -129,6 +129,21 @@ export const inviting = {
 
     },
 
+    getResultOfInvitation(data) {
+
+        let resultOfInvitation;
+
+        if (data.indexOf('слишком часто') > -1)
+            resultOfInvitation = INVITING_RESULT.TOO_OFTEN;
+        else if (data.indexOf('не принимает приглашения') > -1)
+            resultOfInvitation = INVITING_RESULT.NOT_RECEIVING;
+        else
+            resultOfInvitation = INVITING_RESULT.SUCCESS;
+
+        return resultOfInvitation;
+
+    },
+
     //////////////////////////////////////////////////////
 
     startInviting() {
@@ -141,6 +156,15 @@ export const inviting = {
             let userContainer = $($(USER_CONTAINER)[userContainerIndex]);
 
             this.doInvite(userContainer);
+
+            let userContainersAmount = $(USER_CONTAINER).length;
+            let noMoreUsers = userContainerIndex >= userContainersAmount;
+
+            userContainerIndex += 1;
+
+            if (noMoreUsers) {
+                this.stopInviting();
+            }
 
         }, 1000);
     },
@@ -157,17 +181,9 @@ export const inviting = {
         this.sendInvitationToOkApi(userId, gwtHash, token)
             .success(data => {
 
-                let resultOfInvitation;
-
-                if (data.indexOf('слишком часто') > -1)
-                    resultOfInvitation = INVITING_RESULT.TOO_OFTEN;
-                else if (data.indexOf('не принимает приглашения') > -1)
-                    resultOfInvitation = INVITING_RESULT.NOT_RECEIVING;
-                else
-                    resultOfInvitation = INVITING_RESULT.SUCCESS;
+                let resultOfInvitation = this.getResultOfInvitation(data);
 
                 this.paintAvatar(userAvatar, resultOfInvitation);
-
 
                 switch (resultOfInvitation) {
                     case INVITING_RESULT.TOO_OFTEN:
@@ -186,16 +202,6 @@ export const inviting = {
                 }
 
             });
-
-
-        let userContainersAmount = $(USER_CONTAINER).length;
-        let noMoreUsers = userContainerIndex == userContainersAmount;
-
-        if (noMoreUsers) {
-            stopInviting();
-        } else {
-            userContainerIndex += 1;
-        }
 
     },
 
