@@ -1,8 +1,9 @@
 import '../../vendor/jquery-comments'
 import { assignScriptToUrl } from '../../lib/spa-url-observer'
+import * as okApi from '../../lib/ok-api/ok-api'
+import * as ibbApi from '../../lib/ibb-api/ibb-api'
 
 let isInvitingProceed = false;
-let invitedCounter = 0;
 
 let userContainerIndex = 0;
 let invitingInterval = null;
@@ -75,32 +76,13 @@ export const controlPanel = {
 
 export function sendInvitationToOkApi(userId, gwtHash, token) {
 
-    return $.ajax({
-        url: 'http://ok.ru/dk?st.cmd=userFriendLive&cmd=InviteUserToGroups&st.layer.cmd=InviteUserToGroupsOuter&st.layer.friendId=' + userId + '&gwt.requested=' + gwtHash + '&p_sId=0',
-        data: {
-            'gwt.requested': pageCtx.gwtHash,
-            'st.layer.posted': 'set',
-            'selid': '53396058603765',
-            'button_invite': 'clickOverGWT'
-        },
-        type: "POST",
-        beforeSend: xhr => {
-            xhr.setRequestHeader('TKN', token);
-        }
-    });
+    return okApi.invites.send(userId, gwtHash, token);
 
 }
 
 export function tellApiAboutInvitation(userId, city) {
 
-    const INVITES_RESOURCE_URL = 'http://stool.wailorman.ru:8050/invites';
-
-    return $.post(INVITES_RESOURCE_URL, {
-            invite: {
-                userId: userId,
-                city: city
-            }
-        }, {dataType: 'json'})
+    return ibbApi.invites.tell(userId, city)
         .done((data)=> {
             console.log(`Success`);
             console.log(data);
