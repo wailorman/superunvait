@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const Invite = models.invite;
+const Member = models.member;
 
 app.post('/invites', (req, res) => {
 
@@ -73,7 +74,58 @@ app.get('/invites/:id', (req, res) => {
 
 });
 
+/////////////////////////////////////////////////////////////////////
+
+app.get('/members', (req, res)=> {
+
+    Member.findAll()
+        .then((result)=> {
+            res.json({members: result});
+        })
+        .catch((err)=> {
+            res.status(500).json(err);
+        });
+
+
+});
+
+app.get('/members/:userId', (req, res)=> {
+
+    let userId = req.params.userId;
+
+    Member.findOne({where: {id: userId}})
+        .then((result)=> {
+            if (result) res.json({member: result});
+            else res.status(404).json({message: "Not found"});
+        })
+        .catch((err)=> {
+            res.status(500).json(err);
+        });
+
+});
+
+app.put('/members', (req, res)=> {
+
+    let userId = req.body.member.id;
+    let member = req.body.member;
+
+    Member.findOrCreate({where: {id: userId}, defaults: member})
+        .then((result)=> {
+            let object = result[0],
+                created = result[1],
+                responseStatus = created ? 201 : 200;
+
+            res.status(responseStatus).json({member: object, created: created});
+
+        })
+        .catch((err)=> {
+            res.status(500).json(err);
+        });
+
+});
+
+
 app.listen(8050, function () {
     console.log(`server started`);
-    console.log(process.env.NODE_ENV);
+    console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
