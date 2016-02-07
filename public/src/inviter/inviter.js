@@ -7,10 +7,6 @@ import {
     getUserAvatarByHisContainer
 } from '../../lib/ok-ui-parsers/user-container'
 
-let isInvitingProceed = false;
-
-let userContainerIndex = 0;
-let invitingInterval = null;
 
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
@@ -35,7 +31,7 @@ const CONTROL_PANEL_HTML = `<div id="inviterControlPanel">
             </center>
         </div>`;
 
-export const controlPanel = {
+export const controlPanelCtrl = {
     invitedCounter: 0,
 
     mount() {
@@ -55,10 +51,10 @@ export const controlPanel = {
             });
 
             $(CONTROL_PANEL__TOGGLE_INVITING).click(() => {
-                if (isInvitingProceed == false) {
-                    inviting.startInviting();
+                if (invitingCtrl.isInvitingProceed == false) {
+                    invitingCtrl.startInviting();
                 } else {
-                    inviting.stopInviting();
+                    invitingCtrl.stopInviting();
                 }
             });
 
@@ -86,7 +82,11 @@ export const controlPanel = {
 };
 
 
-export const inviting = {
+export const invitingCtrl = {
+
+    isInvitingProceed: false,
+    invitingInterval: null,
+    userContainerIndex: 0,
 
     ////    helpers:
 
@@ -148,19 +148,19 @@ export const inviting = {
 
     startInviting() {
 
-        isInvitingProceed = true;
+        this.isInvitingProceed = true;
         $(CONTROL_PANEL__TOGGLE_INVITING).text("ОСТАНОВИТЬ ИНВАЙТИНГ!");
 
-        invitingInterval = setInterval(() => {
+        this.invitingInterval = setInterval(() => {
 
-            let userContainer = $($(USER_CONTAINER)[userContainerIndex]);
+            let userContainer = $($(USER_CONTAINER)[this.userContainerIndex]);
 
             this.doInvite(userContainer);
 
             let userContainersAmount = $(USER_CONTAINER).length;
-            let noMoreUsers = userContainerIndex >= userContainersAmount;
+            let noMoreUsers = this.userContainerIndex >= userContainersAmount;
 
-            userContainerIndex += 1;
+            this.userContainerIndex += 1;
 
             if (noMoreUsers) {
                 this.stopInviting();
@@ -187,7 +187,7 @@ export const inviting = {
 
                 switch (resultOfInvitation) {
                     case INVITING_RESULT.TOO_OFTEN:
-                        stopInviting();
+                        this.stopInviting();
                         break;
 
                     case INVITING_RESULT.NOT_RECEIVING:
@@ -195,7 +195,7 @@ export const inviting = {
 
                     case INVITING_RESULT.SUCCESS:
                         this.tellApiAboutInvitation(userId, city);
-                        controlPanel.incrementInvitedCounter();
+                        controlPanelCtrl.incrementInvitedCounter();
                         break;
 
                     default:
@@ -209,8 +209,8 @@ export const inviting = {
     },
 
     stopInviting() {
-        clearInterval(invitingInterval);
-        isInvitingProceed = false;
+        clearInterval(this.invitingInterval);
+        this.isInvitingProceed = false;
         $(CONTROL_PANEL__TOGGLE_INVITING).text("НАЧАТЬ UHBAUTUNG!");
     }
 
@@ -219,6 +219,6 @@ export const inviting = {
 //////////////
 // WILL RUN WHEN SCRIPT WILL BE LOADED
 
-assignScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanel.mount);
+assignScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanelCtrl.mount);
 
 //////////////
