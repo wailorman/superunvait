@@ -1,6 +1,6 @@
 import '../../vendor/jquery-put-delete'
 
-export let API_URL = 'http://localhost:8050';
+export let API_URL = 'http://stool.wailorman.ru:8050';
 
 export const invites = {
 
