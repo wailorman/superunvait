@@ -3,8 +3,9 @@
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const Sequelize = require('sequelize');
+const sequelize = require('./models').sequelize;
 const _ = require('lodash');
+const Q = require('q');
 
 const models = require('./models/');
 
@@ -13,7 +14,7 @@ const app = express();
 //CORS middleware
 var allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,HEAD');
     res.header('Access-Control-Allow-Headers', '*');
 
     next();
@@ -106,17 +107,31 @@ app.get('/members/:userId', (req, res)=> {
 
 app.put('/members', (req, res)=> {
 
-    let userId = req.body.member.id;
-    let member = req.body.member;
+    let members = req.body.members;
 
-    Member.findOrCreate({where: {id: userId}, defaults: member})
+    sequelize.transaction((t1)=> {
+
+            let transactionQueries = [];
+
+            members.forEach((member)=> {
+
+                transactionQueries.push(
+                    Member.upsert(
+                        member,
+                        {
+                            transaction: t1,
+                            validate: true
+                        }
+                    )
+                );
+
+            });
+
+            return Q.all([transactionQueries]);
+
+        })
         .then((result)=> {
-            let object = result[0],
-                created = result[1],
-                responseStatus = created ? 201 : 200;
-
-            res.status(responseStatus).json({member: object, created: created});
-
+            res.json({members: members, transactionResults: result});
         })
         .catch((err)=> {
             res.status(500).json(err);
