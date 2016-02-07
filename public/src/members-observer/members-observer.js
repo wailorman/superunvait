@@ -87,6 +87,32 @@ export const membersObserver = {
 
     },
 
+    paintMembersByTransactionResults(memberContainers = this.getMembersFromPage(),
+                                     transactionResults) {
+
+        transactionResults.forEach((transactionResult, i)=> {
+
+            let memberContainer = memberContainers[i];
+            let memberAvatar = getUserAvatarByHisContainer(memberContainer);
+
+            let isFinishWithErrors= transactionResult.rejectionReason;
+            let isNewMember = transactionResult.fulfillmentValue;
+
+            if (isFinishWithErrors) {
+                memberAvatar.paintIn('black')
+            } else {
+
+                if (isNewMember) {
+                    memberAvatar.paintIn('blue');
+                } else {
+                    memberAvatar.paintIn('lightblue');
+                }
+            }
+
+        });
+
+    },
+
     startObserving() {
 
         this.proceedObservation = true;
@@ -101,26 +127,7 @@ export const membersObserver = {
             .done((data)=> {
                 let transactionResults = data.transactionResults;
 
-                transactionResults.forEach((transactionResult, i)=> {
-
-                    let memberContainer = memberContainers[i];
-                    let memberAvatar = getUserAvatarByHisContainer(memberContainer);
-
-                    let isFinishWithErrors= transactionResult.rejectionReason;
-                    let isNewMember = transactionResult.fulfillmentValue;
-
-                    if (isFinishWithErrors) {
-                        memberAvatar.paintIn('black')
-                    } else {
-
-                        if (isNewMember) {
-                            memberAvatar.paintIn('blue');
-                        } else {
-                            memberAvatar.paintIn('lightblue');
-                        }
-                    }
-
-                })
+                this.paintMembersByTransactionResults(memberContainers, transactionResults);
             })
             .fail((err)=> {
                 console.error(err);
