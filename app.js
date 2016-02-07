@@ -131,7 +131,7 @@ app.put('/members', (req, res)=> {
 
         })
         .then((result)=> {
-            res.json({members: members, transactionResults: result});
+            res.json({members: members, transactionResults: result[0]});
         })
         .catch((err)=> {
             res.status(500).json(err);
