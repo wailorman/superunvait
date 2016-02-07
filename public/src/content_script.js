@@ -1,10 +1,11 @@
 import {
-    RUN_POST_HUNTER, RUN_TRAGOMETR
+    RUN_POST_HUNTER, RUN_TRAGOMETR, RUN_MEMBERS_OBSERVER
 } from './action-names'
 
 
 import paintPosts from './post-hunter/parsers/ok-ru'
 import * as tragometr from './tragometr/tragometr'
+import * as membersObserver from './members-observer/members-observer'
 
 console.log(`content_script`);
 
@@ -14,6 +15,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         paintPosts();
     } else if (action == RUN_TRAGOMETR && tragometr.matchUrl()) {
         tragometr.assignTragocentsToPosts();
+    } else if (action == RUN_MEMBERS_OBSERVER) {
+        membersObserver.membersObserver.startObserving();
     }
 });
 
