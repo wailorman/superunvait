@@ -23,7 +23,7 @@ export function stopListeningUrl() {
     clearInterval(interval);
 }
 
-export function urlListener(urlRegexp:RegExp) {
+export function urlListener(urlRegexp) {
 
     return {
         onVisit(visitCallback){
