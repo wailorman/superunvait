@@ -1,5 +1,5 @@
 import '../../vendor/jquery-comments'
-import { assignScriptToUrl } from '../../lib/spa-url-observer'
+import { assignThisScriptToUrl } from '../../lib/spa-url-observer'
 import * as okApi from '../../lib/ok-api/ok-api'
 import * as ibbApi from '../../lib/ibb-api/ibb-api'
 import {
@@ -219,6 +219,6 @@ export const invitingCtrl = {
 //////////////
 // WILL RUN WHEN SCRIPT WILL BE LOADED
 
-assignScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanelCtrl.mount);
+assignThisScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanelCtrl.mount);
 
 //////////////

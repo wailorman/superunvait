@@ -1,4 +1,4 @@
-import { assignScriptToUrl } from '../../lib/spa-url-observer'
+import { assignThisScriptToUrl } from '../../lib/spa-url-observer'
 
 const REFRESH_BUTTON = '.auction_infoPanel .button-pro';
 
@@ -19,6 +19,6 @@ export const matchUrl = ()=> {
 //////////////
 // WILL RUN WHEN SCRIPT WILL BE LOADED
 
-assignScriptToUrl(/\/auctions(\/)?$/gm).onVisit(startClicking);
+assignThisScriptToUrl(/\/auctions(\/)?$/gm).onVisit(startClicking);
 
 //////////////
