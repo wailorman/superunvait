@@ -41,6 +41,7 @@
     }
   ],
   "web_accessible_resources": [
-    "inviter.build.js"
+    "inviter.build.js",
+    "auction_clicker.build.js"
   ]
 }
