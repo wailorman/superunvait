@@ -5,6 +5,7 @@ var webpackConfig = {
     entry: {
         'inviter': './public/src/inviter/inviter.js',
         'auction_clicker': './public/src/auction-clicker/auction-clicker.js',
+        'page_script': './public/src/page-script.js',
         'page_action': './public/src/page_action.js',
         'content_script': './public/src/content_script.js',
         'background': './public/src/background.js'

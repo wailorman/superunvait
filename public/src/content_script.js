@@ -28,6 +28,8 @@ $(document).ready(function(){
         auctions: document.location.href.indexOf('ok.ru/auctions') > -1
     };
 
+    $('head').append('<script src="'+chrome.extension.getURL('page_script.build.js')+'"></script>');
+
     if (pageIs.online) {
 		$('head').append('<script src="'+chrome.extension.getURL('inviter.build.js')+'"></script>');
     } else if (pageIs.auctions) {
