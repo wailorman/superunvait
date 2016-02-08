@@ -2,17 +2,17 @@ import initLoader from '../lib/page-script-loader/page-script-loader'
 
 console.log(`src page script loader`);
 
-let loadInterface = {
+let loadInterfaces = [{
     matchUrl(url) {
         console.log(`matching ${url} url`);
         return true;
     },
-    onPageVisited(pageVisitedCb) {
-        console.log(`ON PAGE VISITED`);
+    onPageVisited(url) {
+        console.log(`ON PAGE VISITED: ${url}`);
     },
-    onPageLeft(pageLeftCb) {
-        console.log(`ON PAGE LEFT`);
+    onPageLeft(url) {
+        console.log(`ON PAGE LEFT ${url}`);
     }
-};
+}];
 
-initLoader([loadInterface]);
+initLoader(loadInterfaces);
