@@ -141,3 +141,8 @@ export const membersObserver = {
     }
 
 };
+
+const membersUrl = '/institutebb/members';
+export const matchUrl = ()=> {
+    return document.location.href.indexOf(membersUrl) > -1;
+};

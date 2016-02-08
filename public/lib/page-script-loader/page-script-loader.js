@@ -40,7 +40,7 @@ function handleUrlUpdate(url) {
 
         if (module.isModuleLoaded) {
             if (module.loadInterface.onPageLeft) {
-                module.loadInterface.onPageLeft();
+                module.loadInterface.onPageLeft(url);
                 module.isModuleLoaded = false;
             }
         }
@@ -48,7 +48,7 @@ function handleUrlUpdate(url) {
         if (module.loadInterface.matchUrl(url)) {
 
             if (module.loadInterface.onPageVisited) {
-                module.loadInterface.onPageVisited();
+                module.loadInterface.onPageVisited(url);
                 module.isModuleLoaded = true;
             }
 
