@@ -50,7 +50,11 @@ app.post('/invites', (req, res) => {
 
 app.get('/invites', (req, res)=> {
 
-    Invite.findAll()
+    let whereStatements = {};
+
+    if ( req.query.userId ) whereStatements.userId = req.query.userId;
+
+    Invite.findAll({where: whereStatements})
         .then((result)=> {
             res.json({invites: result});
         })
