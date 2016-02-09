@@ -92,7 +92,7 @@ export const invitingCtrl = {
 
     sendInvitationToOkApi(userId, gwtHash, token) {
 
-        return okApi.invites.send(userId, gwtHash, token);
+        return okApi.invites.send(userId, gwtHash, token, true);
 
     },
 
@@ -131,6 +131,10 @@ export const invitingCtrl = {
 
                     case INVITING_RESULT.NOT_RECEIVING:
                         userAvatar.paintIn('red');
+                        break;
+
+                    case INVITING_RESULT.ALREADY_INVITED:
+                        userAvatar.paintIn('lightblue');
                         break;
                 }
 

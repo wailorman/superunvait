@@ -22,6 +22,7 @@ var webpackConfig = {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 loader: 'babel',
+                optional: ['runtime'],
                 query: {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']

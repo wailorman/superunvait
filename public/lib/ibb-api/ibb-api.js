@@ -1,12 +1,12 @@
 import '../../vendor/jquery-put-delete'
+import { serialize } from '../url-query-serialize'
 
 export let API_URL = 'http://stool.wailorman.ru:8050';
+const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
 export const invites = {
 
     tell(userId, city) {
-
-        const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
         return $.post(INVITES_RESOURCE_URL, {
             invite: {
@@ -14,6 +14,12 @@ export const invites = {
                 city: city
             }
         }, {dataType: 'json'});
+
+    },
+
+    find(query) {
+
+        return Q($.get(`${INVITES_RESOURCE_URL}?${serialize(query)}`));
 
     }
 
