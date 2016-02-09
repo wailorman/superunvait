@@ -2,6 +2,32 @@ console.log(`lib page script loader`);
 
 let modules = [];
 
+export function waitElemAppears(jqElem) {
+
+    const deferred = Q.defer();
+
+    let findingElemTries = 0;
+    let findingInterval = setInterval(()=> {
+
+        let elemSelector = jqElem.selector || jqElem;
+
+        if (elemSelector) {
+            deferred.resolve();
+            clearInterval(findingInterval);
+        }
+
+        if (findingElemTries > 100){
+            deferred.reject(new Error(`Can't find elem ${elemSelector} since 10s page visited`));
+            clearInterval(findingInterval);
+        }
+
+        findingElemTries++;
+
+    }, 100);
+
+    return deferred.promise;
+}
+
 export function initLoader(modulesLoadInterfaces) {
 
     modulesLoadInterfaces.forEach((loadInterface)=> {

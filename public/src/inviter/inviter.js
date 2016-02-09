@@ -6,6 +6,7 @@ import {
     getUserInfoByHisContainer,
     getUserAvatarByHisContainer
 } from '../../lib/ok-ui-parsers/user-container'
+import { waitElemAppears } from '../../lib/page-script-loader/page-script-loader'
 
 
 const gwtHash = pageCtx.gwtHash;
@@ -20,6 +21,7 @@ const INVITING_RESULT = {
 const CONTROL_PANEL__TOGGLE_INVITING = '#sk_auto';
 const USER_CONTAINER = 'div.photoWrapper';
 const CONTROL_PANEL = '#inviterControlPanel';
+const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
 
 const CONTROL_PANEL_HTML = `<div id="inviterControlPanel">
             <center>
@@ -41,7 +43,7 @@ export const controlPanelCtrl = {
             console.log(`MOUNTING!!!`);
 
             // inject control panel
-            $('#hook_Form_OnSiteNowUsersRBFormForm').append(CONTROL_PANEL_HTML);
+            $(FILTER_FORM).append(CONTROL_PANEL_HTML);
 
             $('#gotoBabyli').click(() => {
                 // set filter to target audience (grannies)
@@ -70,6 +72,8 @@ export const controlPanelCtrl = {
                 }
             });
 
+        }else{
+            console.log(`Control panel already exists`);
         }
 
     },
@@ -219,6 +223,24 @@ export const invitingCtrl = {
 //////////////
 // WILL RUN WHEN SCRIPT WILL BE LOADED
 
-assignThisScriptToUrl(/\/online(\/)?$/gm).onVisit(controlPanelCtrl.mount);
+export const loadInterface = {
+    matchUrl(url) {
+        return url.match(/\/online(\/)?$/gm);
+    },
+    onPageVisited() {
+
+        waitElemAppears($(FILTER_FORM))
+            .then(()=> {
+                controlPanelCtrl.mount();
+            })
+            .catch((err)=> {
+                console.error(err);
+            });
+
+    },
+    onPageLeft() {
+        invitingCtrl.stopInviting();
+    }
+};
 
 //////////////

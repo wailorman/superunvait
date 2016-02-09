@@ -30,9 +30,7 @@ $(document).ready(function(){
 
     $('head').append('<script src="'+chrome.extension.getURL('page_script.build.js')+'"></script>');
 
-    if (pageIs.online) {
-		$('head').append('<script src="'+chrome.extension.getURL('inviter.build.js')+'"></script>');
-    } else if (pageIs.auctions) {
+    if (pageIs.auctions) {
         $('head').append('<script src="'+chrome.extension.getURL('auction_clicker.build.js')+'"></script>');
     }
 });

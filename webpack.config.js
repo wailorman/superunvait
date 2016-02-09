@@ -3,7 +3,6 @@ var webpack = require('webpack');
 
 var webpackConfig = {
     entry: {
-        'inviter': './public/src/inviter/inviter.js',
         'auction_clicker': './public/src/auction-clicker/auction-clicker.js',
         'page_script': './public/src/page-script.js',
         'page_action': './public/src/page_action.js',
