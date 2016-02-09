@@ -12,11 +12,7 @@ import { waitElemAppears } from '../../lib/page-script-loader/page-script-loader
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
 
-const INVITING_RESULT = {
-    SUCCESS: 'SUCCESS',
-    NOT_RECEIVING: 'NOT_RECEIVING',
-    TOO_OFTEN: 'TOO_OFTEN'
-};
+const INVITING_RESULT = okApi.INVITING_RESULT;
 
 const CONTROL_PANEL__TOGGLE_INVITING = '#sk_auto';
 const USER_CONTAINER = 'div.photoWrapper';
@@ -118,18 +114,28 @@ export const invitingCtrl = {
         $(window).scrollTop(userContainer.offset().top - 150);
     },
 
-    paintAvatar(userAvatar, resultOfInvitation) {
+    paintAvatar(userAvatar, invitationPromise) {
 
-        if ( resultOfInvitation === INVITING_RESULT.TOO_OFTEN ){
-            userAvatar.invitingApi.paintAs.tooMuchInvites();
-        } else if ( resultOfInvitation === INVITING_RESULT.NOT_RECEIVING ) {
-            userAvatar.invitingApi.paintAs.notReceivingInvites();
-        } else if ( resultOfInvitation === INVITING_RESULT.SUCCESS ) {
-            userAvatar.invitingApi.paintAs.invited();
-        } else {
-            console.error(`Invalid invitation result`);
-        }
+        invitationPromise
+            .then((data)=> {
+                userAvatar.paintIn('blue');
 
+                return data;
+            })
+            .catch((err)=> {
+
+                switch (err) {
+                    case INVITING_RESULT.TOO_OFTEN:
+                        userAvatar.paintIn('black');
+                        break;
+
+                    case INVITING_RESULT.NOT_RECEIVING:
+                        userAvatar.paintIn('red');
+                        break;
+                }
+
+                return err;
+            });
 
     },
 
@@ -182,14 +188,22 @@ export const invitingCtrl = {
 
         this.scrollToInvitee(userContainer);
 
-        this.sendInvitationToOkApi(userId, gwtHash, token)
-            .success(data => {
+        let invitationRequest = this.sendInvitationToOkApi(userId, gwtHash, token);
 
-                let resultOfInvitation = this.getResultOfInvitation(data);
+        this.paintAvatar(userAvatar, invitationRequest);
 
-                this.paintAvatar(userAvatar, resultOfInvitation);
+        invitationRequest
+            .then((invitationResult)=> {
 
-                switch (resultOfInvitation) {
+                this.tellApiAboutInvitation(userId, city);
+                controlPanelCtrl.incrementInvitedCounter();
+
+                return invitationResult;
+
+            })
+            .catch((invitationErr)=> {
+
+                switch (invitationErr) {
                     case INVITING_RESULT.TOO_OFTEN:
                         this.stopInviting();
                         break;
@@ -197,16 +211,13 @@ export const invitingCtrl = {
                     case INVITING_RESULT.NOT_RECEIVING:
                         break;
 
-                    case INVITING_RESULT.SUCCESS:
-                        this.tellApiAboutInvitation(userId, city);
-                        controlPanelCtrl.incrementInvitedCounter();
-                        break;
-
                     default:
                         console.error(`Unexpected invitation result:`);
-                        console.log(data);
+                        console.log(invitationErr);
                         break;
                 }
+
+                return invitationErr;
 
             });
 
