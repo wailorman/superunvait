@@ -29,7 +29,6 @@ export const invites = {
 
         return ibbApi.invites.find({userId})
             .then((results)=> {
-                debugger;
                 return results.invites.length > 0; // if >0 -- user was already invited
             })
             .catch((err)=> {
@@ -86,7 +85,6 @@ export const invites = {
         if (checkPersistentInInvitees) {
             this.checkPersistentInInvitees(userId)
                 .then((wasUserAlreadyInvited)=> {
-                    debugger;
                     if (!wasUserAlreadyInvited) {
                         sendInviteToOk();
                     } else {

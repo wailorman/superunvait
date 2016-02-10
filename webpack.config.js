@@ -43,7 +43,7 @@ var webpackConfig = {
 
 if (NODE_ENV == 'development') {
 
-    webpackConfig.devtool = 'cheap-inline-module-source-map';
+    webpackConfig.devtool = 'eval';
 
 }
 
