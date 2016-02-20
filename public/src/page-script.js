@@ -1,20 +1,21 @@
+import {SCRIPT_NAME_STYLE} from '../lib/logger'
 import initLoader from '../lib/page-script-loader/page-script-loader'
 import * as inviter from './modules/inviter'
 import * as auctionClicker from './modules/auction-clicker'
 
-console.log(`src page script loader`);
+console.log(`%c page script `, SCRIPT_NAME_STYLE);
 
 let loadInterfaces = [
     {
         matchUrl(url) {
-            console.log(`matching ${url} url`);
+            logger.log(__filename, `matching ${url} url`);
             return true;
         },
         onPageVisited(url) {
-            console.log(`ON PAGE VISITED: ${url}`);
+            logger.log(__filename, `ON PAGE VISITED: ${url}`);
         },
         onPageLeft(url) {
-            console.log(`ON PAGE LEFT ${url}`);
+            logger.log(__filename, `ON PAGE LEFT ${url}`);
         }
     },
     inviter.loadInterface,

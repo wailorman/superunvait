@@ -2,12 +2,13 @@ import {
     RUN_POST_HUNTER, RUN_TRAGOMETR, RUN_MEMBERS_OBSERVER
 } from './action-names'
 
+import {SCRIPT_NAME_STYLE} from '../lib/logger'
 
 import paintPosts from './modules/post-hunter/parsers/ok-ru'
 import * as tragometr from './modules/tragometr'
 import * as membersObserver from './modules/members-observer'
 
-console.log(`content_script`);
+console.log(`%c content script `, SCRIPT_NAME_STYLE);
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     const action = message.action;

@@ -1,5 +1,3 @@
-console.log(`lib page script loader`);
-
 let modules = [];
 
 export function waitElemAppears(jqElem) {

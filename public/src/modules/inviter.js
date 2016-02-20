@@ -36,7 +36,8 @@ export const controlPanelCtrl = {
 
         if ($(CONTROL_PANEL).length == 0) {
 
-            console.log(`MOUNTING!!!`);
+            logger.log(__filename, `Control panel doesn't exist`);
+            logger.log(__filename, 'Mounting control panel');
 
             // inject control panel
             $(FILTER_FORM).append(CONTROL_PANEL_HTML);
@@ -69,7 +70,7 @@ export const controlPanelCtrl = {
             });
 
         }else{
-            console.log(`Control panel already exists`);
+            logger.log(__filename, `Control panel already exists`);
         }
 
     },
@@ -99,13 +100,12 @@ export const invitingCtrl = {
     tellApiAboutInvitation(userId, city) {
 
         return ibbApi.invites.tell(userId, city)
-            .done((data)=> {
-                console.log(`Success`);
-                console.log(data);
+            .done(()=> {
+                // todo: Invitation ID
+                logger.log(__filename, `Told API about invitation`);
             })
-            .fail((data)=> {
-                console.log(`FAIL`);
-                console.log(data);
+            .fail(()=> {
+                logger.error(__filename, `IBB API /invites error`);
             });
 
     },
@@ -216,8 +216,7 @@ export const invitingCtrl = {
                         break;
 
                     default:
-                        console.error(`Unexpected invitation result:`);
-                        console.log(invitationErr);
+                        logger.error(__filename, `Unexpected invitation result`);
                         break;
                 }
 
@@ -244,16 +243,21 @@ export const loadInterface = {
     },
     onPageVisited() {
 
+        logger.log(__filename, `/online visited`);
+
         waitElemAppears($(FILTER_FORM))
             .then(()=> {
                 controlPanelCtrl.mount();
             })
             .catch((err)=> {
-                console.error(err);
+                logger.error(__filename, err);
             });
 
     },
     onPageLeft() {
+
+        logger.log(__filename, `/online left`);
+
         invitingCtrl.stopInviting();
     }
 };

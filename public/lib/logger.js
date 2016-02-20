@@ -1,5 +1,6 @@
-const MODULE_NAME_STYLE = 'background-color: lightyellow; color: black;';
-const MESSAGE_STYLE = 'background-color: none; color: none;';
+export const MODULE_NAME_STYLE = 'background-color: lightyellow; color: black;';
+export const MESSAGE_STYLE = 'background-color: none; color: none;';
+export const SCRIPT_NAME_STYLE = 'background-color: orange; color: black;';
 
 export function log(module, message) {
     // todo: should work with forward slashes
