@@ -1,5 +1,6 @@
 import initLoader from '../lib/page-script-loader/page-script-loader'
 import * as inviter from './modules/inviter'
+import * as auctionClicker from './modules/auction-clicker'
 
 console.log(`src page script loader`);
 
@@ -16,7 +17,8 @@ let loadInterfaces = [
             console.log(`ON PAGE LEFT ${url}`);
         }
     },
-    inviter.loadInterface
+    inviter.loadInterface,
+    auctionClicker.loadInterface
 ];
 
 initLoader(loadInterfaces);

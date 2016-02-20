@@ -41,7 +41,6 @@
     }
   ],
   "web_accessible_resources": [
-    "auction_clicker.build.js",
     "page_script.build.js"
   ]
 }
