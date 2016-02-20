@@ -9,7 +9,7 @@ var webpackConfig = {
     entry: {
         'page_script': './public/src/page-script.js',
         'page_action': './public/src/page-action-controller.js',
-        'content_script': './public/src/content_script.js',
+        'content_script': './public/src/content-script.js',
         'background': './public/src/background.js'
     },
     output: {
