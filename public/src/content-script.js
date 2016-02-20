@@ -23,15 +23,5 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 $(document).ready(function(){
 
-    const pageIs = {
-        online: document.location.href.indexOf('ok.ru/online') > -1,
-        statTopics: document.location.href.indexOf('ok.ru/institutebb/stat/topics') > -1,
-        auctions: document.location.href.indexOf('ok.ru/auctions') > -1
-    };
-
     $('head').append('<script src="'+chrome.extension.getURL('page_script.build.js')+'"></script>');
-
-    if (pageIs.auctions) {
-        $('head').append('<script src="'+chrome.extension.getURL('auction_clicker.build.js')+'"></script>');
-    }
 });
