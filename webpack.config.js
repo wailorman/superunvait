@@ -8,7 +8,7 @@ var webpackConfig = {
     },
     entry: {
         'page_script': './public/src/page-script.js',
-        'page_action': './public/src/page_action.js',
+        'page_action': './public/src/page-action-controller.js',
         'content_script': './public/src/content_script.js',
         'background': './public/src/background.js'
     },
