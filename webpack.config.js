@@ -2,8 +2,11 @@ const NODE_ENV = process.env.NODE_ENV == 'production' ? 'production' : 'developm
 var webpack = require('webpack');
 
 var webpackConfig = {
+    context: __dirname,
+    node: {
+        __filename: true
+    },
     entry: {
-        'auction_clicker': './public/src/modules/auction-clicker.js',
         'page_script': './public/src/page-script.js',
         'page_action': './public/src/page_action.js',
         'content_script': './public/src/content_script.js',
@@ -36,7 +39,8 @@ var webpackConfig = {
         new webpack.ProvidePlugin({
             '$': 'jquery/dist/jquery.min',
             '_': 'lodash',
-            'Q': 'q'
+            'Q': 'q',
+            'logger': __dirname + '/public/lib/logger'
         })
     ]
 };
