@@ -1,5 +1,5 @@
 import initLoader from '../lib/page-script-loader/page-script-loader'
-import * as inviter from './inviter/inviter'
+import * as inviter from './modules/inviter'
 
 console.log(`src page script loader`);
 

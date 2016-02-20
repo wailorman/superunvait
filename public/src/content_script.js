@@ -3,9 +3,9 @@ import {
 } from './action-names'
 
 
-import paintPosts from './post-hunter/parsers/ok-ru'
-import * as tragometr from './tragometr/tragometr'
-import * as membersObserver from './members-observer/members-observer'
+import paintPosts from './modules/post-hunter/parsers/ok-ru'
+import * as tragometr from './modules/tragometr'
+import * as membersObserver from './modules/members-observer'
 
 console.log(`content_script`);
 

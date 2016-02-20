@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 var webpackConfig = {
     entry: {
-        'auction_clicker': './public/src/auction-clicker/auction-clicker.js',
+        'auction_clicker': './public/src/modules/auction-clicker.js',
         'page_script': './public/src/page-script.js',
         'page_action': './public/src/page_action.js',
         'content_script': './public/src/content_script.js',
