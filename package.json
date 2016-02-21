@@ -1,6 +1,6 @@
 {
   "name": "superunvait",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "test:www:integration": "node ./node_modules/karma/bin/karma start",
     "serve:webpack": "node ./node_modules/.bin/webpack-dev-server --content-base public/dist/",
     "serve:browser-sync": "node ./node_modules/.bin/browser-sync start --server --files \"public/dist/*\"",
+    "build:crx": "node ./node_modules/webpack/bin/webpack.js && node ./node_modules/gulp/bin/gulp.js default",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch",
     "start:docker": "NODE_ENV=production npm run migrate && NODE_ENV=production node_modules/forever/bin/forever start -c \"node --harmony\" app.js && node node_modules/forever/bin/forever --fifo logs 0",
