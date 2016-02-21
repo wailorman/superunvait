@@ -13,7 +13,7 @@ export function getArrayOfLikes() {
 
     $(LIKES_ELEM_SELECTOR).each(function (i, elem) {
 
-        likesAmount = parseInt($(elem).html());
+        likesAmount = parseInt($('.a123').html().replace('&nbsp;', ''));
         likesArray.push(likesAmount);
 
     });
