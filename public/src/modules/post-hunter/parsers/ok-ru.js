@@ -1,6 +1,7 @@
 import { getScoreByLikesAmountAndRanges, splitArrayToNRanges } from '../sorting'
 
-export const LIKES_ELEM_SELECTOR = '.feed.h-mod .controls-list_lk .widget_count.js-count';
+export const LIKES_COUNTER = '.controls-list_lk .widget_count.js-count';
+export const LIKES_ELEM_SELECTOR = `.feed.h-mod ${LIKES_COUNTER}`;
 export const POSTS_SELECTOR = '.feed.h-mod';
 export const NUMBER_OF_RANGES_TO_SPLIT = 10;
 
@@ -13,7 +14,7 @@ export function getArrayOfLikes() {
 
     $(LIKES_ELEM_SELECTOR).each(function (i, elem) {
 
-        likesAmount = parseInt($('.a123').html().replace('&nbsp;', ''));
+        likesAmount = parseInt($(elem).html().replace('&nbsp;', ''));
         likesArray.push(likesAmount);
 
     });
@@ -34,9 +35,13 @@ export function paintPostsWithRanges(likesRanges) {
 
     let likesAmount, postScore, bgColor;
 
+    let scores = [];
+
     $(POSTS_SELECTOR).each(function(i, elem){
-        likesAmount = parseInt($(elem).find('.controls-list_lk .widget_count.js-count').html());
+        likesAmount = parseInt($(elem).find(LIKES_COUNTER).html().replace('&nbsp;', ''));
         postScore = getScoreByLikesAmountAndRanges(likesAmount, likesRanges);
+
+        scores.push(postScore);
 
         bgColor = `rgba(255,0,0,${postScore})`;
 
