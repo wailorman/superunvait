@@ -20,7 +20,7 @@ module.exports = function (config) {
         files: [
             'test/requirements/karma.js',
             'test/integration/**/*.test.js',
-            'test/fixtures/ok-ru-ibb.html'
+            'test/fixtures/**/*.html'
         ],
 
         exclude: [],

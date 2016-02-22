@@ -5,22 +5,24 @@ import {
     paintPosts,
 
     POSTS_SELECTOR
-} from '../../public/src/post-hunter/parsers/ok-ru'
+} from '../../public/src/modules/post-hunter/parsers/ok-ru'
 
 import {
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
-} from '../../public/src/post-hunter/sorting'
+} from '../../public/src/modules/post-hunter/sorting'
 
 describe("post hunter / parsers / ok-ru", ()=> {
 
     before(()=> {
-        document.body.innerHTML = __html__['test/fixtures/ok-ru-ibb.html'];
+        document.body.innerHTML = __html__['test/fixtures/ibb-feed.html'];
     });
 
-    const arrayOfLikes = [2, 5, 14, 3, 8, 5, 11, 13, 31];
+    const arrayOfLikes = [53, 1, 12, 62, 23, 20, 23, 23, 12, 18, 13, 38, 45, 26, 8, 9, 45, 23, 46, 43, 43,
+        55, 77, 31, 18, 39, 12, 116, 44, 62, 82, 35, 15, 39, 15];
 
-    const likesRanges = [[2,2],[3,3],[5,5],[5,5],[8,8],[11,11],[13,13],[14,14],[31,31]];
+    const likesRanges = [[1, 12], [12, 15], [15, 20], [23, 23], [26, 38], [39, 43], [43, 45], [45, 53],
+        [55, 62], [77, 116]];
 
     describe("getLikesRanges", ()=> {
 
