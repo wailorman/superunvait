@@ -6,7 +6,7 @@ import * as ibbApi from '../../lib/ibb-api/ibb-api'
 
 const USER_CONTAINER = 'div.photoWrapper';
 
-export const membersObserver = {
+export const controller = {
 
     proceedObservation: false,
 
@@ -143,6 +143,8 @@ export const membersObserver = {
 };
 
 const membersUrl = '/institutebb/members';
-export const matchUrl = ()=> {
-    return document.location.href.indexOf(membersUrl) > -1;
+export const matchUrl = (url = document.location.href)=> {
+    return url.indexOf(membersUrl) > -1;
 };
+
+export default controller;

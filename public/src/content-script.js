@@ -12,12 +12,21 @@ console.log(`%c content script `, SCRIPT_NAME_STYLE);
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     const action = message.action;
-    if (action == RUN_POST_HUNTER) {
-        paintPosts();
-    } else if (action == RUN_TRAGOMETR && tragometr.matchUrl()) {
-        tragometr.assignTragocentsToPosts();
-    } else if (action == RUN_MEMBERS_OBSERVER) {
-        membersObserver.membersObserver.startObserving();
+
+    switch (action) {
+        case RUN_POST_HUNTER:
+            paintPosts();
+            break;
+        case RUN_TRAGOMETR:
+            if (tragometr.matchUrl()) {
+                tragometr.assignTragocentsToPosts();
+            }
+            break;
+        case RUN_MEMBERS_OBSERVER:
+            if (membersObserver.matchUrl()) {
+                membersObserver.controller.startObserving();
+            }
+            break;
     }
 });
 
