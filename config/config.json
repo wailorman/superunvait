@@ -4,16 +4,19 @@
     "password": null,
     "database": "ibb_development",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "charset": "utf8"
   },
   "test": {
     "username": "root",
     "password": null,
     "database": "ibb_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "charset": "utf8"
   },
   "production": {
-    "use_env_variable": "DB_CONNECTION_STRING"
+    "use_env_variable": "DB_CONNECTION_STRING",
+    "charset": "utf8"
   }
 }
