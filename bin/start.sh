@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./start-mysql.sh
+#./start-mysql.sh
 ./start-api.sh
