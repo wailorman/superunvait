@@ -39,7 +39,7 @@
     "mysql": "^2.10.2",
     "path": "^0.12.7",
     "q": "^1.4.1",
-    "sequelize": "^3.19.0",
+    "sequelize": "https://github.com/wailorman/sequelize/tarball/master",
     "sequelize-cli": "^2.3.1"
   },
   "devDependencies": {

@@ -2,4 +2,3 @@
 node_modules/
 public/dist/*.build.js
 /db/development.sqlite
-bin/db-config.sh

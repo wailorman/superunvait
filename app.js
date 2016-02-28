@@ -144,13 +144,7 @@ app.put('/members', (req, res)=> {
 });
 
 
-console.log(`Changing mysql charset names ...`);
-models.sequelize.query('SET NAMES utf8').then(()=> {
-    app.listen(8050, function () {
-        console.log(`server started`);
-        console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
-    });
-})
-.catch((err)=> {
-    console.log(`Error while SET NAMES utf8 : ${err}`);
+app.listen(8050, function () {
+    console.log(`server started`);
+    console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
