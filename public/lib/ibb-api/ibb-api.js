@@ -1,7 +1,7 @@
 import '../../vendor/jquery-put-delete'
 import { serialize } from '../url-query-serialize'
 
-export let API_URL = 'http://stool.wailorman.ru:8050';
+export let API_URL = 'http://stool.wailorman.ru';
 const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
 export const invites = {
