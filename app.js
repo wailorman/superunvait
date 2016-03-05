@@ -52,9 +52,12 @@ app.get('/invites', (req, res)=> {
 
     let whereStatements = {};
 
+    let limit = parseInt(req.query.limit) || 100,
+        offset = parseInt(req.query.offset) || 0;
+
     if ( req.query.userId ) whereStatements.userId = req.query.userId;
 
-    Invite.findAll({where: whereStatements})
+    Invite.findAll({where: whereStatements, offset, limit })
         .then((result)=> {
             res.json({invites: result});
         })
@@ -83,7 +86,10 @@ app.get('/invites/:id', (req, res) => {
 
 app.get('/members', (req, res)=> {
 
-    Member.findAll()
+    let limit = parseInt(req.query.limit) || 100,
+        offset = parseInt(req.query.offset) || 0;
+
+    Member.findAll({offset, limit})
         .then((result)=> {
             res.json({members: result});
         })
