@@ -1,3 +1,3 @@
 global.expect = require('chai').expect;
 
-require('../requirements/mocha');
+require('../../requirements/mocha');

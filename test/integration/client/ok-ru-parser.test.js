@@ -5,12 +5,12 @@ import {
     paintPosts,
 
     POSTS_SELECTOR
-} from '../../public/src/modules/post-hunter/parsers/ok-ru'
+} from '../../../public/src/modules/post-hunter/parsers/ok-ru'
 
 import {
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
-} from '../../public/src/modules/post-hunter/sorting'
+} from '../../../public/src/modules/post-hunter/sorting'
 
 describe("post hunter / parsers / ok-ru", ()=> {
 
