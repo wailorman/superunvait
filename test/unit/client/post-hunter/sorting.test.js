@@ -2,10 +2,10 @@ import {
     inWhichRangeIsNumber,
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
-} from '../../../public/src/post-hunter/sorting'
+} from '../../../../public/src/modules/post-hunter/sorting'
 
 
-describe("sorting", ()=> {
+describe("Post hunter / sorting", ()=> {
 
     describe("inWhichRangeIsNumber", ()=> {
 
