@@ -11,7 +11,7 @@ let likesArray,
 export function pluckNumberFromStr(str) {
 
     if ( typeof str == 'number' ) return `${str}`;
-    if ( typeof str !== 'string' ) throw new TypeError('Only Numbers and Strings can be plucked');
+    if ( typeof str !== 'string' ) throw new TypeError(`Only Numbers and Strings can be plucked. ${typeof str} was passed`);
 
     let pluckedNumbers = str.match(/\d/g);
 
@@ -30,10 +30,10 @@ export function getArrayOfLikes() {
         // Promo posts doesn't have likes amount
         // But they have the same classes with normal posts
         try {
-            likesAmount = parseInt($(elem).html().replace('&nbsp;', ''));
-        } catch (e) {
-            likesAmount = 0;
-        }
+
+            likesAmount = parseInt(pluckNumberFromStr($(elem).html()));
+
+        } catch (e) { return; }
 
         likesArray.push(likesAmount);
 
@@ -59,9 +59,15 @@ export function paintPostsWithRanges(likesRanges) {
 
     $(POSTS_SELECTOR).each(function(i, elem){
         try {
-            likesAmount = parseInt($(elem).find(LIKES_COUNTER).html().replace('&nbsp;', ''));
+
+            let likesCounterElem = $(elem).find(LIKES_COUNTER)[0];
+            likesAmount = parseInt(pluckNumberFromStr($(likesCounterElem).html()));
+
         } catch (e) {
-            likesAmount = 0;
+
+            logger.log(__filename, `Seems post #${i} is promo`);
+            return;
+
         }
 
         postScore = getScoreByLikesAmountAndRanges(likesAmount, likesRanges);

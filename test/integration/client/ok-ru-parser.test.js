@@ -27,7 +27,7 @@ describe("post hunter / parsers / ok-ru", ()=> {
     });
 
     afterEach(()=> {
-        $('#test-zone').html("");
+        //$('#test-zone').html("");
     });
 
     describe("getLikesRanges", ()=> {
