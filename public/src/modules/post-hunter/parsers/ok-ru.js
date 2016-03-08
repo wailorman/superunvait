@@ -8,13 +8,33 @@ export const NUMBER_OF_RANGES_TO_SPLIT = 10;
 let likesArray,
     likesAmount;
 
+export function pluckNumberFromStr(str) {
+
+    if ( typeof str == 'number' ) return `${str}`;
+    if ( typeof str !== 'string' ) throw new TypeError('Only Numbers and Strings can be plucked');
+
+    let pluckedNumbers = str.match(/\d/g);
+
+    if (!pluckedNumbers) return "0";
+
+    return pluckedNumbers.join('');
+
+}
+
 export function getArrayOfLikes() {
 
     likesArray = [];
 
     $(LIKES_ELEM_SELECTOR).each(function (i, elem) {
 
-        likesAmount = parseInt($(elem).html().replace('&nbsp;', ''));
+        // Promo posts doesn't have likes amount
+        // But they have the same classes with normal posts
+        try {
+            likesAmount = parseInt($(elem).html().replace('&nbsp;', ''));
+        } catch (e) {
+            likesAmount = 0;
+        }
+
         likesArray.push(likesAmount);
 
     });
@@ -38,7 +58,12 @@ export function paintPostsWithRanges(likesRanges) {
     let scores = [];
 
     $(POSTS_SELECTOR).each(function(i, elem){
-        likesAmount = parseInt($(elem).find(LIKES_COUNTER).html().replace('&nbsp;', ''));
+        try {
+            likesAmount = parseInt($(elem).find(LIKES_COUNTER).html().replace('&nbsp;', ''));
+        } catch (e) {
+            likesAmount = 0;
+        }
+
         postScore = getScoreByLikesAmountAndRanges(likesAmount, likesRanges);
 
         scores.push(postScore);
