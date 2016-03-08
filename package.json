@@ -69,6 +69,8 @@
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
+    "mocha-loader": "^0.7.1",
+    "null-loader": "^0.1.1",
     "sinon": "^1.17.3",
     "sqlite3": "^3.1.1",
     "supertest": "^1.1.0",

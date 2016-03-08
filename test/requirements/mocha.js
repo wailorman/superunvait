@@ -1,2 +1,2 @@
-global.sinon = require('sinon');
+//global.sinon = require('sinon');
 require('./universal');
