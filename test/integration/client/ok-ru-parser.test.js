@@ -14,17 +14,23 @@ import {
 
 describe("post hunter / parsers / ok-ru", ()=> {
 
-    before(()=> {
-        document.body.innerHTML = __html__['test/fixtures/ibb-feed.html'];
-    });
-
     const arrayOfLikes = [53, 1, 12, 62, 23, 20, 23, 23, 12, 18, 13, 38, 45, 26, 8, 9, 45, 23, 46, 43, 43,
         55, 77, 31, 18, 39, 12, 116, 44, 62, 82, 35, 15, 39, 15];
 
     const likesRanges = [[1, 12], [12, 15], [15, 20], [23, 23], [26, 38], [39, 43], [43, 45], [45, 53],
         [55, 62], [77, 116]];
 
-    describe("getLikesRanges", ()=> {
+    describe("getLikesRanges & getArrayOfLikes", ()=> {
+
+        beforeEach(()=> {
+            //document.body.innerHTML = __html__['test/fixtures/ibb-feed.html'];
+            const fixtureContent = require('raw!../../fixtures/ibb-feed.html');
+            $('#test-zone').html(fixtureContent);
+        });
+
+        afterEach(()=> {
+            $('#test-zone').html("");
+        });
 
         it(`should return expected ranges`, () => {
 
@@ -35,14 +41,14 @@ describe("post hunter / parsers / ok-ru", ()=> {
 
         });
 
-    });
+        it(`should return expected array of likes`, () => {
 
-    it(`should return expected array of likes`, () => {
+            const expected = arrayOfLikes;
+            const actual = getArrayOfLikes();
 
-        const expected = arrayOfLikes;
-        const actual = getArrayOfLikes();
+            expect(actual).to.eql(expected);
 
-        expect(actual).to.eql(expected);
+        });
 
     });
 

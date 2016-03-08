@@ -72,6 +72,7 @@
     "mocha": "^2.4.5",
     "mocha-loader": "^0.7.1",
     "null-loader": "^0.1.1",
+    "raw-loader": "^0.5.1",
     "sinon": "^2.0.0-pre",
     "sqlite3": "^3.1.1",
     "supertest": "^1.1.0",
