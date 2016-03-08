@@ -142,9 +142,9 @@ export const controller = {
 
 };
 
-const membersUrl = '/institutebb/members';
+const membersUrlRegexp = /\/(group\/53396058603765|institutebb)\/members/;
 export const matchUrl = (url = document.location.href)=> {
-    return url.indexOf(membersUrl) > -1;
+    return url.match(membersUrlRegexp);
 };
 
 export default controller;
