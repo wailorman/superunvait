@@ -2,3 +2,4 @@
 node_modules/
 public/dist/*.build.js
 /db/development.sqlite
+test/test-bundle.js
