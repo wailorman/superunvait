@@ -38,7 +38,7 @@ var webpackConfig = {
             '$': 'jquery/dist/jquery.min',
             '_': 'lodash',
             'Q': 'q',
-            'logger': __dirname + '../public/lib/logger'
+            'logger': __dirname + '/../public/lib/logger'
         })
     ],
 
