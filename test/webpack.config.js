@@ -5,10 +5,10 @@ var webpackConfig = {
     node: {
         __filename: true
     },
-    entry: 'mocha!./unit/index.js',
+    entry: `mocha!${__dirname}/unit/index.js`,
     output: {
         path: __dirname,
-        filename: 'testBundle.js'
+        filename: 'test-bundle.js'
     },
 
     module: {
