@@ -247,7 +247,9 @@ export const loadInterface = {
 
         waitElemAppears($(FILTER_FORM))
             .then(()=> {
-                controlPanelCtrl.mount();
+                $(document).ready(()=> {
+                    controlPanelCtrl.mount();
+                });
             })
             .catch((err)=> {
                 logger.error(__filename, err);
