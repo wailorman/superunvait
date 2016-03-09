@@ -14,3 +14,9 @@ export function error(module, message) {
     module = module[module.length - 1];
     console.error(`%c ${module} %c: ${message}`, MODULE_NAME_STYLE, MESSAGE_STYLE);
 }
+
+export function debug(module, message) {
+    module = module.split('\\');
+    module = module[module.length - 1];
+    console.debug(` ${module} : ${message}`);
+}
