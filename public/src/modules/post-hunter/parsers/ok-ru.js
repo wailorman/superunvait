@@ -65,7 +65,10 @@ export function paintPostsWithRanges(likesRanges) {
 
         } catch (e) {
 
-            logger.log(__filename, `Seems post #${i} is promo`);
+            logger.debug(__filename, `Seems post #${i} is promo`);
+
+            // if this is promo post, it shouldn't have a score
+            scores.push(null);
             return;
 
         }
@@ -78,6 +81,8 @@ export function paintPostsWithRanges(likesRanges) {
 
         $(elem).css({'background-color': bgColor});
     });
+
+    console.debug(scores);
 
 }
 

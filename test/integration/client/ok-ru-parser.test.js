@@ -7,6 +7,8 @@ import {
     POSTS_SELECTOR
 } from '../../../public/src/modules/post-hunter/parsers/ok-ru'
 
+const _POSTS_SELECTOR = POSTS_SELECTOR;
+
 import {
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
@@ -20,17 +22,25 @@ describe("post hunter / parsers / ok-ru", ()=> {
     const likesRanges = [[1, 12], [12, 15], [15, 20], [23, 23], [26, 38], [39, 43], [43, 45], [45, 53],
         [55, 62], [77, 116]];
 
-    beforeEach(()=> {
-        //document.body.innerHTML = __html__['test/fixtures/ibb-feed.html'];
+    const expectedScores = [0.8, 0.1, 0.1, 0.9, 0.4, 0.3, 0.4, null, 0.4, 0.1, 0.3, 0.2, 0.5,
+        0.7, 0.5, 0.1, 0.1, null, 0.7, 0.4, 0.8, 0.6, 0.6, 0.9, 1, 0.5, null, 0.3, 0.6, 0.1, 1,
+        0.7, 0.9, 1, 0.5, null, 0.2, 0.6, 0.2];
+
+    before(()=> {
         const fixtureContent = require('raw!../../fixtures/ibb-feed.html');
         $('#test-zone').html(fixtureContent);
     });
 
-    afterEach(()=> {
-        //$('#test-zone').html("");
+    after(()=> {
+        $('#test-zone').html("");
     });
 
-    describe("getLikesRanges", ()=> {
+    describe("getLikesRanges && getArrayOfLikes", ()=> {
+
+        beforeEach(()=> {
+            const fixtureContent = require('raw!../../fixtures/ibb-feed.html');
+            $('#test-zone').html(fixtureContent);
+        });
 
         it(`should return expected ranges`, () => {
 
@@ -40,10 +50,6 @@ describe("post hunter / parsers / ok-ru", ()=> {
             expect(actual).to.eql(expectedRanges);
 
         });
-
-    });
-
-    describe("getArrayOfLikes", ()=> {
 
         it(`should return expected array of likes`, () => {
 
@@ -63,6 +69,37 @@ describe("post hunter / parsers / ok-ru", ()=> {
             expect(()=> {
                 paintPosts();
             }).to.not.throw();
+
+        });
+
+        describe("color checking", ()=> {
+
+            before(()=> {
+                paintPosts();
+
+            });
+
+            expectedScores.forEach((expectedScore, i)=> {
+                if ( expectedScore === null ) return;
+
+                it(`should paint post #${i} with right color`, () => {
+
+                    let smallestExpectedScore = expectedScore - 0.1,
+                        greatestExpectedScore = expectedScore + 0.1,
+
+                        thisPost = $(_POSTS_SELECTOR)[i],
+                        thisPostBackgroundColor = $(thisPost)[0].style.backgroundColor,
+
+                        // If score == 1, css of post will be rgba(255, 0, 0),
+                        // not rgba(255,0,0,1)! That's why ... || [1]
+                        thisPostScoreMatch = thisPostBackgroundColor.match(/\d\.\d/) || [1],
+                        thisPostScore = thisPostScoreMatch[0];
+
+                    expect(thisPostScore).to.be.within(smallestExpectedScore, greatestExpectedScore);
+
+                });
+
+            });
 
         });
 
