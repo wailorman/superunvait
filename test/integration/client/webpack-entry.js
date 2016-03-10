@@ -2,6 +2,6 @@ global.expect = require('chai').expect;
 
 require('../../requirements/mocha');
 
-require('./example-integration.test');
-require('./ok-ru-parser.test');
-require('./ui-user-data.test');
+require('./example-integration.integr');
+require('./ok-ru-parser.integr');
+require('./ui-user-data.integr');
