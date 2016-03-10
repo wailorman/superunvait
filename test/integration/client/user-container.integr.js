@@ -89,6 +89,29 @@ describe("UserContainer API", ()=> {
 
         });
 
+        const borderWidthsAndExpectations = [
+            [ 'black', '1px', '1px solid black' ],
+            [ 'red', '5px', '5px solid red' ]
+        ];
+
+        borderWidthsAndExpectations.forEach((expectGroup)=> {
+
+            it(`should set border width to ${expectGroup[1]} and ${expectGroup[0]} color`, () => {
+
+                let colorToPaint = expectGroup[0],
+                    borderWidth = expectGroup[1],
+                    expectedBorderStyle = expectGroup[2];
+
+                userContainerInstance.paintIn(colorToPaint, borderWidth);
+
+                let avatarBorderStyle = userContainerInstance.avatar[0].style.border;
+
+                expect(avatarBorderStyle).to.eql(expectedBorderStyle);
+
+            });
+
+        });
+
     });
 
 });

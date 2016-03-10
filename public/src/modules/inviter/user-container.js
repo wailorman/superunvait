@@ -18,8 +18,8 @@ export class UserContainer {
         this.avatar = UserContainer.getUserAvatarByContainer(userContainerElem);
     }
 
-    paintIn(color) {
-        $(this.avatar).css({border: `solid 10px ${color}`});
+    paintIn(color, borderWidth = '10px') {
+        $(this.avatar).css({border: `solid ${borderWidth} ${color}`});
     }
 
 }
