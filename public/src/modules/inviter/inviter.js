@@ -7,6 +7,7 @@ import {
     getUserAvatarByHisContainer
 } from '../../../lib/ok-ui-parsers/user-container'
 import { waitElemAppears } from '../../../lib/page-script-loader/page-script-loader'
+import { UserContainer } from './user-container'
 import './inviting-style.css'
 
 const gwtHash = pageCtx.gwtHash;
@@ -65,12 +66,8 @@ export const controlPanelCtrl = {
         if (invitingCtrl) {
             if (invitingCtrl.isInvitingProceed == false) {
                 invitingCtrl.startInviting();
-                //noinspection JSUnusedAssignment
-                controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__STOP)
             } else {
                 invitingCtrl.stopInviting();
-                //noinspection JSUnusedAssignment
-                controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__CONTINUE);
             }
         }else{
             console.error(`toggleInviting(): Inviting Controller hasn't yet initialized`);
@@ -177,6 +174,8 @@ export const invitingCtrl = {
 
     startInviting() {
 
+        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__STOP)
+
         this.isInvitingProceed = true;
 
         this.invitingInterval = setInterval(() => {
@@ -192,42 +191,41 @@ export const invitingCtrl = {
 
             if (noMoreUsers) {
                 this.stopInviting();
-                controlPanelCtrl.toggleInviting();
             }
 
         }, 1000);
     },
 
-    doInvite(userContainer) {
+    doInvite(userContainerElem) {
 
-        let userAvatar = getUserAvatarByHisContainer(userContainer);
-        let userInfo = getUserInfoByHisContainer(userContainer);
+        let userContainer = new UserContainer(userContainerElem);
+        let userInfo = userContainer.getUserInfo();
         let userId = userInfo.userId;
         const city = $('#oSNCN').html();
 
-        this.scrollToInvitee(userContainer);
+        userContainer.scrollTo();
 
-        let invitationRequest = this.sendInvitationToOkApi(userId, gwtHash, token);
+        userContainer.paintIn('gray', '5px');
 
-        this.paintAvatar(userAvatar, invitationRequest);
-
-        invitationRequest
+        this.sendInvitationToOkApi(userId, gwtHash, token)
             .then((invitationResult)=> {
 
-                this.tellApiAboutInvitation(userId, city);
-                controlPanelCtrl.incrementInvitedCounter();
+                switch (invitationResult) {
+                    case INVITING_RESULT.SUCCESS:
+                        userContainer.paintIn('blue', '5px');
+                        this.tellApiAboutInvitation(userId, city).then(()=> {
+                            userContainer.paintIn('blue');
+                        });
+                        controlPanelCtrl.incrementInvitedCounter();
+                        break;
 
-                return invitationResult;
-
-            })
-            .catch((invitationErr)=> {
-
-                switch (invitationErr) {
                     case INVITING_RESULT.TOO_OFTEN:
+                        userContainer.paintIn('black');
                         this.stopInviting();
                         break;
 
                     case INVITING_RESULT.NOT_RECEIVING:
+                        userContainer.paintIn('red');
                         break;
 
                     default:
@@ -244,6 +242,7 @@ export const invitingCtrl = {
     stopInviting() {
         clearInterval(this.invitingInterval);
         this.isInvitingProceed = false;
+        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__CONTINUE);
     }
 
 };

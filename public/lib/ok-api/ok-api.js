@@ -38,8 +38,21 @@ export const invites = {
 
     },
 
-    send(userId, gwtHash, token, checkPersistentInInvitees) {
+    send(userId, gwtHash, token, checkIsAlreadyInvited) {
         const deferred = Q.defer();
+
+        if (checkIsAlreadyInvited) {
+            this.checkPersistentInInvitees(userId)
+                .then((wasUserAlreadyInvited)=> {
+                    if (!wasUserAlreadyInvited) {
+                        sendInviteToOk();
+                    } else {
+                        deferred.reject(INVITING_RESULT.ALREADY_INVITED);
+                    }
+                });
+        } else {
+            sendInviteToOk();
+        }
 
         const sendInviteToOk = ()=> {
             $.ajax({
@@ -62,11 +75,11 @@ export const invites = {
                     switch (invitationResult) {
                         case INVITING_RESULT.TOO_OFTEN:
                         case INVITING_RESULT.NOT_RECEIVING:
-                            deferred.reject(invitationResult);
+                            deferred.resolve(invitationResult);
                             break;
 
                         case INVITING_RESULT.SUCCESS:
-                            deferred.resolve(data);
+                            deferred.resolve(invitationResult);
                             break;
 
                         default:
@@ -81,19 +94,6 @@ export const invites = {
                     deferred.reject(INVITING_RESULT.UNEXPECTED_RESPONSE, err);
                 });
         };
-
-        if (checkPersistentInInvitees) {
-            this.checkPersistentInInvitees(userId)
-                .then((wasUserAlreadyInvited)=> {
-                    if (!wasUserAlreadyInvited) {
-                        sendInviteToOk();
-                    } else {
-                        deferred.reject(INVITING_RESULT.ALREADY_INVITED);
-                    }
-                });
-        } else {
-            sendInviteToOk();
-        }
 
 
         return deferred.promise;
