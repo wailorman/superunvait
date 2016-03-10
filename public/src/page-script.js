@@ -1,6 +1,6 @@
 import {SCRIPT_NAME_STYLE} from '../lib/logger'
 import initLoader from '../lib/page-script-loader/page-script-loader'
-import * as inviter from './modules/inviter'
+import * as inviter from './modules/inviter/inviter'
 import * as auctionClicker from './modules/auction-clicker'
 
 console.log(`%c page script `, SCRIPT_NAME_STYLE);

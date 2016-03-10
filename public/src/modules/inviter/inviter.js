@@ -1,13 +1,13 @@
-import '../../vendor/jquery-comments'
-import { assignThisScriptToUrl } from '../../lib/spa-url-observer'
-import * as okApi from '../../lib/ok-api/ok-api'
-import * as ibbApi from '../../lib/ibb-api/ibb-api'
+import '../../../vendor/jquery-comments'
+import { assignThisScriptToUrl } from '../../../lib/spa-url-observer'
+import * as okApi from '../../../lib/ok-api/ok-api'
+import * as ibbApi from '../../../lib/ibb-api/ibb-api'
 import {
     getUserInfoByHisContainer,
     getUserAvatarByHisContainer
-} from '../../lib/ok-ui-parsers/user-container'
-import { waitElemAppears } from '../../lib/page-script-loader/page-script-loader'
-
+} from '../../../lib/ok-ui-parsers/user-container'
+import { waitElemAppears } from '../../../lib/page-script-loader/page-script-loader'
+import './inviting-style.css'
 
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
@@ -15,19 +15,12 @@ const token = OK.tkn.get();
 const INVITING_RESULT = okApi.INVITING_RESULT;
 
 const CONTROL_PANEL__TOGGLE_INVITING = '#sk_auto';
+const CONTROL_PANEL__SET_FITLER = '#gotoBabyli';
 const USER_CONTAINER = 'div.photoWrapper';
 const CONTROL_PANEL = '#inviterControlPanel';
 const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
 
-const CONTROL_PANEL_HTML = `<div id="inviterControlPanel">
-            <center>
-                <button id="gotoBabyli">Перейти к бабулям (^.^)</button>
-                </center><br><center>
-                <button id="sk_auto">НАЧАТЬ ИНВАЙТИНГ!</button>
-                <br><br>
-                <span>Пригласили: <span id="invitedDiv">0</span></span>
-            </center>
-        </div>`;
+const CONTROL_PANEL_HTML = require('raw!./control-panel-tpl.html');
 
 export const controlPanelCtrl = {
     invitedCounter: 0,
@@ -36,43 +29,55 @@ export const controlPanelCtrl = {
 
         if ($(CONTROL_PANEL).length == 0) {
 
-            logger.log(__filename, `Control panel doesn't exist`);
-            logger.log(__filename, 'Mounting control panel');
+            console.debug('Mounting control panel');
 
-            // inject control panel
-            $(FILTER_FORM).append(CONTROL_PANEL_HTML);
+            this.injectHTML();
 
-            $('#gotoBabyli').click(() => {
-                // set filter to target audience (grannies)
-                $('#field_ageTo').val(90).change();
-                $('#field_ageFrom').val(50).change();
-                $('#field_male').attr('checked', false).change();
-            });
+            $(CONTROL_PANEL__SET_FITLER).click(this.setFilter);
 
-            $(CONTROL_PANEL__TOGGLE_INVITING).click(() => {
-                if (invitingCtrl.isInvitingProceed == false) {
-                    invitingCtrl.startInviting();
-                } else {
-                    invitingCtrl.stopInviting();
-                }
-            });
+            $(CONTROL_PANEL__TOGGLE_INVITING).click(this.toggleInviting);
 
-            let controlPanelWidth = $(CONTROL_PANEL).width();
-            $(CONTROL_PANEL).css({background: 'rgb(240, 240, 240)', padding: '20px 0px', width: controlPanelWidth});
-            $(window).scroll(()=> {
-                let viewPortTopPointPosition = $(window).scrollTop();
-                if (viewPortTopPointPosition > 310) {
-                    // keep control panel visible when scroll
-                    $(CONTROL_PANEL).css({position: 'fixed', top: 110});
-                } else {
-                    $(CONTROL_PANEL).css({position: 'relative', top: 0});
-                }
-            });
+            $(window).scroll(this.moveControlPanel);
+
+            $(CONTROL_PANEL).addClass('ibb-tools inviting-control-panel');
 
         }else{
-            logger.log(__filename, `Control panel already exists`);
+            console.debug(`Control panel already exists`);
         }
 
+    },
+
+    injectHTML(){
+        $(FILTER_FORM).append(CONTROL_PANEL_HTML);
+    },
+
+    setFilter() {
+        // set filter to target audience (grannies)
+        $('#field_ageTo').val(90).change();
+        $('#field_ageFrom').val(50).change();
+        $('#field_male').attr('checked', false).change();
+    },
+
+    toggleInviting() {
+        if (invitingCtrl) {
+            if (invitingCtrl.isInvitingProceed == false) {
+                invitingCtrl.startInviting();
+            } else {
+                invitingCtrl.stopInviting();
+            }
+        }else{
+            console.error(`toggleInviting(): Inviting Controller hasn't yet initialized`);
+        }
+    },
+
+    moveControlPanel() {
+        let viewPortTopPointPosition = $(window).scrollTop();
+        if (viewPortTopPointPosition > 310) {
+            // keep control panel visible when scroll
+            $(CONTROL_PANEL).css({position: 'fixed', top: 110});
+        } else {
+            $(CONTROL_PANEL).css({position: 'relative', top: 0});
+        }
     },
 
     incrementInvitedCounter() {
