@@ -1,3 +1,5 @@
+import '../../../vendor/jquery-comments'
+
 export const USER_CONTAINER = 'div.photoWrapper';
 
 export class UserContainer {
@@ -20,6 +22,16 @@ export class UserContainer {
 
     paintIn(color, borderWidth = '10px') {
         $(this.avatar).css({border: `solid ${borderWidth} ${color}`});
+    }
+
+    getUserInfo() {
+
+        return JSON.parse(this.jqElem.find('.hookData').comments().html());
+
+    }
+
+    scrollTo() {
+        $(window).scrollTop($(this.jqElem).offset().top - 150);
     }
 
 }

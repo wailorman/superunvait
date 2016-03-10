@@ -4,8 +4,9 @@ import { UserContainer, USER_CONTAINER } from '../../../public/src/modules/invit
 
 describe("UserContainer API", ()=> {
 
+    const fixtureContent = require('raw!../../fixtures/online-users-list.html');
+
     before(()=> {
-        const fixtureContent = require('raw!../../fixtures/online-users-list.html');
         $('#test-zone').html(fixtureContent);
     });
 
@@ -107,6 +108,41 @@ describe("UserContainer API", ()=> {
                 let avatarBorderStyle = userContainerInstance.avatar[0].style.border;
 
                 expect(avatarBorderStyle).to.eql(expectedBorderStyle);
+
+            });
+
+        });
+
+        afterEach(()=> {
+            $('#test-zone').html(fixtureContent);
+        });
+
+    });
+
+    describe("getUserInfo", ()=> {
+
+        let userContainerInstance;
+        let actualInfo;
+
+        const expectations = {
+            "userId": "510332572503",
+            "fio": "Ольга Хохрякова",
+            "userIdDecoded": "510332572503",
+            "male": false
+        };
+
+        before(()=> {
+
+            userContainerInstance = new UserContainer($(USER_CONTAINER)[0]);
+            actualInfo = userContainerInstance.getUserInfo();
+
+        });
+
+        _.forEach(expectations, (value, key)=> {
+
+            it(`${key} should eql ${value}`, () => {
+
+                expect(actualInfo[key]).to.eql(value);
 
             });
 
