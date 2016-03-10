@@ -2,10 +2,8 @@ import '../../../vendor/jquery-comments'
 import { assignThisScriptToUrl } from '../../../lib/spa-url-observer'
 import * as okApi from '../../../lib/ok-api/ok-api'
 import * as ibbApi from '../../../lib/ibb-api/ibb-api'
-import {
-    getUserInfoByHisContainer,
-    getUserAvatarByHisContainer
-} from '../../../lib/ok-ui-parsers/user-container'
+import { getUserInfoByHisContainer, getUserAvatarByHisContainer } from '../../../lib/ok-ui-parsers/user-container'
+import { getCurrentUserInfo } from '../../../lib/ok-ui-parsers/user-data'
 import { waitElemAppears } from '../../../lib/page-script-loader/page-script-loader'
 import { UserContainer } from './user-container'
 import './inviting-style.css'
@@ -202,6 +200,7 @@ export const invitingCtrl = {
         let userInfo = userContainer.getUserInfo();
         let userId = userInfo.userId;
         const city = $('#oSNCN').html();
+        const senderId = getCurrentUserInfo().uid;
 
         userContainer.scrollTo();
 
@@ -213,7 +212,7 @@ export const invitingCtrl = {
                 switch (invitationResult) {
                     case INVITING_RESULT.SUCCESS:
                         userContainer.paintIn('blue', '5px');
-                        this.tellApiAboutInvitation(userId, city).then(()=> {
+                        ibbApi.invites.tell(userId, city, senderId).then(()=> {
                             userContainer.paintIn('blue');
                         });
                         controlPanelCtrl.incrementInvitedCounter();

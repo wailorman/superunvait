@@ -1,17 +1,19 @@
 import '../../vendor/jquery-put-delete'
 import { serialize } from '../url-query-serialize'
 
+//export let API_URL = 'http://localhost:8050';
 export let API_URL = 'http://stool.wailorman.ru';
 const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
 export const invites = {
 
-    tell(userId, city) {
+    tell(userId, city, senderId) {
 
         return $.post(INVITES_RESOURCE_URL, {
             invite: {
                 userId: userId,
-                city: city
+                city: city,
+                senderId: senderId
             }
         }, {dataType: 'json'});
 
