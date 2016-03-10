@@ -30,7 +30,8 @@ var webpackConfig = {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']
                 }
-            }
+            },
+            { test: /\.css$/, loader: 'style!css' }
         ]
 
     },
