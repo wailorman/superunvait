@@ -2,4 +2,5 @@
     background: rgb(240, 240, 240);
     padding: 20px 0;
     width: 240px;
+    z-index: 1000;
 }
