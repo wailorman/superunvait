@@ -455,7 +455,7 @@ var page_script =
 /* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("exports = module.exports = __webpack_require__(76)();\n// imports\n\n\n// module\nexports.push([module.id, \".ibb-tools.inviting-control-panel {\\r\\n    background: rgb(240, 240, 240);\\r\\n    padding: 20px 0;\\r\\n    width: 240px;\\r\\n}\", \"\"]);\n\n// exports\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./~/css-loader!./public/src/modules/inviter/inviting-style.css\n ** module id = 75\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./public/src/modules/inviter/inviting-style.css?./~/css-loader");
+	eval("exports = module.exports = __webpack_require__(76)();\n// imports\n\n\n// module\nexports.push([module.id, \".ibb-tools.inviting-control-panel {\\r\\n    background: rgb(240, 240, 240);\\r\\n    padding: 20px 0;\\r\\n    width: 240px;\\r\\n    z-index: 1000;\\r\\n}\", \"\"]);\n\n// exports\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./~/css-loader!./public/src/modules/inviter/inviting-style.css\n ** module id = 75\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./public/src/modules/inviter/inviting-style.css?./~/css-loader");
 
 /***/ },
 /* 76 */
