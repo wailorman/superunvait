@@ -41,8 +41,6 @@ export const controlPanelCtrl = {
 
             $(window).scroll(this.moveControlPanel);
 
-            $(CONTROL_PANEL).addClass('ibb-tools inviting-control-panel');
-
         }else{
             console.debug(`Control panel already exists`);
         }
@@ -50,7 +48,10 @@ export const controlPanelCtrl = {
     },
 
     injectHTML(){
-        $(FILTER_FORM).append(CONTROL_PANEL_HTML);
+        setTimeout(()=> {
+            $(FILTER_FORM).append(CONTROL_PANEL_HTML);
+            $(CONTROL_PANEL).addClass('ibb-tools inviting-control-panel');
+        }, 700);
     },
 
     setFilter() {
