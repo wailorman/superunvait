@@ -48,10 +48,8 @@ export const controlPanelCtrl = {
     },
 
     injectHTML(){
-        setTimeout(()=> {
-            $(FILTER_FORM).append(CONTROL_PANEL_HTML);
-            $(CONTROL_PANEL).addClass('ibb-tools inviting-control-panel');
-        }, 700);
+        $(FILTER_FORM).append(CONTROL_PANEL_HTML);
+        $(CONTROL_PANEL).addClass('ibb-tools inviting-control-panel');
     },
 
     setFilter() {
@@ -113,7 +111,7 @@ export const invitingCtrl = {
 
     startInviting() {
 
-        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__STOP)
+        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__STOP);
 
         this.isInvitingProceed = true;
 
@@ -198,15 +196,9 @@ export const loadInterface = {
 
         logger.log(__filename, `/online visited`);
 
-        waitElemAppears($(FILTER_FORM))
-            .then(()=> {
-                $(document).ready(()=> {
-                    controlPanelCtrl.mount();
-                });
-            })
-            .catch((err)=> {
-                logger.error(__filename, err);
-            });
+        setTimeout(()=> {
+            controlPanelCtrl.mount();
+        }, 700);
 
     },
     onPageLeft() {
