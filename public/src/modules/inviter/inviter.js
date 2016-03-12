@@ -109,66 +109,6 @@ export const invitingCtrl = {
 
     },
 
-    tellApiAboutInvitation(userId, city) {
-
-        return ibbApi.invites.tell(userId, city)
-            .done(()=> {
-                logger.log(__filename, `Told API about invitation`);
-            })
-            .fail(()=> {
-                logger.error(__filename, `IBB API /invites error`);
-            });
-
-    },
-
-    scrollToInvitee(userContainer) {
-        $(window).scrollTop(userContainer.offset().top - 150);
-    },
-
-    paintAvatar(userAvatar, invitationPromise) {
-
-        invitationPromise
-            .then((data)=> {
-                userAvatar.paintIn('blue');
-
-                return data;
-            })
-            .catch((err)=> {
-
-                switch (err) {
-                    case INVITING_RESULT.TOO_OFTEN:
-                        userAvatar.paintIn('black');
-                        break;
-
-                    case INVITING_RESULT.NOT_RECEIVING:
-                        userAvatar.paintIn('red');
-                        break;
-
-                    case INVITING_RESULT.ALREADY_INVITED:
-                        userAvatar.paintIn('lightblue');
-                        break;
-                }
-
-                return err;
-            });
-
-    },
-
-    getResultOfInvitation(data) {
-
-        let resultOfInvitation;
-
-        if (data.indexOf('слишком часто') > -1)
-            resultOfInvitation = INVITING_RESULT.TOO_OFTEN;
-        else if (data.indexOf('не принимает приглашения') > -1)
-            resultOfInvitation = INVITING_RESULT.NOT_RECEIVING;
-        else
-            resultOfInvitation = INVITING_RESULT.SUCCESS;
-
-        return resultOfInvitation;
-
-    },
-
     //////////////////////////////////////////////////////
 
     startInviting() {
