@@ -2,6 +2,9 @@
 
 const express = require('express');
 const models = require('../../models/');
+const sequelize = require('../../models/index').sequelize;
+const Q = require('q');
+const _ = require('lodash');
 
 const Member = models.member;
 const membersRouter = express.Router();
