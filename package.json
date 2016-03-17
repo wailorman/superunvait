@@ -17,7 +17,8 @@
     "start": "NODE_ENV=production node --harmony ./src/app.js",
     "start:production:win": "set NODE_ENV=production&& node ./src/app.js",
     "start:dev": "node --harmony ./src/app.js",
-    "migrate": "node node_modules/sequelize-cli/bin/sequelize db:migrate"
+    "migrate": "node node_modules/sequelize-cli/bin/sequelize db:migrate",
+    "build:test:unit": "node ./node_modules/webpack/bin/webpack.js --config webpack.config-test.js"
   },
   "repository": {
     "type": "git",
