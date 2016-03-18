@@ -1,10 +1,10 @@
 
 
-import { UserContainer, USER_CONTAINER } from '../../../public/src/modules/inviter/user-container'
+import { UserContainer, USER_CONTAINER } from '../../src/modules/inviter/user-container'
 
 describe("UserContainer API", ()=> {
 
-    const fixtureContent = require('raw!../../fixtures/online-users-list.html');
+    const fixtureContent = require('raw!../fixtures/online-users-list.html');
 
     before(()=> {
         $('#test-zone').html(fixtureContent);

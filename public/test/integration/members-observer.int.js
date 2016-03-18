@@ -1,4 +1,4 @@
-import { matchUrl } from '../../../public/src/modules/members-observer'
+import { matchUrl } from '../../src/modules/members-observer'
 
 describe("Members observer", ()=> {
 

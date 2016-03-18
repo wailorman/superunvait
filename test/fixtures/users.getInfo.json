@@ -1,0 +1,40 @@
+[
+  {
+    "uid": "558123591415",
+    "birthday": "1954-06-26",
+    "age": 61,
+    "name": "Лидия Орёл(Тарутина)",
+    "gender": "female",
+    "location": {
+      "city": "Москва",
+      "country": "RUSSIAN_FEDERATION",
+      "countryCode": "RU",
+      "countryName": "Россия"
+    },
+    "last_online": "2016-02-23 02:10:50",
+    "photo_id": "815884534519",
+    "allows_anonym_access": true,
+    "allows_messaging_only_for_friends": false,
+    "private": false,
+    "has_service_invisible": false
+  },
+  {
+    "uid": "571769013138",
+    "birthday": "1955-04-30",
+    "age": 60,
+    "name": "Ирина Селезнёва",
+    "gender": "female",
+    "location": {
+      "city": "Москва",
+      "country": "RUSSIAN_FEDERATION",
+      "countryCode": "RU",
+      "countryName": "Россия"
+    },
+    "last_online": "2016-03-15 02:11:00",
+    "photo_id": "815909729170",
+    "allows_anonym_access": true,
+    "allows_messaging_only_for_friends": false,
+    "private": false,
+    "has_service_invisible": false
+  }
+]
