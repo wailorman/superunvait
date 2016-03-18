@@ -1,11 +1,11 @@
-import { getCurrentUserInfo } from '../../../public/lib/ok-ui-parsers/user-data'
+import { getCurrentUserInfo } from '../../lib/ok-ui-parsers/user-data'
 
 describe("ok ui parsers / user data", ()=> {
 
     describe("getCurrentUserInfo", ()=> {
 
         before(()=> {
-            const fixtureContent = require('raw!../../fixtures/current-user-hook-data.html');
+            const fixtureContent = require('raw!../fixtures/current-user-hook-data.html');
             $('#test-zone').html(fixtureContent);
         });
 

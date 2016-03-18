@@ -1,6 +1,6 @@
 import {
     pluckNumberFromStr
-} from '../../../../public/src/modules/post-hunter/parsers/ok-ru'
+} from '../../../src/modules/post-hunter/parsers/ok-ru'
 
 describe("post hunter / ok.ru parser", ()=> {
 

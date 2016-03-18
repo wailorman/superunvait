@@ -2,7 +2,7 @@ import {
     inWhichRangeIsNumber,
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
-} from '../../../../public/src/modules/post-hunter/sorting'
+} from '../../../src/modules/post-hunter/sorting'
 
 
 describe("Post hunter / sorting", ()=> {

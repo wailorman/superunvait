@@ -5,14 +5,14 @@ import {
     paintPosts,
 
     POSTS_SELECTOR
-} from '../../../public/src/modules/post-hunter/parsers/ok-ru'
+} from '../../src/modules/post-hunter/parsers/ok-ru'
 
 const _POSTS_SELECTOR = POSTS_SELECTOR;
 
 import {
     splitArrayToNRanges,
     getScoreByLikesAmountAndRanges
-} from '../../../public/src/modules/post-hunter/sorting'
+} from '../../src/modules/post-hunter/sorting'
 
 describe("post hunter / parsers / ok-ru", ()=> {
 
@@ -27,7 +27,7 @@ describe("post hunter / parsers / ok-ru", ()=> {
         0.7, 0.9, 1, 0.5, null, 0.2, 0.6, 0.2];
 
     before(()=> {
-        const fixtureContent = require('raw!../../fixtures/ibb-feed.html');
+        const fixtureContent = require('raw!../fixtures/ibb-feed.html');
         $('#test-zone').html(fixtureContent);
     });
 
@@ -38,7 +38,7 @@ describe("post hunter / parsers / ok-ru", ()=> {
     describe("getLikesRanges && getArrayOfLikes", ()=> {
 
         beforeEach(()=> {
-            const fixtureContent = require('raw!../../fixtures/ibb-feed.html');
+            const fixtureContent = require('raw!../fixtures/ibb-feed.html');
             $('#test-zone').html(fixtureContent);
         });
 
