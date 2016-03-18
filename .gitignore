@@ -1,5 +1,5 @@
 .idea/
 node_modules/
-public/dist/*.build.js
 /db/development.sqlite
+dist/crx/*.build.js
 dist/test/*.build.js

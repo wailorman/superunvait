@@ -13,7 +13,7 @@ var webpackConfig = {
         'background': './public/src/background.js'
     },
     output: {
-        path: __dirname + '/public/dist',
+        path: __dirname + '/dist/crx',
         filename: '[name].build.js',
         library: "[name]"
     },
