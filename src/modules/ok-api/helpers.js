@@ -1,17 +1,5 @@
 const humps = require('humps');
 
-const adoptReceivedData = function (receivedData) {
-
-    const resultData = {};
-
-    _.each(receivedData, (value, index)=>{
-        resultData[humps.camelize(index)] = value;
-    });
-
-    return resultData;
-
-};
-
 const camelizeKeys = function (receivedData) {
 
     const resultData = {};
