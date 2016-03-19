@@ -48,4 +48,4 @@ const adoptGender = function (receivedData) {
 };
 
 
-module.exports = {camelizeKeys, adoptLocation, adoptGender, adoptReceivedData};
+module.exports = {camelizeKeys, adoptLocation, adoptGender};
