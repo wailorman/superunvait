@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
         gender: DataTypes.ENUM('F', 'M'),
         lastOnline: DataTypes.DATE,
         city: DataTypes.STRING,
-        countryName: DataTypes.STRING,
+        country: DataTypes.STRING,
         photoId: DataTypes.STRING,
         hasServiceInvisible: DataTypes.BOOLEAN,
         private: DataTypes.BOOLEAN

@@ -31,7 +31,7 @@ module.exports = {
             city: {
                 type: Sequelize.STRING
             },
-            countryName: {
+            country: {
                 type: Sequelize.STRING
             },
             photoId: {
