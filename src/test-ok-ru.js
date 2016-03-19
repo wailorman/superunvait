@@ -1,4 +1,10 @@
-const pullUsersData = require('./modules/pull-users-data');
+const pullUsersData = require('./modules/ok-api/get-users-info');
+const nock = require('nock');
+
+//nock('http://api.odnoklassniki.ru')
+//    .filteringPath(()=>'/fb.do')
+//    .get('/fb.do')
+//    .reply(200, 'OK');
 
 pullUsersData.pullUsersInfo(['571769013138, 558123591415']);
 

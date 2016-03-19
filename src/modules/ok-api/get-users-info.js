@@ -1,11 +1,13 @@
 "use strict";
 
 const okApi = require('./ok-api-facade');
-const models = require('../../models/');
+const models = require('../../../models/index');
 const User = models.user;
 const _ = require('lodash');
-const sequelize = require('../../models/index').sequelize;
+const sequelize = require('../../../models/index').sequelize;
 const Q = require('q');
+const humps = require('humps');
+const okApiHelpers = require('./helpers');
 
 const fieldsRequiredForUsersGetInfo = [
     'uid',
@@ -100,4 +102,4 @@ const pullUsersInfo = function (userIds) {
 
 };
 
-module.exports = {pullUsersInfo};
+module.exports = {pullUsersInfo, adoptReceivedData};
