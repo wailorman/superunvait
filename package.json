@@ -17,10 +17,11 @@
     "start:dev": "node --harmony ./src/app.js",
     "migrate": "node node_modules/sequelize-cli/bin/sequelize db:migrate",
     "build:test:unit": "node ./node_modules/webpack/bin/webpack.js --config webpack.config-test.js",
-
     "serve:test:client:integration": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config-mocha.js --content-base \"./dist/test/integration-client\"",
     "build:crx": "node ./node_modules/webpack/bin/webpack.js && node ./node_modules/gulp/bin/gulp.js default",
-    "build:test": "node ./node_modules/webpack/bin/webpack.js --config webpack.config-mocha.js"
+    "build:test": "node ./node_modules/webpack/bin/webpack.js --config webpack.config-mocha.js",
+    "test:api:integration": "node ./node_modules/mocha/bin/mocha --harmony --require ./test/requirements/mocha.js --colors ./test/integration/**/*.int.js",
+    "test:api:unit": "node ./node_modules/mocha/bin/mocha --harmony --require ./test/requirements/mocha.js --colors ./test/unit/**/*.unit.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "express": "^4.13.4",
     "forever": "^0.15.1",
     "fs": "0.0.2",
+    "humps": "^1.0.0",
     "jquery": "^2.2.0",
     "lodash": "^4.1.0",
     "mysql": "^2.10.2",
@@ -64,6 +66,7 @@
     "gulp-crx-pack": "^1.0.1",
     "gulp-zip": "^3.2.0",
     "jsdom": "^8.1.0",
+    "json-loader": "^0.5.4",
     "karma": "^0.13.15",
     "karma-chrome-launcher": "^0.2.2",
     "karma-cli": "^0.1.1",

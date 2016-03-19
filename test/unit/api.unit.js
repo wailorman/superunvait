@@ -1,4 +1,4 @@
-console.log(`api.test1`);
+"use strict";
 
 describe("desc!", ()=> {
 

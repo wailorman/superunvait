@@ -9,9 +9,6 @@ var webpackConfig = {
     node: originalConfig.node,
     entry: {
 
-        "unit-api": `${__dirname}/test/unit/index`,
-        "integration-api": `${__dirname}/test/integration/index`,
-
         "unit-client": `${__dirname}/public/test/unit/index`,
         "integration-client": `mocha!${__dirname}/public/test/integration/index`
 
@@ -28,6 +25,7 @@ var webpackConfig = {
 
         loaders: [
             originalConfig.module.loaders[0],
+            originalConfig.module.loaders[1],
 
             {test: /\.css$/, loader: 'null'}
         ]

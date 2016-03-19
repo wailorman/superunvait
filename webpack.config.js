@@ -4,7 +4,14 @@ var webpack = require('webpack');
 var webpackConfig = {
     context: __dirname,
     node: {
-        __filename: true
+        __filename: true,
+        console: true,
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        dgram: 'empty',
+        'pg-hstore': 'empty',
+        dns: 'empty'
     },
     entry: {
         'page_script': './public/src/page-script.js',
@@ -30,6 +37,10 @@ var webpackConfig = {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']
                 }
+            },
+            {
+                test: /\.json$/,
+                loader: 'json'
             },
             { test: /\.css$/, loader: 'style!css' }
         ]
