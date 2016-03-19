@@ -4,6 +4,8 @@ const ok = require('ok.ru');
 const Q = require('q');
 
 const okCredentials = process.env.OK_CREDENTIALS;
+if (!okCredentials) throw 'OK_CREDENTIALS env var should be passed';
+
 const splitedCredentials = okCredentials.split(';');
 
 const requestOptions = {
