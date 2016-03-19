@@ -36,5 +36,24 @@
     "allows_messaging_only_for_friends": false,
     "private": false,
     "has_service_invisible": false
+  },
+  {
+    "uid": "000069013138",
+    "birthday": "1955-04-30",
+    "age": 60,
+    "name": "Михаил Фербер",
+    "gender": "male",
+    "location": {
+      "city": "Москва",
+      "country": "RUSSIAN_FEDERATION",
+      "countryCode": "RU",
+      "countryName": "Россия"
+    },
+    "last_online": "2016-03-15 02:11:00",
+    "photo_id": "815909729171",
+    "allows_anonym_access": true,
+    "allows_messaging_only_for_friends": false,
+    "private": false,
+    "has_service_invisible": false
   }
 ]
