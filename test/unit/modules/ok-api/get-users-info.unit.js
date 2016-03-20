@@ -1,6 +1,9 @@
 const getUsersInfoHelpers = require('../../../../src/modules/ok-api/helpers');
+
 const fixtures = require('../../../fixtures/users.getInfo.json');
+
 const humps = require('humps');
+const nock = require('nock');
 
 describe("OK API / get users info", ()=> {
 
@@ -95,6 +98,48 @@ describe("OK API / get users info", ()=> {
 
         });
 
-    });
+        describe("getCredentialsByStr", ()=> {
 
+            const getCredentialsByStr = getUsersInfoHelpers.getCredentialsByStr;
+            const credentialsStr = 'id576;publicABA;secretA827F;tknAD4';
+
+            it(`.applicationId`, () => {
+
+                const result = getCredentialsByStr(credentialsStr);
+
+                expect(result.applicationId).to.exist;
+                expect(result.applicationId).to.eql('id576');
+
+            });
+
+            it(`.applicationKey`, () => {
+
+                const result = getCredentialsByStr(credentialsStr);
+
+                expect(result.applicationKey).to.exist;
+                expect(result.applicationKey).to.eql('publicABA');
+
+            });
+
+            it(`.applicationSecretKey`, () => {
+
+                const result = getCredentialsByStr(credentialsStr);
+
+                expect(result.applicationSecretKey).to.exist;
+                expect(result.applicationSecretKey).to.eql('secretA827F');
+
+            });
+
+            it(`.accessToken`, () => {
+
+                const result = getCredentialsByStr(credentialsStr);
+
+                expect(result.accessToken).to.exist;
+                expect(result.accessToken).to.eql('secretA827F');
+
+            });
+
+        });
+
+    });
 });
