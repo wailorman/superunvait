@@ -2,6 +2,8 @@
 
 const nock = require('nock');
 
+const fixtures = require('../../../fixtures/users.getInfo.json');
+
 const models = require('../../../../models/index');
 const sequelize = models.sequelize;
 const User = models.user;
@@ -10,11 +12,15 @@ const okApiHelpers = require('../../../../src/modules/ok-api/helpers');
 const getUsersInfo = require('../../../../src/modules/ok-api/get-users-info');
 const signatureCalculator = require('../../../../src/modules/ok-api/signature-calculator');
 
+const credentials = okApiHelpers.getCredentialsByStr(process.env.OK_CREDENTIALS);
+
 describe("ok api / get users info", ()=> {
 
-    before(()=> {
+    const cleanDB = ()=> {
         return sequelize.sync({force: true});
-    });
+    };
+
+    before(cleanDB);
 
     describe("Users", ()=> {
 
@@ -34,31 +40,28 @@ describe("ok api / get users info", ()=> {
 
     describe("getUsersInfoFromOK", ()=> {
 
-        const credentials = okApiHelpers.getCredentialsByStr(process.env.OK_CREDENTIALS);
-
         const getUsersInfoFromOK = getUsersInfo.getUsersInfoFromOK;
 
         it(`should make correct request`, () => {
 
-            let query = {
+            const query = {
                 method: "users.getInfo",
                 fields: "uid,name,age,allows_anonym_access,allows_messaging_only_for_friends,birthday,gender,last_online,location,photo_id,has_service_invisible,private",
-                uids: "123",
-
-                application_key: credentials.applicationKey
+                uids: "558123591415"
             };
 
-            query.sig = signatureCalculator.calculateSignature(query,  credentials);
-            query.access_token = credentials.accessToken;
+            const expectedQuery = signatureCalculator._generateQueryObjectWithSig(query, credentials);
 
             const usersGetInfoMock = nock('http://api.odnoklassniki.ru')
                 .get('/fb.do')
-                .query(query)
-                .reply(200, 'OK');
+                .query(expectedQuery)
+                .reply(200, [fixtures[0]]);
 
-            return getUsersInfoFromOK(['123'])
+            return getUsersInfoFromOK(['558123591415'])
                 .then((result)=> {
-                    debugger;
+                    expect(result[0].uid).to.eql(fixtures[0].uid);
+                    expect(result[0].name).to.eql(fixtures[0].name);
+
                     expect(usersGetInfoMock.isDone()).to.eql(true);
                 });
 
@@ -77,6 +80,82 @@ describe("ok api / get users info", ()=> {
 
     });
 
+    describe("bulkUpsert", ()=> {
+
+        beforeEach(cleanDB);
+
+        it(`should bulk write to DB`, () => {
+
+            const dataArray = [
+                {uid: '1234'},
+                {uid: '5678'}
+            ];
+
+            return getUsersInfo.bulkUpsert(User, dataArray, true)
+                .then(()=> {
+                    return User.find({where: {uid: '1234'}});
+                })
+                .then((res1)=> {
+                    expect(res1.uid).to.eql('1234');
+                    return User.find({where: {uid: '5678'}});
+                })
+                .then((res2)=> {
+                    expect(res2.uid).to.eql('5678');
+                });
+
+        });
+
+    });
+
+    describe("saveUsersInfo", ()=> {
+
+        const saveUsersInfo = getUsersInfo.saveUsersInfo;
+
+        beforeEach(cleanDB);
+
+        it(`should write user data to db`, () => {
+
+            const query = {
+                method: "users.getInfo",
+                fields: "uid,name,age,allows_anonym_access,allows_messaging_only_for_friends,birthday,gender,last_online,location,photo_id,has_service_invisible,private",
+                uids: "558123591415,571769013138"
+            };
+
+            const expectedQuery = signatureCalculator._generateQueryObjectWithSig(query, credentials);
+
+            const usersGetInfoMock = nock('http://api.odnoklassniki.ru')
+                .get('/fb.do')
+                .query(expectedQuery)
+                .reply(200, [fixtures[0], fixtures[1]]);
+
+            return saveUsersInfo([fixtures[0].uid, fixtures[1].uid])
+                .then(()=> {
+                    expect(usersGetInfoMock.isDone()).to.eql(true);
+
+                    return Q.all([
+                        User.find({
+                            where: {
+                                uid: fixtures[0].uid
+                            }
+                        }),
+                        User.find({
+                            where: {
+                                uid: fixtures[1].uid
+                            }
+                        })
+                    ]);
+
+                })
+                .then((res)=> {
+
+                    expect(res[0].uid).to.eql(fixtures[0].uid);
+                    expect(res[1].uid).to.eql(fixtures[1].uid);
+
+                });
+
+        });
+
+    });
 
 });
 

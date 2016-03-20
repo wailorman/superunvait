@@ -65,4 +65,14 @@ const calculateSignature = function (queryObject, credentials) {
     return md5(sortedParams + secret);
 };
 
-module.exports = {objectToAscSortedString, calculateSignature};
+const _generateQueryObjectWithSig = function (query, credentials) {
+
+    query.application_key = credentials.applicationKey;
+    query.sig = calculateSignature(query,  credentials);
+    query.access_token = credentials.accessToken;
+
+    return query;
+
+};
+
+module.exports = {objectToAscSortedString, calculateSignature, _generateQueryObjectWithSig};

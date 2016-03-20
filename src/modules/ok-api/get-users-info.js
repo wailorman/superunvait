@@ -23,83 +23,85 @@ const fieldsRequiredForUsersGetInfo = [
     'has_service_invisible',
     'private'
 ];
-const joinedFields = fieldsRequiredForUsersGetInfo.join(',');
+const requiredFields = fieldsRequiredForUsersGetInfo.join(',');
 
-const adoptPulledDataToDbFormat = function (dataFromApi) {
+const adoptReceivedData = function (dataFromApi) {
 
-    let dataForDB = {};
+    const camelized = okApiHelpers.camelizeKeys(dataFromApi);
+    const adoptedLocation = okApiHelpers.adoptLocation(camelized);
 
-    dataForDB.allowsAnonymAccess = dataFromApi.allows_anonym_access;
-    dataForDB.allowsMessagingOnlyForFriends = dataFromApi.allows_messaging_only_for_friends;
-    dataForDB.lastOnline = dataFromApi.last_online;
-    dataForDB.photoId = dataFromApi.photo_id;
-    dataForDB.hasServiceInvisible = dataFromApi.has_service_invisible;
-
-    switch (dataFromApi.gender) {
-        case 'male':
-            dataForDB.gender = 'M';
-            break;
-        case 'female':
-            dataForDB.gender = 'F';
-            break;
-    }
-
-    if (dataFromApi.location) {
-        dataForDB.city = dataFromApi.location.city;
-        dataForDB.countryName = dataFromApi.location.countryName;
-    }
-
-    const fieldsToPickFromApiResponse = _.without(
-        fieldsRequiredForUsersGetInfo, 'gender', 'location',
-        'allows_anonym_access', 'allows_messaging_only_for_friends', 'last_online', 'photo_id', 'has_service_invisible'
-    );
-
-    const cuttedDataFromApi = _.pick(dataFromApi, fieldsToPickFromApiResponse);
-
-    return _.merge(cuttedDataFromApi, dataForDB);
+    return okApiHelpers.adoptGender(adoptedLocation);
 
 };
 
-const pullUsersInfo = function (userIds) {
+const getUsersInfoFromOK = function (userIds) {
 
     let requestParameters = {
         method: 'users.getInfo',
         uids: userIds.join(',') || userIds,
-        fields: joinedFields
+        fields: requiredFields
     };
 
-    okApi.get(requestParameters)
-        .then((data)=> {
+    return okApi.get(requestParameters);
 
-            sequelize.transaction((t1)=> {
+};
 
-                let transactionQueries = [];
+const bulkUpsert = function (model, dataArray, validationNecessity) {
 
-                data.forEach((user)=> {
+    if (validationNecessity === undefined)
+        validationNecessity = true;
 
-                    const adoptedUser = adoptPulledDataToDbFormat(user);
+    return sequelize.transaction((t1)=> {
 
-                    transactionQueries.push(
-                        User.upsert(
-                            adoptedUser,
-                            {
-                                transaction: t1,
-                                validate: true
-                            }
-                        )
-                    );
+        let transactionQueries = [];
 
-                });
+        dataArray.forEach((data)=> {
 
-                return Q.all([transactionQueries]);
+            transactionQueries.push(
+                model.upsert(
+                    data,
+                    {
+                        transaction: t1,
+                        validate: validationNecessity
+                    }
+                )
+            );
 
+        });
+
+        return Q.all([transactionQueries]);
+
+    });
+
+};
+
+const saveUsersInfo = function (userIds) {
+
+    let requestParameters = {
+        method: 'users.getInfo',
+        uids: userIds.join(',') || userIds,
+        fields: requiredFields
+    };
+
+    return okApi.get(requestParameters)
+        .then((receivedData)=> {
+
+            let adoptedData = [];
+
+            receivedData.forEach((data)=> {
+                adoptedData.push(adoptReceivedData(data));
             });
-        })
-        .catch((err)=> {
-            debugger;
-            return err;
+
+            return bulkUpsert(User, adoptedData);
+
         });
 
 };
 
-module.exports = {pullUsersInfo, adoptReceivedData};
+module.exports = {
+    saveUsersInfo,
+    getUsersInfoFromOK,
+    adoptReceivedData,
+    fieldsRequiredForUsersGetInfo,
+    bulkUpsert
+};
