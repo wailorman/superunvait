@@ -9,7 +9,8 @@
   },
   "test": {
     "storage": "./db/development.sqlite",
-    "dialect": "sqlite"
+    "dialect": "sqlite",
+    "logging": false
   },
   "production": {
     "use_env_variable": "DB_CONNECTION_STRING",
