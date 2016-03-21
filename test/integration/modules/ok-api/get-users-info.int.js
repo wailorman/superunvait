@@ -3,6 +3,7 @@
 const nock = require('nock');
 
 const fixtures = require('../../../fixtures/users.getInfo.json');
+const usedFixtures = [fixtures[0], fixtures[1]];
 
 const models = require('../../../../models/index');
 const sequelize = models.sequelize;
@@ -11,6 +12,8 @@ const User = models.user;
 const okApiHelpers = require('../../../../src/modules/ok-api/helpers');
 const getUsersInfo = require('../../../../src/modules/ok-api/get-users-info');
 const signatureCalculator = require('../../../../src/modules/ok-api/signature-calculator');
+
+const requiredFieldsStr = getUsersInfo.requiredFieldsStr;
 
 const credentials = okApiHelpers.getCredentialsByStr(process.env.OK_CREDENTIALS);
 
@@ -27,7 +30,7 @@ describe("ok api / get users info", ()=> {
         it(`should insert record`, () => {
 
             return User.create({uid: "123456"})
-                .then((result)=> {
+                .then(()=> {
                     return User.find({uid: '123456'});
                 })
                 .then((user)=> {
@@ -46,7 +49,7 @@ describe("ok api / get users info", ()=> {
 
             const query = {
                 method: "users.getInfo",
-                fields: "uid,name,age,allows_anonym_access,allows_messaging_only_for_friends,birthday,gender,last_online,location,photo_id,has_service_invisible,private",
+                fields: requiredFieldsStr,
                 uids: "558123591415"
             };
 
@@ -55,12 +58,13 @@ describe("ok api / get users info", ()=> {
             const usersGetInfoMock = nock('http://api.odnoklassniki.ru')
                 .get('/fb.do')
                 .query(expectedQuery)
-                .reply(200, [fixtures[0]]);
+                .reply(200, [usedFixtures[0]]);
 
             return getUsersInfoFromOK(['558123591415'])
                 .then((result)=> {
-                    expect(result[0].uid).to.eql(fixtures[0].uid);
-                    expect(result[0].name).to.eql(fixtures[0].name);
+
+                    expect(result[0].uid).to.eql(usedFixtures[0].uid);
+                    expect(result[0].name).to.eql(usedFixtures[0].name);
 
                     expect(usersGetInfoMock.isDone()).to.eql(true);
                 });
@@ -111,45 +115,78 @@ describe("ok api / get users info", ()=> {
 
         const saveUsersInfo = getUsersInfo.saveUsersInfo;
 
-        beforeEach(cleanDB);
-
-        it(`should write user data to db`, () => {
+        let usersGetInfoMock;
+        const mockOkApiRequest = function () {
 
             const query = {
                 method: "users.getInfo",
-                fields: "uid,name,age,allows_anonym_access,allows_messaging_only_for_friends,birthday,gender,last_online,location,photo_id,has_service_invisible,private",
+                fields: requiredFieldsStr,
                 uids: "558123591415,571769013138"
             };
 
             const expectedQuery = signatureCalculator._generateQueryObjectWithSig(query, credentials);
 
-            const usersGetInfoMock = nock('http://api.odnoklassniki.ru')
+            usersGetInfoMock = nock('http://api.odnoklassniki.ru')
                 .get('/fb.do')
                 .query(expectedQuery)
-                .reply(200, [fixtures[0], fixtures[1]]);
+                .reply(200, [usedFixtures[0], usedFixtures[1]]);
 
-            return saveUsersInfo([fixtures[0].uid, fixtures[1].uid])
+        };
+
+        beforeEach(cleanDB);
+        beforeEach(mockOkApiRequest);
+
+        const consideredUids = [usedFixtures[0].uid, usedFixtures[1].uid];
+
+        it(`should write 2 users`, () => {
+
+            return saveUsersInfo(consideredUids)
                 .then(()=> {
                     expect(usersGetInfoMock.isDone()).to.eql(true);
 
-                    return Q.all([
-                        User.find({
-                            where: {
-                                uid: fixtures[0].uid
-                            }
-                        }),
-                        User.find({
-                            where: {
-                                uid: fixtures[1].uid
-                            }
-                        })
-                    ]);
+                    return User.findAll({
+                        where: {
+                            $or: [
+                                {uid: consideredUids[0]},
+                                {uid: consideredUids[1]}
+                            ]
+                        }
+                    })
 
                 })
-                .then((res)=> {
+                .then((usersFromDB)=> {
 
-                    expect(res[0].uid).to.eql(fixtures[0].uid);
-                    expect(res[1].uid).to.eql(fixtures[1].uid);
+                    expect(usersFromDB[0].uid).to.eql(usedFixtures[0].uid);
+                    expect(usersFromDB[1].uid).to.eql(usedFixtures[1].uid);
+
+                });
+
+        });
+
+        it(`check most valuable fields`, () => {
+
+            return saveUsersInfo(consideredUids)
+                .then(()=> {
+
+                    return User.findAll({
+                        where: {
+                            $or: [
+                                {uid: usedFixtures[0].uid},
+                                {uid: usedFixtures[1].uid}
+                            ]
+                        }
+                    })
+
+                })
+                .then((usersFromDB)=> {
+
+                    const userAttrs = usersFromDB[0].get({plain: true});
+                    const receivedAttrs = usedFixtures[0];
+
+                    expect(userAttrs).to.have.property('uid', receivedAttrs.uid);
+                    expect(userAttrs).to.have.property('name', receivedAttrs.name);
+                    expect(userAttrs).to.have.property('city', receivedAttrs.location.city);
+                    expect(userAttrs).to.have.property('country', receivedAttrs.location.countryName);
 
                 });
 

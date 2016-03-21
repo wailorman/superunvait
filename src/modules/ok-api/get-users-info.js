@@ -21,7 +21,7 @@ const fieldsRequiredForUsersGetInfo = [
     'has_service_invisible',
     'private'
 ];
-const requiredFields = fieldsRequiredForUsersGetInfo.join(',');
+const requiredFieldsStr = fieldsRequiredForUsersGetInfo.join(',');
 
 const adoptReceivedData = function (dataFromApi) {
 
@@ -37,7 +37,7 @@ const getUsersInfoFromOK = function (userIds) {
     let requestParameters = {
         method: 'users.getInfo',
         uids: userIds.join(',') || userIds,
-        fields: requiredFields
+        fields: requiredFieldsStr
     };
 
     return okApi.get(requestParameters);
@@ -94,6 +94,6 @@ module.exports = {
     saveUsersInfo,
     getUsersInfoFromOK,
     adoptReceivedData,
-    fieldsRequiredForUsersGetInfo,
+    requiredFieldsStr,
     bulkUpsert
 };
