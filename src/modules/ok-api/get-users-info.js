@@ -3,7 +3,6 @@
 const okApi = require('./ok-api-facade');
 const models = require('../../../models/index');
 const User = models.user;
-const _ = require('lodash');
 const sequelize = require('../../../models/index').sequelize;
 const Q = require('q');
 const okApiHelpers = require('./helpers');
@@ -76,13 +75,7 @@ const bulkUpsert = function (model, dataArray, validationNecessity) {
 
 const saveUsersInfo = function (userIds) {
 
-    let requestParameters = {
-        method: 'users.getInfo',
-        uids: userIds.join(',') || userIds,
-        fields: requiredFields
-    };
-
-    return okApi.get(requestParameters)
+    return getUsersInfoFromOK(userIds)
         .then((receivedData)=> {
 
             let adoptedData = [];
