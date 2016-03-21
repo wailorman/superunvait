@@ -2,20 +2,17 @@
 
 const ok = require('ok.ru');
 const Q = require('q');
+const okApiHelpers = require('./helpers');
 
-const okCredentials = process.env.OK_CREDENTIALS;
-if (!okCredentials) throw 'OK_CREDENTIALS env var should be passed';
+const okCredentialsStr = process.env.OK_CREDENTIALS;
+if (!okCredentialsStr) throw 'OK_CREDENTIALS env var should be passed';
 
-const splitedCredentials = okCredentials.split(';');
+const okCredentials = okApiHelpers.getCredentialsByStr(okCredentialsStr);
 
-const requestOptions = {
-    applicationId: splitedCredentials[0],
-    applicationKey: splitedCredentials[1],
-    applicationSecretKey: splitedCredentials[2]
-};
+const requestOptions = _.pick(okCredentials, ['applicationId', 'applicationKey', 'applicationSecretKey']);
 
 ok.setOptions(requestOptions);
-ok.setAccessToken(splitedCredentials[3]);
+ok.setAccessToken(okCredentials.accessToken);
 
 const universalFunction = function (method, requestParameters) {
     let nodefiedRequest;
@@ -34,9 +31,20 @@ const universalFunction = function (method, requestParameters) {
         });
 };
 
+const getCredentialsStr = function () {
+    return okCredentialsStr;
+};
+
+const getCredentials = function () {
+    return okCredentials;
+};
+
 const okFacade = {
     get: universalFunction.bind(this, 'GET'),
-    post: universalFunction.bind(this, 'POST')
+    post: universalFunction.bind(this, 'POST'),
+
+    getCredentials,
+    getCredentialsStr
 };
 
 module.exports = okFacade;
