@@ -6,7 +6,6 @@ const User = models.user;
 const _ = require('lodash');
 const sequelize = require('../../../models/index').sequelize;
 const Q = require('q');
-const humps = require('humps');
 const okApiHelpers = require('./helpers');
 
 const fieldsRequiredForUsersGetInfo = [

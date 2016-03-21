@@ -1,11 +1,10 @@
-const humps = require('humps');
 
 const camelizeKeys = function (receivedData) {
 
     const resultData = {};
 
     _.each(receivedData, (value, index)=>{
-        resultData[humps.camelize(index)] = value;
+        resultData[_.camelCase(index)] = value;
     });
 
     return resultData;

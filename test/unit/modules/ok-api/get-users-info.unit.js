@@ -2,7 +2,6 @@ const getUsersInfoHelpers = require('../../../../src/modules/ok-api/helpers');
 
 const fixtures = require('../../../fixtures/users.getInfo.json');
 
-const humps = require('humps');
 const nock = require('nock');
 
 describe("OK API / get users info", ()=> {
@@ -13,21 +12,34 @@ describe("OK API / get users info", ()=> {
 
             const camelizeKeys = getUsersInfoHelpers.camelizeKeys;
 
-            it(`no fields with "_" - only camelCase`, () => {
+            it(`should convert under_scored to underScored and remove old attr`, () => {
 
-                const result = camelizeKeys(fixtures[0]);
+                const result = camelizeKeys({under_scored: 123});
                 const resultKeys = _.keys(result);
 
-                expect(result.lastOnline).to.exist;
-                expect(result.last_online).to.not.exist;
+                expect(result.under_scored).to.not.exist;
 
-                resultKeys.forEach((key)=> {
-                    expect(humps.camelize(key)).to.eql(key);
-                });
+                expect(resultKeys[0]).to.eql('underScored');
+
+
+            });
+            
+            it(`should not create redundant attributes`, () => {
+
+                const result = camelizeKeys({under_scored: 123});
+                const resultKeys = _.keys(result);
+
+                expect(resultKeys.length).to.eql(1);
 
             });
 
-            // should have ${1} field and eql to ${2}
+            it(`should have 'underScored' field eql to 123`, () => {
+
+                const result = camelizeKeys({under_scored: 123});
+
+                expect(result.underScored).to.eql(123);
+
+            });
 
         });
 
@@ -135,7 +147,7 @@ describe("OK API / get users info", ()=> {
                 const result = getCredentialsByStr(credentialsStr);
 
                 expect(result.accessToken).to.exist;
-                expect(result.accessToken).to.eql('secretA827F');
+                expect(result.accessToken).to.eql('tknAD4');
 
             });
 
