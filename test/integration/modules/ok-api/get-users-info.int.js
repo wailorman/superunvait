@@ -13,6 +13,8 @@ const okApiHelpers = require('../../../../src/modules/ok-api/helpers');
 const getUsersInfo = require('../../../../src/modules/ok-api/get-users-info');
 const signatureCalculator = require('../../../../src/modules/ok-api/signature-calculator');
 
+const okApiTestHelpers = require('../../../helpers/ok-api-test-helper');
+
 const requiredFieldsStr = getUsersInfo.requiredFieldsStr;
 
 const credentials = okApiHelpers.getCredentialsByStr(process.env.OK_CREDENTIALS);
@@ -115,40 +117,37 @@ describe("ok api / get users info", ()=> {
 
         const saveUsersInfo = getUsersInfo.saveUsersInfo;
 
+        const consideredUsersUids = [usedFixtures[0].uid, usedFixtures[1].uid];
+
         let usersGetInfoMock;
         const mockOkApiRequest = function () {
 
             const query = {
                 method: "users.getInfo",
                 fields: requiredFieldsStr,
-                uids: "558123591415,571769013138"
+                uids: consideredUsersUids.join(',')
             };
 
-            const expectedQuery = signatureCalculator._generateQueryObjectWithSig(query, credentials);
+            const mockedResponse = [usedFixtures[0], usedFixtures[1]];
 
-            usersGetInfoMock = nock('http://api.odnoklassniki.ru')
-                .get('/fb.do')
-                .query(expectedQuery)
-                .reply(200, [usedFixtures[0], usedFixtures[1]]);
+            usersGetInfoMock = okApiTestHelpers.mockApiRequest(query, mockedResponse);
 
         };
 
         beforeEach(cleanDB);
         beforeEach(mockOkApiRequest);
 
-        const consideredUids = [usedFixtures[0].uid, usedFixtures[1].uid];
-
         it(`should write 2 users`, () => {
 
-            return saveUsersInfo(consideredUids)
+            return saveUsersInfo(consideredUsersUids)
                 .then(()=> {
                     expect(usersGetInfoMock.isDone()).to.eql(true);
 
                     return User.findAll({
                         where: {
                             $or: [
-                                {uid: consideredUids[0]},
-                                {uid: consideredUids[1]}
+                                {uid: consideredUsersUids[0]},
+                                {uid: consideredUsersUids[1]}
                             ]
                         }
                     })
@@ -156,8 +155,8 @@ describe("ok api / get users info", ()=> {
                 })
                 .then((usersFromDB)=> {
 
-                    expect(usersFromDB[0].uid).to.eql(usedFixtures[0].uid);
-                    expect(usersFromDB[1].uid).to.eql(usedFixtures[1].uid);
+                    expect(usersFromDB[0].uid).to.eql(consideredUsersUids[0]);
+                    expect(usersFromDB[1].uid).to.eql(consideredUsersUids[1]);
 
                 });
 
@@ -165,14 +164,14 @@ describe("ok api / get users info", ()=> {
 
         it(`check most valuable fields`, () => {
 
-            return saveUsersInfo(consideredUids)
+            return saveUsersInfo(consideredUsersUids)
                 .then(()=> {
 
                     return User.findAll({
                         where: {
                             $or: [
-                                {uid: usedFixtures[0].uid},
-                                {uid: usedFixtures[1].uid}
+                                {uid: consideredUsersUids[0]},
+                                {uid: consideredUsersUids[1]}
                             ]
                         }
                     })
