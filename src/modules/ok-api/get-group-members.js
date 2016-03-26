@@ -1,3 +1,7 @@
+"use strict";
+
+const _ = require('lodash');
+
 /*
 
 getLastMembersUids ( groupId, count=100 )
@@ -23,24 +27,18 @@ getLastMembersUids ( groupId, count=100 )
             usersToGet = usersRemaining >= 100 ? 100 : usersRemaining
 
             doMembersGetRequest( groupId, usersToGet, lastAnchor )
-                .THEN ( result{ membersUids, anchor } ) {
+                .THEN ( result{ members, anchor } ) {
 
-                    verifyMembers( membersUids )
-                        success:
-                            decreaseUsersCounter(members.length);
-                            addNewMembers(members);
+                    if (enough members){
+                        decreaseUsersCounter(members.length);
+                        addNewMembers(members);
+                    }else{
+                        stop();
+                    }
 
-                        NO_MEMBERS_ANY_MORE:
-                            stop();
+                    updateAnchor(anchor);
 
-
-
-                    verifyAnchor( anchor )
-                        success:
-                            updateAnchor(anchor);
-
-
-                    next()
+                    next();
 
                 }
                 .CATCH {
@@ -75,6 +73,14 @@ doMembersGetRequest ( groupId, [count=100], [lastAnchor] )
         .THEN (result)
             <- return parseResponse(result)
 
+validateResponse ( response )
+    try
+        verifyMembers( response.members )
+        verifyAnchor( response.anchor )
+        return true;
+    catch (e)
+        throw e;
+        return false
 
 parseResponse ( response )
     // response: { members[ {userId} ], anchor }
@@ -89,3 +95,22 @@ parseResponse ( response )
     return result;
 
 */
+
+const SUCCESS = true;
+const NO_MEMBERS_ANY_MORE = -1;
+
+const resultCodes = {SUCCESS, NO_MEMBERS_ANY_MORE};
+
+const collectionToPlainArray = function (membersCollection, fieldToPick) {
+
+    return _
+        .chain(membersCollection)
+        .map((memberObject)=> {
+            return _.get(memberObject, fieldToPick, null);
+        })
+        .compact() // remove all `null`s
+        .value();
+
+};
+
+module.exports = {collectionToPlainArray, resultCodes};
