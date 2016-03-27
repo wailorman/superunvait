@@ -1,12 +1,33 @@
 const pullUsersData = require('./modules/ok-api/get-users-info');
 const nock = require('nock');
+const okApi = require('./modules/ok-api/ok-api-facade');
+const getGroupMembers = require('./modules/ok-api/get-group-members');
 
 //nock('http://api.odnoklassniki.ru')
 //    .filteringPath(()=>'/fb.do')
 //    .get('/fb.do')
 //    .reply(200, 'OK');
 
-pullUsersData.pullUsersInfo(['571769013138, 558123591415']);
+//okApi.get({
+//        method: 'group.getMembers',
+//        uid: '53396058603765',
+//        count: 100,
+//        anchor: 'LTE5NTE3NTU3OTY6LTEwNjEyNjIxOTE3OQ'
+//    })
+//    .then((res)=> {
+//        debugger;
+//    })
+//    .catch((err)=> {
+//        debugger;
+//    });
+
+getGroupMembers.getLastMembersUids(53396058603765, 999999)
+.then((membersList)=> {
+    debugger;
+})
+.catch((err)=> {
+    debugger;
+});
 
 /*
 uid
