@@ -1,3 +1,6 @@
+"use strict";
+
+const _ = require('lodash');
 
 const camelizeKeys = function (receivedData) {
 
@@ -59,5 +62,25 @@ const getCredentialsByStr = function (str) {
 
 };
 
+const removeEmptyFieldsFromObject = function (obj) {
 
-module.exports = {camelizeKeys, adoptLocation, adoptGender, getCredentialsByStr};
+    let fieldsToRemove = [];
+    let objClone = _.cloneDeep(obj);
+
+    _.forIn(objClone, (value, key)=> {
+
+        if (!value) fieldsToRemove.push(key);
+
+    });
+
+    return _.omit(objClone, fieldsToRemove);
+
+};
+
+module.exports = {
+    removeEmptyFieldsFromObject,
+    camelizeKeys,
+    adoptLocation,
+    adoptGender,
+    getCredentialsByStr
+};

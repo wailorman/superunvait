@@ -1,7 +1,5 @@
 const getUsersInfoHelpers = require('../../../../src/modules/ok-api/helpers');
-
 const fixtures = require('../../../fixtures/users.getInfo.json');
-
 const nock = require('nock');
 
 describe("OK API / helpers", ()=> {
@@ -146,6 +144,43 @@ describe("OK API / helpers", ()=> {
 
             expect(result.accessToken).to.exist;
             expect(result.accessToken).to.eql('tknAD4');
+
+        });
+
+    });
+
+    describe("removeEmptyFieldsFromObject", ()=> {
+
+        const removeEmptyFields = getUsersInfoHelpers.removeEmptyFieldsFromObject;
+
+        it(`should remove null field from object`, () => {
+
+            const objectWithNullField = {
+                a: 123,
+                b: null,
+                c: undefined
+            };
+
+            const expectedResult = {
+                a: 123
+            };
+
+            const result = removeEmptyFields(objectWithNullField);
+
+            expect(result).to.eql(expectedResult);
+
+        });
+
+        it(`should not remove anything if all filled`, () => {
+
+            const normalObject = {
+                a: 123,
+                b: 456
+            };
+
+            const result = removeEmptyFields(normalObject);
+
+            expect(result).to.eql(normalObject);
 
         });
 
