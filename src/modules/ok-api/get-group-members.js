@@ -1,6 +1,7 @@
 "use strict";
 
 const _ = require('lodash');
+const okApi = require('./ok-api-facade');
 
 /*
 
@@ -123,7 +124,20 @@ const convertResponse = function (payload) {
 
 };
 
+const doMembersGetRequest = function (groupId, count, lastAnchor) {
+
+    count = count || 100;
+
+    return okApi.get({
+            method: 'group.getMembers', count: count, uid: groupId, anchor: lastAnchor
+        })
+        .then((response)=> {
+            return convertResponse(response);
+        });
+};
+
 module.exports = {
+    doMembersGetRequest,
     convertResponse,
     collectionToPlainArray,
     resultCodes

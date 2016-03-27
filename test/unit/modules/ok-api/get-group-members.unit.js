@@ -1,6 +1,13 @@
 "use strict";
 
 const getGroupMembers = require('../../../../src/modules/ok-api/get-group-members');
+const nock = require('nock');
+
+const fixtures = {
+    short1: require('../../../fixtures/group.getMembers - 1 short.json'),
+    1: require('../../../fixtures/group.getMembers - 1.json'),
+    2: require('../../../fixtures/group.getMembers - 2.json')
+};
 
 describe("OK API / get group members", ()=> {
 
@@ -8,7 +15,7 @@ describe("OK API / get group members", ()=> {
 
         const convertResponse = getGroupMembers.convertResponse;
 
-        const examplePayload = require('../../../fixtures/group.getMembers - 1 short.json');
+        const examplePayload = fixtures.short1;
 
         const expectedMembersArray = [
             '106770658161',
@@ -159,13 +166,6 @@ describe("OK API / get group members", ()=> {
 
         // should return 1 if all OK
         // should return 0 if response not valid
-
-    });
-
-    describe("doMembersGetRequest", ()=> {
-
-        // should make correct request
-        // should reject error if response is invalid
 
     });
 
