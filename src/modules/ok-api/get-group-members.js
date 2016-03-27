@@ -113,4 +113,18 @@ const collectionToPlainArray = function (membersCollection, fieldToPick) {
 
 };
 
-module.exports = {collectionToPlainArray, resultCodes};
+const convertResponse = function (payload) {
+
+    const result = _.cloneDeep(payload);
+
+    result.members = collectionToPlainArray(payload.members, 'userId');
+
+    return result;
+
+};
+
+module.exports = {
+    convertResponse,
+    collectionToPlainArray,
+    resultCodes
+};

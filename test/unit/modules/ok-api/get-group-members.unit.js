@@ -6,10 +6,43 @@ describe("OK API / get group members", ()=> {
 
     describe("convertResponse", ()=> {
 
-        // should convert members to flat array
-        // should append anchor to result
+        const convertResponse = getGroupMembers.convertResponse;
 
-        // no members field -> throw MEMBERS_MISSING
+        const examplePayload = require('../../../fixtures/group.getMembers - 1 short.json');
+
+        const expectedMembersArray = [
+            '106770658161',
+            '107269796331',
+            '107974487920',
+            '107986528211',
+            '110155316285',
+            '110594416400',
+            '110852134928',
+            '111377293060',
+            '111421099655',
+            '111562086379',
+            '112888033984'
+        ];
+
+        it(`should convert members to flat array`, () => {
+
+            const result = convertResponse(examplePayload);
+
+            expect(result.members).to.eql(expectedMembersArray);
+
+        });
+
+        it(`should keep anchor, has_more, totalCount props`, () => {
+
+            const result = convertResponse(examplePayload);
+
+            expect(result).to.have.property('totalCount', 4637);
+            expect(result).to.have.property('anchor', "LTEwNTk3ODExMjA4MTotMTU3MTI1MDQ3NTAw");
+            expect(result).to.have.property('has_more', true);
+
+        });
+
+
         // members array if empty -> members:[]
         // anchor didn't resolved -> throw ANCHOR_MISSING
         // in some of objects disappeared userId field
@@ -98,6 +131,22 @@ describe("OK API / get group members", ()=> {
             const result = collectionToPlainArray(exampleCollection, 'hey');
 
             expect(result).to.eql(expectedResult);
+
+        });
+
+        it(`should return [] if collection is empty`, () => {
+
+            const result = collectionToPlainArray([], 'userId');
+
+            expect(result).to.eql([]);
+
+        });
+
+        it(`should return [] if fieldToPick not passed`, () => {
+
+            const result = collectionToPlainArray(exampleMembersCollection);
+
+            expect(result).to.eql([]);
 
         });
 
