@@ -3,6 +3,7 @@
 const ok = require('ok.ru');
 const Q = require('q');
 const okApiHelpers = require('./helpers');
+const _ = require('lodash');
 
 const okCredentialsStr = process.env.OK_CREDENTIALS;
 if (!okCredentialsStr) throw 'OK_CREDENTIALS env var should be passed';
