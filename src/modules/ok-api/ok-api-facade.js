@@ -18,6 +18,8 @@ ok.setAccessToken(okCredentials.accessToken);
 const universalFunction = function (method, requestParameters) {
     let nodefiedRequest;
 
+    const cleanedRequestParameters = okApiHelpers.removeEmptyFieldsFromObject(requestParameters);
+
     if (method.toUpperCase() == 'GET') {
         nodefiedRequest = Q.denodeify(ok.get);
     }else if (method.toUpperCase() == 'POST') {
@@ -26,7 +28,7 @@ const universalFunction = function (method, requestParameters) {
         throw 'Accepting only POST or GET methods';
     }
 
-    return nodefiedRequest(requestParameters)
+    return nodefiedRequest(cleanedRequestParameters)
         .then((data)=> {
             return data[0];
         });
