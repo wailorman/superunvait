@@ -4,9 +4,15 @@ const nock = require('nock');
 
 const credentials = okApiFacade.getCredentials();
 
+const generateQueryObject = function (query) {
+
+    return signatureCalculator._generateQueryObjectWithSig(query, credentials);
+
+};
+
 const mockApiRequest = function (query, responseObject) {
 
-    const expectedRequestParams = signatureCalculator._generateQueryObjectWithSig(query, credentials);
+    const expectedRequestParams = generateQueryObject(query);
 
     return nock('http://api.odnoklassniki.ru')
         .get('/fb.do')
