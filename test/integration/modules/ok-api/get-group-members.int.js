@@ -15,16 +15,151 @@ const fixtures = {
 describe("OK API / get group members", ()=> {
 
 
+    const exampleGroupId = '53396058603765';
+
+
     describe("getLastMembersUids", ()=> {
 
-        //should write 1 member
-        //should write 100 members
-        //should write 101 members with 2 requests
-        //should write 201 members with three requests
-        //should not write anything if members amount = 0
+        const getLastMembersUids = getGroupMembers.getLastMembersUids;
 
-        //should request twice if first response return only half
-        //should calm down on second request if requested 100, but there are only 50
+        beforeEach(()=> {
+            nock.cleanAll();
+        });
+
+        afterEach(()=> {
+            nock.cleanAll();
+        });
+
+
+        it(`should get 1 member`, () => {
+
+            let cuttedFixture1 = _.cloneDeep(fixtures[1]);
+            cuttedFixture1.members = _.take(fixtures[1].members, 1);
+
+            const nockedRequest = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 1
+                },
+                cuttedFixture1
+            );
+
+            return getLastMembersUids(exampleGroupId, 1)
+                .then((res)=> {
+                    expect(nockedRequest.isDone()).to.eql(true);
+                    expect(res.length).to.eql(1);
+                    expect(res[0]).to.eql(cuttedFixture1.members[0].userId);
+                });
+
+        });
+
+        it(`should get 97 members`, () => {
+
+            const nockedRequest = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 97
+                },
+                fixtures[1]
+            );
+
+            return getLastMembersUids(exampleGroupId, 97)
+                .then((res)=> {
+                    expect(nockedRequest.isDone()).to.eql(true);
+                    expect(res.length).to.eql(97);
+                    expect(res[0]).to.eql(fixtures[1].members[0].userId);
+                    expect(res[96]).to.eql(fixtures[1].members[96].userId);
+                });
+
+        });
+
+        it(`should get 101 members with 2 requests`, () => {
+
+            const nockedRequest1 = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 100
+                },
+                fixtures[1]
+            );
+
+            let cuttedFixture2 = _.cloneDeep(fixtures[2]);
+            cuttedFixture2.members = _.take(fixtures[2].members, 4);
+
+            const nockedRequest2 = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 4,
+                    anchor: fixtures[1].anchor
+                },
+                cuttedFixture2
+            );
+
+            return getLastMembersUids(exampleGroupId, 101)
+                .then((res)=> {
+                    expect(nockedRequest1.isDone()).to.eql(true);
+                    expect(nockedRequest2.isDone()).to.eql(true);
+
+                    expect(res.length).to.eql(101);
+
+                    expect(res[0]).to.eql(_.first(fixtures[1].members).userId);
+                    expect(res[96]).to.eql(_.last(fixtures[1].members).userId);
+
+                    expect(res[97]).to.eql(_.first(fixtures[2].members).userId);
+                    expect(res[100]).to.eql(fixtures[2].members[3].userId);
+                });
+
+        });
+
+        it(`should ignore overhead`, () => {
+
+            const nockedRequest1 = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 100
+                },
+                fixtures[1]
+            );
+
+            const nockedRequest2 = mockApiRequest(
+                {
+                    method: 'group.getMembers',
+                    uid: exampleGroupId,
+                    count: 4,
+                    anchor: fixtures[1].anchor
+                },
+                fixtures[2]
+            );
+
+            return getLastMembersUids(exampleGroupId, 101)
+                .then((res)=> {
+                    expect(nockedRequest1.isDone()).to.eql(true);
+                    expect(nockedRequest2.isDone()).to.eql(true);
+
+                    expect(res.length).to.eql(101);
+
+                    expect(res[0]).to.eql(_.first(fixtures[1].members).userId);
+                    expect(res[96]).to.eql(_.last(fixtures[1].members).userId);
+
+                    expect(res[97]).to.eql(_.first(fixtures[2].members).userId);
+                    expect(res[100]).to.eql(fixtures[2].members[3].userId);
+                });
+
+        });
+
+        // should get 201 members with three requests
+        // should not get anything if members amount = 0
+
+        // should request twice if first response return only half
+        // should calm down on second request if requested 100, but there are only 50
+        // should calm down on second request if requested Infinity, but there are only 50
+
+        // + has_more using
 
     });
 
@@ -32,7 +167,6 @@ describe("OK API / get group members", ()=> {
 
         const doMembersGetRequest = getGroupMembers.doMembersGetRequest;
 
-        const exampleGroupId = '53396058603765';
         const exampleMembersGetQuery = {
             method: 'group.getMembers',
             uid: exampleGroupId,
