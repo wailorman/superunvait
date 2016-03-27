@@ -20,4 +20,4 @@ const mockApiRequest = function (query, responseObject) {
         .reply(200, responseObject);
 };
 
-module.exports = {mockApiRequest};
+module.exports = {mockApiRequest, generateQueryObject};
