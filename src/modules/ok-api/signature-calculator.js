@@ -65,7 +65,9 @@ const calculateSignature = function (queryObject, credentials) {
     return md5(sortedParams + secret);
 };
 
-const _generateQueryObjectWithSig = function (query, credentials) {
+const _generateQueryObjectWithSig = function (queryArg, credentials) {
+
+    let query = _.cloneDeep(queryArg);
 
     query.application_key = credentials.applicationKey;
     query.sig = calculateSignature(query,  credentials);
