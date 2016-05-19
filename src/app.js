@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(apiRoute);
 
 
-app.listen(8050, function () {
-    console.log(`server started`);
+app.listen(process.env.PORT || 8050, function () {
+    console.log(`server started on port ${process.env.PORT}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
