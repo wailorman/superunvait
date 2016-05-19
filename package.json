@@ -12,6 +12,7 @@
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch",
     "start:docker": "NODE_ENV=production npm run migrate && NODE_ENV=production node_modules/forever/bin/forever start -c \"node --harmony\" ./src/app.js && node node_modules/forever/bin/forever --fifo logs 0",
+    "start:heroku": "npm run migrate && node --harmony ./src/app.js",
     "start": "NODE_ENV=production node --harmony ./src/app.js",
     "start:production:win": "set NODE_ENV=production&& node ./src/app.js",
     "start:dev": "node --harmony ./src/app.js",

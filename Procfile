@@ -1,1 +1,1 @@
-web: node --harmony ./src/app.js
+web: npm run start:heroku
