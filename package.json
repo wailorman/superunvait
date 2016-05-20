@@ -22,7 +22,8 @@
     "build:crx": "node ./node_modules/webpack/bin/webpack.js && node ./node_modules/gulp/bin/gulp.js default",
     "build:test": "node ./node_modules/webpack/bin/webpack.js --config webpack.config-mocha.js",
     "test:api:integration": "node ./node_modules/mocha/bin/mocha --harmony --require ./test/requirements/mocha.js --colors ./test/integration/**/*.int.js",
-    "test:api:unit": "node ./node_modules/mocha/bin/mocha --harmony --require ./test/requirements/mocha.js --colors ./test/unit/**/*.unit.js"
+    "test:api:unit": "node ./node_modules/mocha/bin/mocha --harmony --require ./test/requirements/mocha.js --colors ./test/unit/**/*.unit.js",
+    "publish-extension": "npm run build && gulp crx && gulp zip && node ./bin/publish-extension.js"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "ok.ru": "^1.2.0",
     "path": "^0.12.7",
     "q": "^1.4.1",
+    "request": "^2.72.0",
     "sequelize": "https://github.com/wailorman/sequelize/tarball/master",
     "sequelize-cli": "^2.3.1"
   },
@@ -84,6 +86,7 @@
     "null-loader": "^0.1.1",
     "raw-loader": "^0.5.1",
     "sinon": "^2.0.0-pre",
+    "sprintf": "^0.1.5",
     "sqlite3": "^3.1.1",
     "style-loader": "^0.13.0",
     "supertest": "^1.1.0",

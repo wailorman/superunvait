@@ -7,6 +7,8 @@ var manifest = require('./dist/crx/manifest.json');
 var fs = require('fs');
 var packageInfo = require('./package.json');
 
+const crxZipName = `ibb-tools-${packageInfo.version}.zip`;
+
 gulp.task('crx', function () {
     return gulp.src('dist/crx')
         .pipe(crx({
@@ -18,7 +20,7 @@ gulp.task('crx', function () {
 
 gulp.task('zip', function () {
     return gulp.src('dist/crx/**/*')
-        .pipe(zip(`ibb-tools-${packageInfo.version}.zip`))
+        .pipe(zip(crxZipName))
         .pipe(gulp.dest('dist/'));
 });
 
