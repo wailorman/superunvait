@@ -2,7 +2,7 @@ import '../../vendor/jquery-put-delete'
 import { serialize } from '../url-query-serialize'
 
 //export let API_URL = 'http://localhost:8050';
-export let API_URL = 'http://stool.wailorman.ru';
+export let API_URL = 'https://ibb-api.herokuapp.com';
 const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
 export const invites = {
