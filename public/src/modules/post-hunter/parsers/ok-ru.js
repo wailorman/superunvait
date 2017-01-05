@@ -1,6 +1,6 @@
 import { getScoreByLikesAmountAndRanges, splitArrayToNRanges } from '../sorting'
 
-export const LIKES_COUNTER = '.controls-list_lk .widget_count.js-count';
+export const LIKES_COUNTER = '.controls-list_lk .widget_count';
 export const LIKES_ELEM_SELECTOR = `.feed.h-mod ${LIKES_COUNTER}`;
 export const POSTS_SELECTOR = '.feed.h-mod';
 export const NUMBER_OF_RANGES_TO_SPLIT = 10;
