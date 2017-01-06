@@ -210,3 +210,30 @@ export const loadInterface = {
 };
 
 //////////////
+
+/*
+
+Скрипт на просмотр классов
+
+ $.ajax({
+
+ url: 'https://ok.ru/institutebb?cmd=ShowLikers&gwt.requested=' + pageCtx.gwtHash + '&st.cmd=altGroupMain&st.groupId=53396058603765&',
+
+ data: {
+
+ 'st.layer.cmd': 'ShowLikers',
+ 'st.layer.rt': '4',
+ 'st.layer.t': '0',
+ 'st.layer.sid': '64936667616757',
+ 'fetch': 'false',
+ 'st.lpage': '3'
+ },
+ type: "POST",
+ beforeSend: xhr => {
+ xhr.setRequestHeader('TKN', OK.tkn.get());
+ }
+ })
+ .success(function (data){ console.log(data) })
+ .error(function (err){ console.error(err) });
+
+*/

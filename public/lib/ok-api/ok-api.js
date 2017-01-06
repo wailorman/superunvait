@@ -14,11 +14,11 @@ export const invites = {
 
         let resultOfInvitation;
 
-        if (data.indexOf('слишком часто') > -1)
+        if (!data)
             resultOfInvitation = INVITING_RESULT.TOO_OFTEN;
-        else if (data.indexOf('не принимает приглашения') > -1)
+        else if (data.indexOf('не принимает приглашения в группы') > -1)
             resultOfInvitation = INVITING_RESULT.NOT_RECEIVING;
-        else
+        else if (data.indexOf('отправлено') > -1)
             resultOfInvitation = INVITING_RESULT.SUCCESS;
 
         return resultOfInvitation;
@@ -56,7 +56,7 @@ export const invites = {
 
         const sendInviteToOk = ()=> {
             $.ajax({
-                    url: 'https://ok.ru/dk?cmd=PopLayer&st.cmd=userFriendLive&st.layer.cmd=InviteUserToGroup2&st.layer.friendId=' + userId + '&st.layer.groupId=53396058603765&st.vpl.mini=false&st.layer._bh=596&st.layer._bw=1920&gwt.requested=' + gwtHash + '&p_sId=759701885561766480',
+                    url: 'https://ok.ru/online?cmd=PopLayer&st.cmd=userFriendLive&st.layer.cmd=InviteUserToGroup2&st.layer.friendId=' + userId + '&st.layer.groupId=53396058603765&st.vpl.mini=false&st.layer._bh=596&st.layer._bw=1920&gwt.requested=' + gwtHash + '&p_sId=759701885561766480',
                     data: {
                         'gwt.requested': gwtHash,
                         'st.layer.posted': 'set',
