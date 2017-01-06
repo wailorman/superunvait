@@ -1,10 +1,11 @@
-FROM node:latest
+FROM node:6.9.2
 MAINTAINER Sergey Popov <wailorman@gmail.com>
 
 RUN mkdir /ibb
 ADD ./package.json /ibb/package.json
 WORKDIR /ibb
-RUN npm install --production
+RUN npm i -g yarn
+RUN yarn
 ADD . /ibb
 
 #RUN npm run migrate
