@@ -22,11 +22,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                 tragometr.assignTragocentsToPosts();
             }
             break;
-        case RUN_MEMBERS_OBSERVER:
-            if (membersObserver.matchUrl()) {
-                membersObserver.controller.startObserving();
-            }
-            break;
+        // case RUN_MEMBERS_OBSERVER:
+        //     if (membersObserver.matchUrl()) {
+        //         membersObserver.controller.startObserving();
+        //     }
+        //     break;
     }
 });
 
