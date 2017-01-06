@@ -159,7 +159,7 @@ export const invitingCtrl = {
 
                     case INVITING_RESULT.TOO_OFTEN:
                         userContainer.paintIn('black');
-                        this.stopInviting();
+                        // this.stopInviting();
                         break;
 
                     case INVITING_RESULT.NOT_RECEIVING:
