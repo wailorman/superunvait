@@ -1,21 +1,22 @@
 import '../../vendor/jquery-put-delete'
 import { serialize } from '../url-query-serialize'
+import Q from 'q';
 
 //export let API_URL = 'http://localhost:8050';
-export let API_URL = 'https://ibb-api.herokuapp.com';
+export let API_URL = 'https://ibb.wailorman.ru';
 const INVITES_RESOURCE_URL = `${API_URL}/invites`;
 
 export const invites = {
 
     tell(userId, city, senderId) {
 
-        return $.post(INVITES_RESOURCE_URL, {
+        return Q($.post(INVITES_RESOURCE_URL, {
             invite: {
                 userId: userId,
                 city: city,
                 senderId: senderId
             }
-        }, {dataType: 'json'});
+        }, { dataType: 'json' }));
 
     },
 
@@ -35,7 +36,7 @@ export const members = {
 
         return $.put(MEMBERS_RESOURCE_URL, {
             members: userDataArray
-        }, {dataType: 'json'});
+        }, { dataType: 'json' });
 
     }
 
