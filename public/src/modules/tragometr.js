@@ -1,6 +1,6 @@
 "use strict";
 
-const ROW = '.charts_list_i.soh-s';
+const ROW = '.charts_list_i:not(.__header)';
 const ROW__untouched = '.charts_list_i_cell:not(.tragometr)';
 
 const ROW__COLUMN = '.charts_list_i_cell';
