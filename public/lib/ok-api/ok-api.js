@@ -56,7 +56,7 @@ export const invites = {
 
         const sendInviteToOk = ()=> {
             $.ajax({
-                    url: 'http://ok.ru/dk?st.cmd=userFriendLive&cmd=InviteUserToGroups&st.layer.cmd=InviteUserToGroupsOuter&st.layer.friendId=' + userId + '&gwt.requested=' + gwtHash + '&p_sId=0',
+                    url: 'https://ok.ru/dk?cmd=PopLayer&st.cmd=userFriendLive&st.layer.cmd=InviteUserToGroup2&st.layer.friendId=' + userId + '&st.layer.groupId=53396058603765&st.vpl.mini=false&st.layer._bh=596&st.layer._bw=1920&gwt.requested=' + gwtHash + '&p_sId=759701885561766480',
                     data: {
                         'gwt.requested': gwtHash,
                         'st.layer.posted': 'set',
