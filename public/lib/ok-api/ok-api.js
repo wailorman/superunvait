@@ -56,13 +56,18 @@ export const invites = {
 
         const sendInviteToOk = ()=> {
             $.ajax({
-                    url: 'https://ok.ru/online?cmd=PopLayer&st.cmd=userFriendLive&st.layer.cmd=InviteUserToGroup2&st.layer.friendId=' + userId + '&st.layer.groupId=53396058603765&st.vpl.mini=false&st.layer._bh=596&st.layer._bw=1920&gwt.requested=' + gwtHash + '&p_sId=759701885561766480',
-                    data: {
-                        'gwt.requested': gwtHash,
-                        'st.layer.posted': 'set',
-                        'selid': '53396058603765',
-                        'button_invite': 'clickOverGWT'
-                    },
+                    url: 'https://ok.ru/online?' +
+                                    'cmd=PopLayer&' +
+                                    'st.cmd=userFriendLive&' +
+                                    'st.layer.cmd=InviteUserToGroup2&' +
+                                    'st.layer.friendId=' + userId + '&' +
+                                    'st.layer.groupId=53396058603765&' +
+                                    'st.vpl.mini=false&' +
+                                    'st._aid=SM_AltGroup_Invite' +
+                                    'st.layer._bh=596&' +
+                                    'st.layer._bw=1920&' +
+                                    'gwt.requested=' + gwtHash + '&' +
+                                    'p_sId=759701885561766480',
                     type: "POST",
                     beforeSend: xhr => {
                         xhr.setRequestHeader('TKN', token);
