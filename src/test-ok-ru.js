@@ -2,6 +2,11 @@ const pullUsersData = require('./modules/ok-api/get-users-info');
 const nock = require('nock');
 const okApi = require('./modules/ok-api/ok-api-facade');
 const getGroupMembers = require('./modules/ok-api/get-group-members');
+const getUsersInfo = require('./modules/ok-api/get-users-info');
+
+const models = require('../models/index');
+const User = models.user;
+
 
 //nock('http://api.odnoklassniki.ru')
 //    .filteringPath(()=>'/fb.do')
@@ -21,13 +26,50 @@ const getGroupMembers = require('./modules/ok-api/get-group-members');
 //        debugger;
 //    });
 
-getGroupMembers.getLastMembersUids(53396058603765, 999999)
+getGroupMembers.getLastMembersUids(53396058603765, 999999999)
 .then((membersList)=> {
-    debugger;
+    // debugger;
+
+    getUsersInfo.getAllUsersInfoFromOK(membersList)
+        .then((rawUsersData) =>
+
+            Promise.all(
+                rawUsersData.map(userData => getUsersInfo.adoptReceivedData(userData))
+            )
+            // rawUsersData
+
+        )
+        .then((adoptedData) => {
+            // debugger;
+
+            return getUsersInfo.bulkUpsert(User, adoptedData);
+
+        })
+        .then((insertResult) => {
+
+            debugger;
+
+        });
+
+        // return Promise.all(
+        //     membersList.map((userId) => getUsersInfo.getUsersInfoFromOK([userId])
+        //             .then((rawUserData => getUsersInfo.adoptReceivedData(rawUserData) ))
+        //     )
+        // )
+        // .then((adoptedData) => {
+        //
+        //     debugger;
+        //
+        // })
+
+
 })
 .catch((err)=> {
-    debugger;
+    // debugger;
+    console.error(err);
 });
+
+
 
 /*
 uid
