@@ -1,7 +1,7 @@
 const getGroupMembers = require('../modules/ok-api/get-group-members');
 const getUsersInfo = require('../modules/ok-api/get-users-info');
 
-const models = require('../models/index');
+const models = require('../../models/index');
 const User = models.user;
 const Member = models.member;
 

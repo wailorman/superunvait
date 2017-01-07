@@ -22,6 +22,9 @@ app.listen(process.env.PORT || 8050, function () {
     console.log(`server started on port ${process.env.PORT}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 
+    console.log(`Running members observer`);
+    okObserver.refreshMembersData();
+
     setInterval(() => {
         console.log(`Running members observer`);
         okObserver.refreshMembersData();
