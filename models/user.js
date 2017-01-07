@@ -12,6 +12,8 @@ module.exports = function (sequelize, DataTypes) {
         city: DataTypes.STRING,
         country: DataTypes.STRING,
         photoId: DataTypes.STRING,
+        pic5: DataTypes.STRING,
+        picFull: DataTypes.STRING,
         hasServiceInvisible: DataTypes.BOOLEAN,
         private: DataTypes.BOOLEAN
     }, {
