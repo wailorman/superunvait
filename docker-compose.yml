@@ -3,9 +3,10 @@ services:
   api:
     container_name: ibb-api-node
     build: .
-    image: ibb-api:dev
+    image: "wailorman/ibb-api:dev"
     environment:
       PORT: 80
+      DB_CONNECTION_STRING:
     ports:
       - "80:80"
   mysql:
