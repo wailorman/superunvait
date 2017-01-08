@@ -16,6 +16,7 @@ const fieldsRequiredForUsersGetInfo = [
     'birthday',
     'gender',
     'last_online',
+    'registered_date',
     'location',
     'photo_id',
     'pic_5',

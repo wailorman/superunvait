@@ -30,7 +30,9 @@ SELECT
         `userNames`.`photos` AS `photos`,
         `userNames`.`groups` AS `groups`,
         `userNames`.`notes` AS `notes`,
-        `userNames`.`games` AS `games`
+        `userNames`.`games` AS `games`,
+        `userNames`.`registeredDate` AS `registeredDate`,
+        `userNames`.`lastOnline` AS `lastOnline`
 FROM
 
 invites

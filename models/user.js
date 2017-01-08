@@ -13,6 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         birthday: DataTypes.DATE,
         gender: DataTypes.ENUM('F', 'M'),
         lastOnline: DataTypes.DATE,
+        registeredDate: DataTypes.DATE,
         city: DataTypes.STRING,
         country: DataTypes.STRING,
         photoId: DataTypes.STRING,
