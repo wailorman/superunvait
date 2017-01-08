@@ -2,9 +2,6 @@ require('babel-core/register');
 require('babel-polyfill');
 
 
-const pullUsersData = require('./modules/ok-api/get-users-info');
-const nock = require('nock');
-const okApi = require('./modules/ok-api/ok-api-facade');
 const getGroupMembers = require('./modules/ok-api/get-group-members');
 const getUsersInfo = require('./modules/ok-api/get-users-info');
 
@@ -69,7 +66,6 @@ const pullMembersInfo = () => {
             Promise.all(
                 rawUsersData.map(userData => getUsersInfo.adoptReceivedData(userData))
             )
-
         )
         .then((adoptedData) =>
             getUsersInfo.bulkUpsert(User, adoptedData)
@@ -84,7 +80,7 @@ const pullMembersInfo = () => {
 const pullInfoAboutInvites = () => {
 
     Invite.findAll({ limit: 1000, order: 'id DESC', raw: true }).then((data) => {
-        return data.map((invite)=>invite.userId);
+        return data.map((invite) => invite.userId);
     })
         .then((invitesUserIds) => {
             return getUsersInfo.getAllUsersInfoFromOK(invitesUserIds);
@@ -106,7 +102,29 @@ const pullInfoAboutInvites = () => {
 
 };
 
-pullMembersIds();
+
+const fetchHtml = require('./modules/ok-api/fetch-html-data');
+
+User.findAll({ limit: 1000, offset: 11000, order: 'createdAt DESC', raw: true })
+    .then((data) => {
+        debugger;
+        return data.map(user => user.uid);
+    })
+    .then((uids) => {
+        return fetchHtml.multipleFetchHtmlUserData(uids)
+    })
+    .then((data) => {
+
+        debugger;
+        return getUsersInfo.bulkUpsert(User, data, true)
+            .then((res) => {
+                debugger;
+            });
+
+    })
+    .catch((err) => {
+        debugger;
+    });
 
 
 /*

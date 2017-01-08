@@ -1,7 +1,11 @@
 'use strict';
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('user', {
-        uid: DataTypes.STRING,
+        uid: {
+            primaryKey: true,
+            allowNull: false,
+            type: DataTypes.STRING
+        },
         name: DataTypes.STRING,
         age: DataTypes.INTEGER,
         allowsAnonymAccess: DataTypes.BOOLEAN,
@@ -15,7 +19,12 @@ module.exports = function (sequelize, DataTypes) {
         pic5: DataTypes.STRING,
         picFull: DataTypes.STRING,
         hasServiceInvisible: DataTypes.BOOLEAN,
-        private: DataTypes.BOOLEAN
+        private: DataTypes.BOOLEAN,
+        friends: DataTypes.STRING,
+        photos: DataTypes.STRING,
+        groups: DataTypes.STRING,
+        games: DataTypes.STRING,
+        notes: DataTypes.STRING
     }, {
         classMethods: {
             associate: function (models) {
