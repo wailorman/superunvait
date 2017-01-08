@@ -67,6 +67,4 @@ LEFT JOIN
 ON invites.userId = joinedMembers.id
 
 
-WHERE invites.senderId IS NOT NULL
-
-LIMIT 100;
+WHERE invites.senderId IS NOT NULL;
