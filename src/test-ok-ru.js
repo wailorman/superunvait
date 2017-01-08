@@ -12,7 +12,7 @@ const Invite = models.invite;
 
 const refreshMembersData = function() {
 
-    getGroupMembers.getLastMembersUids(53396058603765, 20)
+    getGroupMembers.getLastMembersUids(53396058603765, 200)
         .then((membersList) => {
             // debugger;
 
@@ -51,7 +51,7 @@ const refreshMembersData = function() {
 
 const pullMembersInfo = () => {
 
-    getGroupMembers.getLastMembersUids(53396058603765, 100)
+    getGroupMembers.getLastMembersUids(53396058603765, 10000)
         .then((membersList) => {
 
             getUsersInfo.bulkUpsert(Member, membersList.map((id) => ({ id: id })));
@@ -79,7 +79,7 @@ const pullMembersInfo = () => {
 
 const pullInfoAboutInvites = () => {
 
-    Invite.findAll({ limit: 1000, order: 'id DESC', raw: true }).then((data) => {
+    Invite.findAll({ limit: 10000, order: 'id DESC', raw: true }).then((data) => {
         return data.map((invite) => invite.userId);
     })
         .then((invitesUserIds) => {
@@ -103,28 +103,30 @@ const pullInfoAboutInvites = () => {
 };
 
 
-const fetchHtml = require('./modules/ok-api/fetch-html-data');
+pullMembersInfo();
 
-User.findAll({ limit: 1000, offset: 11000, order: 'createdAt DESC', raw: true })
-    .then((data) => {
-        debugger;
-        return data.map(user => user.uid);
-    })
-    .then((uids) => {
-        return fetchHtml.multipleFetchHtmlUserData(uids)
-    })
-    .then((data) => {
-
-        debugger;
-        return getUsersInfo.bulkUpsert(User, data, true)
-            .then((res) => {
-                debugger;
-            });
-
-    })
-    .catch((err) => {
-        debugger;
-    });
+// const fetchHtml = require('./modules/ok-api/fetch-html-data');
+//
+// User.findAll({ limit: 1000, offset: 11000, order: 'createdAt DESC', raw: true })
+//     .then((data) => {
+//         debugger;
+//         return data.map(user => user.uid);
+//     })
+//     .then((uids) => {
+//         return fetchHtml.multipleFetchHtmlUserData(uids)
+//     })
+//     .then((data) => {
+//
+//         debugger;
+//         return getUsersInfo.bulkUpsert(User, data, true)
+//             .then((res) => {
+//                 debugger;
+//             });
+//
+//     })
+//     .catch((err) => {
+//         debugger;
+//     });
 
 
 /*
