@@ -30,10 +30,10 @@ app.listen(process.env.PORT || 8050, function () {
     console.log(`server started on port ${process.env.PORT}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 
-    observe();
-
-    setInterval(() => {
-        observe();
-    }, 300000);
+    // observe();
+    //
+    // setInterval(() => {
+        // observe();
+    // }, 300000);
 
 });
