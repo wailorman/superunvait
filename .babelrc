@@ -1,7 +1,0 @@
-{
-  "retainLines": true,
-  "presets": [
-    "es2015"
-  ],
-  "sourceMaps": "inline"
-}

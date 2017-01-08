@@ -1,3 +1,7 @@
+require('babel-core/register');
+require('babel-polyfill');
+
+
 const pullUsersData = require('./modules/ok-api/get-users-info');
 const nock = require('nock');
 const okApi = require('./modules/ok-api/ok-api-facade');
@@ -7,10 +11,11 @@ const getUsersInfo = require('./modules/ok-api/get-users-info');
 const models = require('../models/index');
 const User = models.user;
 const Member = models.member;
+const Invite = models.invite;
 
 const refreshMembersData = function() {
 
-    getGroupMembers.getLastMembersUids(53396058603765, 999999999)
+    getGroupMembers.getLastMembersUids(53396058603765, 20)
         .then((membersList) => {
             // debugger;
 
@@ -47,7 +52,61 @@ const refreshMembersData = function() {
 
 };
 
-refreshMembersData();
+const pullMembersInfo = () => {
+
+    getGroupMembers.getLastMembersUids(53396058603765, 100)
+        .then((membersList) => {
+
+            getUsersInfo.bulkUpsert(Member, membersList.map((id) => ({ id: id })));
+            return membersList;
+
+        })
+        .then((membersList) =>
+            getUsersInfo.getAllUsersInfoFromOK(membersList)
+        )
+        .then((rawUsersData) =>
+
+            Promise.all(
+                rawUsersData.map(userData => getUsersInfo.adoptReceivedData(userData))
+            )
+
+        )
+        .then((adoptedData) =>
+            getUsersInfo.bulkUpsert(User, adoptedData)
+        )
+        .catch((err) => {
+            // debugger;
+            console.error(err);
+        });
+
+};
+
+const pullInfoAboutInvites = () => {
+
+    Invite.findAll({ limit: 1000, order: 'id DESC', raw: true }).then((data) => {
+        return data.map((invite)=>invite.userId);
+    })
+        .then((invitesUserIds) => {
+            return getUsersInfo.getAllUsersInfoFromOK(invitesUserIds);
+        })
+        .then((rawUsersData) =>
+
+                Promise.all(
+                    rawUsersData.map(userData => getUsersInfo.adoptReceivedData(userData))
+                )
+            // rawUsersData
+
+        )
+        .then((adoptedData) => {
+            // debugger;
+
+            return getUsersInfo.bulkUpsert(User, adoptedData);
+
+        })
+
+};
+
+pullMembersIds();
 
 
 /*
