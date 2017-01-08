@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var InviteCandidates = sequelize.define('invite-candidates', {
+  var InviteCandidate = sequelize.define('invite-candidate', {
     userId: DataTypes.STRING
   }, {
     classMethods: {
@@ -9,5 +9,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return InviteCandidates;
+  return InviteCandidate;
 };
