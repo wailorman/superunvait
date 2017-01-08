@@ -1,8 +1,25 @@
 SELECT
-	invites.*,
-	senderNames.senderName,
-	userNames.userName,
-	joinedMembers.joinedAt
+		`ibb`.`invites`.`id` AS `id`,
+    	`ibb`.`invites`.`userId` AS `userId`,
+    	`ibb`.`invites`.`city` AS `city`,
+    	convert_tz(
+    		`ibb`.`invites`.`createdAt`,
+    		'+00:00',
+    		'+03:00'
+    	) AS `createdAt`,
+    	convert_tz(
+    		`ibb`.`invites`.`updatedAt`,
+    		'+00:00',
+    		'+03:00'
+    	) AS `updatedAt`,
+    	`ibb`.`invites`.`senderId` AS `senderId`,
+    	`senderNames`.`senderName` AS `senderName`,
+    	`userNames`.`userName` AS `userName`,
+    	convert_tz(
+    		`joinedMembers`.`joinedAt`,
+    		'+00:00',
+    		'+03:00'
+    	) AS `joinedAt`
 FROM
 
 invites
