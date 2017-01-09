@@ -10,19 +10,44 @@ const InviteCandidateRouter = express.Router();
 InviteCandidateRouter.post('/invite-candidates', (req, res) => {
 
     if (
-        !req.body.inviteCandidate ||
-        !req.body.inviteCandidate.userId
+        !req.body.inviteCandidates ||
+        !(req.body.inviteCandidates instanceof Array)
     ) {
-        return res.status(400).json({message: 'Invalid format. You should pass {inviteCandidate:{userId: "..."}} to POST body'});
+        return res.status(400).json({message: `Invalid format. You should pass {inviteCandidates: [ uids, ... ]} to POST body`});
     }
 
-    InviteCandidate.create(req.body.inviteCandidate)
-        .then((result) => {
-            res.json(result);
+
+    let inviteCandidates = req.body.inviteCandidates;
+
+    sequelize.transaction((t1)=> {
+
+        let transactionQueries = [];
+
+        inviteCandidates.forEach((candidateId)=> {
+
+            transactionQueries.push(
+                InviteCandidate.upsert(
+                    {
+                        userId: candidateId
+                    },
+                    {
+                        transaction: t1,
+                        validate: true
+                    }
+                )
+            );
+
+        });
+
+        return Q.all([transactionQueries]);
+
+    })
+        .then((result)=> {
+            res.json({inviteCandidates: inviteCandidates, transactionResults: result[0]});
         })
-        .catch((err) => {
+        .catch((err)=> {
             res.status(500).json(err);
-        })
+        });
 
 });
 
