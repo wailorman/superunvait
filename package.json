@@ -5,10 +5,10 @@
   "main": "index.js",
   "babel": {
     "presets": [
-      "es2015",
-      "stage-0"
+      "es2015"
     ],
     "plugins": [
+      "syntax-async-functions",
       "transform-async-to-generator"
     ]
   },
@@ -46,15 +46,19 @@
   "homepage": "https://github.com/wailorman/superunvait",
   "dependencies": {
     "async": "^1.5.2",
+    "babel-cli": "^6.18.0",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-polyfill": "^6.20.0",
-    "babel-preset-es2015-native-modules": "^6.9.4",
+    "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-0": "^6.16.0",
+    "babel-preset-stage-3": "^6.17.0",
     "body-parser": "^1.14.2",
     "cheerio": "^0.22.0",
     "express": "^4.13.4",
     "forever": "^0.15.1",
     "fs": "0.0.2",
+    "fs-promise": "^1.0.0",
     "jquery": "^2.2.0",
     "lodash": "^4.1.0",
     "md5": "^2.1.0",
