@@ -15,7 +15,7 @@ FROM
 		UNION ALL
 		(
 			SELECT
-				`invite-candidates`.userId,
+				`invite-candidates`.userId AS id,
 				users.uid
 			FROM
 				`invite-candidates`
@@ -26,7 +26,7 @@ FROM
 		UNION ALL
 		(
 			SELECT
-				invites.userId,
+				invites.userId AS id,
 				users.uid
 			FROM
 				invites
