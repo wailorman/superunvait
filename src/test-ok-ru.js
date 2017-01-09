@@ -79,7 +79,7 @@ const pullMembersInfo = () => {
 
 const pullInfoAboutInvites = () => {
 
-    Invite.findAll({ limit: 10000, order: 'id DESC', raw: true }).then((data) => {
+    Invite.findAll({ limit: 100, order: 'id DESC', raw: true }).then((data) => {
         return data.map((invite) => invite.userId);
     })
         .then((invitesUserIds) => {

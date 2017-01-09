@@ -41,3 +41,17 @@ export const members = {
     }
 
 };
+
+export const inviteCandidates = {
+
+    bulkTell(userIds) {
+
+        const INVITE_CANDIDATES_RESOURCE_URL = `${API_URL}/invite-candidates`;
+
+        return $.post(INVITE_CANDIDATES_RESOURCE_URL, {
+            inviteCandidates: userIds
+        }, { dataType: 'json' });
+
+    }
+
+};

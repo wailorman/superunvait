@@ -15,9 +15,13 @@ const INVITING_RESULT = okApi.INVITING_RESULT;
 
 const CONTROL_PANEL__TOGGLE_INVITING_BTN = '#sk_auto';
 const CONTROL_PANEL__SET_FILTER_BTN = '#gotoBabyli';
+const CONTROL_PANEL__SCAN_CANDIDATES_BTN = '#scanInviteCandidates';
 const USER_CONTAINER = 'div.photoWrapper';
+const USER_CONTAINER__CANDIDATE = `div.photoWrapper:not(.${SCANNED_CANDIDATE_CLASS})`;
 const CONTROL_PANEL = '#inviterControlPanel';
 const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
+
+const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
 
 const TOGGLE_BUTTON_TEXT__CONTINUE = "ПРОДОЛЖИТЬ ИНВАЙТИНГ!";
 const TOGGLE_BUTTON_TEXT__STOP = "ОСТАНОВИТЬ ИНВАЙТИНГ!";
@@ -38,6 +42,7 @@ export const controlPanelCtrl = {
             $(CONTROL_PANEL__SET_FILTER_BTN).click(this.setFilter);
 
             $(CONTROL_PANEL__TOGGLE_INVITING_BTN).click(this.toggleInviting);
+            $(CONTROL_PANEL__SCAN_CANDIDATES_BTN).click(invitingCtrl.startScanCandidates);
 
             $(window).scroll(this.moveControlPanel);
 
@@ -108,6 +113,27 @@ export const invitingCtrl = {
     },
 
     //////////////////////////////////////////////////////
+
+    startScanCandidates() {
+
+        let candidatesIds = [];
+
+        $(USER_CONTAINER__CANDIDATE).each((i, userContainerElem) => {
+
+            const userContainer = new UserContainer(userContainerElem);
+            const { userId } = userContainer.getUserInfo();
+
+            userContainer.paintIn('orange', '5px');
+            userContainer.scrollTo();
+            userContainer.jqElem.addClass(SCANNED_CANDIDATE_CLASS);
+
+            candidatesIds.push(userId);
+
+        });
+
+        return ibbApi.inviteCandidates.bulkTell(candidatesIds);
+
+    },
 
     startInviting() {
 
