@@ -8,36 +8,38 @@ const fetchHtmlUserData = (uid) => {
 
         request(`https://ok.ru/profile/${uid}`, (err, res, body) => {
 
-                const $ = cheerio.load(body);
+            if (err) return reject(err);
 
-                let data = [];
+            const $ = cheerio.load(body);
 
-                $('a.mctc_navMenuSec').each((i, elem)=>{
-                    data.push(( $(elem).text().match(/\d+/) || ['0'] )[0]);
-                    // console.log( $(elem).text(), ' - ', ( $(elem).text().match(/\d+/) || ['0'] )[0] )
-                });
+            let data = [];
 
-                const userInfo = {
-                    uid: uid,
-                    friends: data[1],
-                    photos: data[2],
-                    groups: data[3],
-                    games: data[4],
-                    notes: data[5]
-                };
+            $('a.mctc_navMenuSec').each((i, elem) => {
+                data.push(( $(elem).text().match(/\d+/) || ['0'] )[0]);
+                // console.log( $(elem).text(), ' - ', ( $(elem).text().match(/\d+/) || ['0'] )[0] )
+            });
 
-                /*
-                 * друзья 1
-                 * фото 2
-                 * группы 3
-                 * игры 4
-                 * заметки 5
-                 *
-                 * */
+            const userInfo = {
+                uid: uid,
+                friends: data[1],
+                photos: data[2],
+                groups: data[3],
+                games: data[4],
+                notes: data[5]
+            };
 
-                // debugger;
+            /*
+             * друзья 1
+             * фото 2
+             * группы 3
+             * игры 4
+             * заметки 5
+             *
+             * */
 
-                return resolve(userInfo);
+            // debugger;
+
+            return resolve(userInfo);
         });
 
     });
@@ -73,12 +75,6 @@ const multipleFetchHtmlUserData = async (uidsArray) => {
         );
 
     });
-
-
-
-    // return await Promise.all(
-    //     uidsArray.map( uid => fetchHtmlUserData(uid) )
-    // );
 
 };
 
