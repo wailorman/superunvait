@@ -38,7 +38,7 @@ export const invites = {
 
     },
 
-    send(userId, gwtHash, token, checkIsAlreadyInvited) {
+    send(userId, gwtHash, token, checkIsAlreadyInvited, psid) {
         const deferred = Q.defer();
 
         if (checkIsAlreadyInvited) {
@@ -67,7 +67,7 @@ export const invites = {
                                     'st.layer._bh=596&' +
                                     'st.layer._bw=1920&' +
                                     'gwt.requested=' + gwtHash + '&' +
-                                    'p_sId=759701885561766480',
+                                    'p_sId=' + psid,
                     type: "POST",
                     beforeSend: xhr => {
                         xhr.setRequestHeader('TKN', token);

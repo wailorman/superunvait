@@ -10,6 +10,12 @@ import './inviting-style.css'
 
 const gwtHash = pageCtx.gwtHash;
 const token = OK.tkn.get();
+const p_sId = () => {
+    const psid = (OK.NFC.getStateParamString().match(/\d+/) || [''] )[0];
+    console.log('psid', psid);
+    return psid;
+};
+
 
 const INVITING_RESULT = okApi.INVITING_RESULT;
 
@@ -106,9 +112,9 @@ export const invitingCtrl = {
 
     ////    helpers:
 
-    sendInvitationToOkApi(userId, gwtHash, token) {
+    sendInvitationToOkApi(userId) {
 
-        return okApi.invites.send(userId, gwtHash, token, true);
+        return okApi.invites.send(userId, gwtHash, token, true, p_sId());
 
     },
 
@@ -171,7 +177,7 @@ export const invitingCtrl = {
 
         userContainer.paintIn('gray', '5px');
 
-        this.sendInvitationToOkApi(userId, gwtHash, token)
+        this.sendInvitationToOkApi(userId)
             .then((invitationResult)=> {
 
                 switch (invitationResult) {
