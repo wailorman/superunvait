@@ -6,6 +6,7 @@ const User = models.user;
 const sequelize = require('../../../models/index').sequelize;
 const Q = require('q');
 const okApiHelpers = require('./helpers');
+const async = require('async');
 
 const fieldsRequiredForUsersGetInfo = [
     'uid',
@@ -110,6 +111,41 @@ const bulkUpsert = function (model, dataArray, validationNecessity) {
 
 };
 
+const bulkUpsertParallel = function(model, dataArray, validationNecessity) {
+
+    if (validationNecessity === undefined)
+        validationNecessity = true;
+
+
+    return new Promise((resolve, reject) => {
+
+        async.eachLimit(
+            dataArray,
+            50,
+            (data, callback) => {
+
+                model.upsert(
+                    data,
+                    {
+                        validate: validationNecessity
+                    }
+                ).then(() => {
+                    callback();
+                }).catch((err) => {
+                    callback(err);
+                });
+
+            }, (err) => {
+
+                if (err) return reject(err);
+                resolve();
+
+            });
+
+    });
+
+};
+
 const saveUsersInfo = function (userIds) {
 
     return getUsersInfoFromOK(userIds)
@@ -174,5 +210,6 @@ module.exports = {
     adoptReceivedData,
     requiredFieldsStr,
     bulkUpsert,
-    getAdoptedUsersInfo
+    getAdoptedUsersInfo,
+    bulkUpsertParallel
 };

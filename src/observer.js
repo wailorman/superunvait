@@ -30,7 +30,7 @@ const writeInfoAboutUnfilledUsers = () => {
         })
         .then((fullUsersInfo) => {
 
-            return getUsersInfo.bulkUpsert(User, fullUsersInfo);
+            return getUsersInfo.bulkUpsertParallel(User, fullUsersInfo);
 
         })
         .then(() => {
@@ -48,7 +48,7 @@ const writeFreshUsersInfo = () => {
             return getUsersInfo.getAdoptedUsersInfo(rottenUids);
         })
         .then((apiResponse) => {
-            return getUsersInfo.bulkUpsert(User, apiResponse);
+            return getUsersInfo.bulkUpsertParallel(User, apiResponse);
         });
 
 };
@@ -61,7 +61,7 @@ const writeNewMembersToDB = () => {
 
             const membersUidsCollection = membersUids.map((id) => ({ id: id }));
 
-            return getUsersInfo.bulkUpsert(Member, membersUidsCollection);
+            return getUsersInfo.bulkUpsertParallel(Member, membersUidsCollection);
 
         });
 

@@ -7,7 +7,9 @@ const _ = require('lodash');
 const InviteCandidate = models['invite-candidate'];
 const InviteCandidateRouter = express.Router();
 
-InviteCandidateRouter.post('/invite-candidates', (req, res) => {
+const bulkUpsertParallel = require('../modules/ok-api/get-users-info').bulkUpsertParallel;
+
+InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
 
     if (
         !req.body.inviteCandidates ||
@@ -19,34 +21,19 @@ InviteCandidateRouter.post('/invite-candidates', (req, res) => {
 
     let inviteCandidates = req.body.inviteCandidates;
 
-    sequelize.transaction((t1)=> {
+    const data = inviteCandidates.map((id) => {
+        return {
+            id: id
+        };
+    });
 
-        let transactionQueries = [];
-
-        inviteCandidates.forEach((candidateId)=> {
-
-            transactionQueries.push(
-                InviteCandidate.upsert(
-                    {
-                        userId: candidateId
-                    },
-                    {
-                        transaction: t1,
-                        validate: true
-                    }
-                )
-            );
-
-        });
-
-        return Q.all([transactionQueries]);
-
-    })
+    bulkUpsertParallel(InviteCandidate, data, true)
         .then((result)=> {
-            res.json({inviteCandidates: inviteCandidates, transactionResults: result[0]});
+            res.json({inviteCandidates: inviteCandidates});
         })
         .catch((err)=> {
-            res.status(500).json(err);
+            console.error(err);
+            res.status(500).send({message: err.message});
         });
 
 });
