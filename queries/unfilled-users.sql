@@ -1,6 +1,3 @@
-SELECT DISTINCT * FROM
-(
-(
 SELECT DISTINCT
 	*
 FROM
@@ -38,17 +35,4 @@ FROM
 				users.groups IS NULL
 		)
 	) AS unino
-LIMIT 1000
-)
-UNION ALL
-(
-SELECT
-uid AS id,
-uid
-FROM
-users
-ORDER BY
-updatedAt ASC
-LIMIT 100
-)
-) unfilled_and_far_updated
+LIMIT 2000;
