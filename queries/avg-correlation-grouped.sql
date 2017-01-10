@@ -106,4 +106,4 @@ GROUP BY joined, groupsS
 
 ORDER BY
     joined DESC,
-    groupS ASC;
+    groupsS ASC;
