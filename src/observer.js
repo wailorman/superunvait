@@ -19,9 +19,12 @@ const GROUP_ID = 53396058603765;
 
 const writeInfoAboutUnfilledUsers = () => {
 
+    let newUserIds = [];
+
     return getUnfilledUserIds()
         .then((unfilledUids) => {
 
+            newUserIds = unfilledUids;
             return getFullUsersInfo(unfilledUids);
 
         })
@@ -29,6 +32,23 @@ const writeInfoAboutUnfilledUsers = () => {
 
             return getUsersInfo.bulkUpsert(User, fullUsersInfo);
 
+        })
+        .then(() => {
+
+            return newUserIds;
+
+        });
+
+};
+
+const writeFreshUsersInfo = () => {
+
+    return getUnfilledUserIds()
+        .then((rottenUids) => {
+            return getUsersInfo.getAdoptedUsersInfo(rottenUids);
+        })
+        .then((apiResponse) => {
+            return getUsersInfo.bulkUpsert(User, apiResponse);
         });
 
 };
@@ -67,6 +87,21 @@ const getUnfilledUserIds = () => {
 
 };
 
+const getRottenUserIds = () => {
+
+    return fs.readFile(__dirname + '/../queries/rotten-users.sql', 'utf8')
+        .then((sqlQuery) => {
+
+            return sequelize.query(sqlQuery, { type: sequelize.QueryTypes.SELECT });
+
+        })
+        .then((res) => {
+
+            return res.map(res => res.id);
+
+        });
+
+};
 
 
 ///////// GETTING DATA FROM APIs ////////////
@@ -111,5 +146,7 @@ module.exports = {
     getFullUsersInfo,
     getUnfilledUserIds,
     writeNewMembersToDB,
-    writeInfoAboutUnfilledUsers
+    writeInfoAboutUnfilledUsers,
+    getRottenUserIds,
+    writeFreshUsersInfo
 };
