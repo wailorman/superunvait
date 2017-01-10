@@ -21,11 +21,11 @@ module.exports = function (sequelize, DataTypes) {
         picFull: DataTypes.STRING,
         hasServiceInvisible: DataTypes.BOOLEAN,
         private: DataTypes.BOOLEAN,
-        friends: DataTypes.STRING,
-        photos: DataTypes.STRING,
-        groups: DataTypes.STRING,
-        games: DataTypes.STRING,
-        notes: DataTypes.STRING
+        friends: DataTypes.INTEGER,
+        photos: DataTypes.INTEGER,
+        groups: DataTypes.INTEGER,
+        games: DataTypes.INTEGER,
+        notes: DataTypes.INTEGER
     }, {
         classMethods: {
             associate: function (models) {
