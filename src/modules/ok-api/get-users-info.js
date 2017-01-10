@@ -36,6 +36,15 @@ const adoptReceivedData = function (dataFromApi) {
 
 };
 
+const getAdoptedUsersInfo = function(uids) {
+
+    return getAllUsersInfoFromOK(uids)
+        .then((rawUsersData) =>
+            rawUsersData.map(userData => adoptReceivedData(userData))
+        )
+
+};
+
 const getAllUsersInfoFromOK = function (userIds) {
 
     const parts = Math.floor( userIds.length / 100 ) + 1;
@@ -54,13 +63,21 @@ const getAllUsersInfoFromOK = function (userIds) {
 
 const getUsersInfoFromOK = function (userIds) {
 
-    let requestParameters = {
-        method: 'users.getInfo',
-        uids: userIds.join(',') || userIds,
-        fields: requiredFieldsStr
-    };
+    return new Promise((resolve, reject) => {
 
-    return okApi.get(requestParameters);
+        if (userIds.length == 0) return resolve([]);
+
+        let requestParameters = {
+            method: 'users.getInfo',
+            uids: userIds.join(',') || userIds,
+            fields: requiredFieldsStr
+        };
+
+        return okApi.get(requestParameters)
+            .then(resolve)
+            .catch(reject);
+
+    });
 
 };
 
@@ -156,5 +173,6 @@ module.exports = {
     getUsersInfoFromOK,
     adoptReceivedData,
     requiredFieldsStr,
-    bulkUpsert
+    bulkUpsert,
+    getAdoptedUsersInfo
 };
