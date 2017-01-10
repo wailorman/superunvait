@@ -56,7 +56,7 @@ const writeFreshUsersInfo = () => {
 
 const writeNewMembersToDB = () => {
 
-    return getAllMembersIds()
+    return getNewMembersIds()
         .then((membersUids) => {
 
             const membersUidsCollection = membersUids.map((id) => ({ id: id }));
