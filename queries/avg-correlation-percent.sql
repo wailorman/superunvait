@@ -44,5 +44,5 @@ LEFT JOIN (
 GROUP BY splitted_invites_to_grps.groupsS
 
 ORDER BY
-    "%" DESC,
+    `%` DESC,
     splitted_invites_to_grps.groupsS ASC;
