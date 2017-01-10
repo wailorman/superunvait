@@ -1,3 +1,10 @@
+(
+SELECT * FROM avg_correlation
+)
+
+UNION ALL
+
+(
 SELECT
 
     "delta" AS joined,
@@ -31,3 +38,4 @@ FROM
         WHERE joined = '0'
     )
     notJoined
+)
