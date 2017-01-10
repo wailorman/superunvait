@@ -35,4 +35,4 @@ FROM
 				users.groups IS NULL
 		)
 	) AS unino
-LIMIT 2000;
+LIMIT 100;
