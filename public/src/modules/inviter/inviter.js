@@ -23,11 +23,10 @@ const CONTROL_PANEL__TOGGLE_INVITING_BTN = '#sk_auto';
 const CONTROL_PANEL__SET_FILTER_BTN = '#gotoBabyli';
 const CONTROL_PANEL__SCAN_CANDIDATES_BTN = '#scanInviteCandidates';
 const USER_CONTAINER = 'div.photoWrapper';
+const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
 const USER_CONTAINER__CANDIDATE = `div.photoWrapper:not(.${SCANNED_CANDIDATE_CLASS})`;
 const CONTROL_PANEL = '#inviterControlPanel';
 const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
-
-const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
 
 const TOGGLE_BUTTON_TEXT__CONTINUE = "ПРОДОЛЖИТЬ ИНВАЙТИНГ!";
 const TOGGLE_BUTTON_TEXT__STOP = "ОСТАНОВИТЬ ИНВАЙТИНГ!";
