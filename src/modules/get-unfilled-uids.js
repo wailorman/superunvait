@@ -18,9 +18,6 @@ const fromAll = () => {
 
 };
 
-
-fromAll();
-
 module.exports = {
     fromAll
 };
