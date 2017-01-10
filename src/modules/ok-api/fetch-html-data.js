@@ -54,7 +54,7 @@ const multipleFetchHtmlUserData = async (uidsArray) => {
 
         async.mapLimit(
             uidsArray,
-            10,
+            3,
             (uid, callback) => {
                 fetchHtmlUserData(uid)
                     .then((res) => {
