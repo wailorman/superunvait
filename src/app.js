@@ -10,30 +10,15 @@ const corsMiddleware = require('./middlewares/cors');
 
 const app = express();
 
-const okObserver = require('./modules/ok-observer');
+const BODY_LIMIT = '20mb';
 
 app.use(corsMiddleware);
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true, limit: BODY_LIMIT}));
+app.use(bodyParser.json({limit: BODY_LIMIT}));
 
 app.use(apiRoute);
-
-const observe = () => {
-    console.log(`Running members & invites observer`);
-    okObserver.pullInfoAboutInvites();
-    setTimeout(() => {
-        okObserver.pullMembersInfo();
-    }, 60000);
-};
 
 app.listen(process.env.PORT || 8050, function () {
     console.log(`server started on port ${process.env.PORT}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
-
-    // observe();
-    //
-    // setInterval(() => {
-        // observe();
-    // }, 300000);
-
 });
