@@ -27,9 +27,13 @@ const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
 const USER_CONTAINER__CANDIDATE = `div.photoWrapper:not(.${SCANNED_CANDIDATE_CLASS})`;
 const CONTROL_PANEL = '#inviterControlPanel';
 const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
+const SHOW_MORE_BUTTON = '.js-show-more.link-show-more';
 
-const TOGGLE_BUTTON_TEXT__CONTINUE = "ПРОДОЛЖИТЬ ИНВАЙТИНГ!";
-const TOGGLE_BUTTON_TEXT__STOP = "ОСТАНОВИТЬ ИНВАЙТИНГ!";
+const TOGGLE_INV_BUTTON_TEXT__CONTINUE = "ПРОДОЛЖИТЬ ИНВАЙТИНГ!";
+const TOGGLE_INV_BUTTON_TEXT__STOP = "ОСТАНОВИТЬ ИНВАЙТИНГ!";
+
+const TOGGLE_SCAN_BUTTON_TEXT__CONTINUE = "ВЗГЛЯНУТЬ!";
+const TOGGLE_SCAN_BUTTON_TEXT__STOP = "ОТВЕРНУТЬСЯ!";
 
 const CONTROL_PANEL_HTML = require('raw!./control-panel-tpl.html');
 
@@ -47,7 +51,7 @@ export const controlPanelCtrl = {
             $(CONTROL_PANEL__SET_FILTER_BTN).click(this.setFilter);
 
             $(CONTROL_PANEL__TOGGLE_INVITING_BTN).click(this.toggleInviting);
-            $(CONTROL_PANEL__SCAN_CANDIDATES_BTN).click(invitingCtrl.startScanCandidates);
+            $(CONTROL_PANEL__SCAN_CANDIDATES_BTN).click(this.toggleScanning);
 
             $(window).scroll(this.moveControlPanel);
 
@@ -81,6 +85,18 @@ export const controlPanelCtrl = {
         }
     },
 
+    toggleScanning(){
+        if (invitingCtrl) {
+            if (invitingCtrl.isScanningProceed == false) {
+                invitingCtrl.startScanCandidates();
+            } else {
+                invitingCtrl.stopScanCandidates();
+            }
+        }else{
+            console.error(`toggleInviting(): Inviting Controller hasn't yet initialized`);
+        }
+    },
+
     moveControlPanel() {
         let viewPortTopPointPosition = $(window).scrollTop();
         if (viewPortTopPointPosition > 310) {
@@ -96,9 +112,13 @@ export const controlPanelCtrl = {
         $('#invitedDiv').text(this.invitedCounter);
     },
 
-    updateToggleButtonText(newText) {
+    updateInvitingToggleButtonText(newText) {
         $(CONTROL_PANEL__TOGGLE_INVITING_BTN).text(newText);
-    }
+    },
+
+    updateScanningToggleButtonText(newText) {
+        $(CONTROL_PANEL__SCAN_CANDIDATES_BTN).text(newText);
+    },
 
 };
 
@@ -108,6 +128,9 @@ export const invitingCtrl = {
     isInvitingProceed: false,
     invitingInterval: null,
     userContainerIndex: 0,
+
+    isScanningProceed: false,
+    scanningInterval: null,
 
     ////    helpers:
 
@@ -121,7 +144,32 @@ export const invitingCtrl = {
 
     startScanCandidates() {
 
+        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__STOP);
+
+        this.isScanningProceed = true;
+        this.scanningInterval = setInterval(() => {
+
+            this.scanCandidates();
+
+        }, 100);
+
+    },
+    stopScanCandidates() {
+
+        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__CONTINUE);
+
+        this.isScanningProceed = false;
+        clearInterval(this.scanningInterval);
+
+    },
+
+    scanCandidates() {
+
+        if (!this.isScanningProceed) return;
+
         let candidatesIds = [];
+
+        $(SHOW_MORE_BUTTON).click();
 
         $(USER_CONTAINER__CANDIDATE).each((i, userContainerElem) => {
 
@@ -136,13 +184,15 @@ export const invitingCtrl = {
 
         });
 
-        return ibbApi.inviteCandidates.bulkTell(candidatesIds);
+        if (candidatesIds.length > 0) {
+            ibbApi.inviteCandidates.bulkTell(candidatesIds);
+        }
 
     },
 
     startInviting() {
 
-        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__STOP);
+        controlPanelCtrl.updateInvitingToggleButtonText(TOGGLE_INV_BUTTON_TEXT__STOP);
 
         this.isInvitingProceed = true;
 
@@ -211,7 +261,7 @@ export const invitingCtrl = {
     stopInviting() {
         clearInterval(this.invitingInterval);
         this.isInvitingProceed = false;
-        controlPanelCtrl.updateToggleButtonText(TOGGLE_BUTTON_TEXT__CONTINUE);
+        controlPanelCtrl.updateInvitingToggleButtonText(TOGGLE_INV_BUTTON_TEXT__CONTINUE);
     }
 
 };
