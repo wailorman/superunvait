@@ -26,7 +26,8 @@ SELECT
     		'+03:00'
     	) AS `joinedAt`,
 
-    	`userNames`.`friends` AS `friends`,
+    	`userNames`.`age` AS `age`,
+        `userNames`.`friends` AS `friends`,
         `userNames`.`photos` AS `photos`,
         `userNames`.`groups` AS `groups`,
         `userNames`.`notes` AS `notes`,
