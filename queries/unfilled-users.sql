@@ -10,7 +10,7 @@ FROM
 				`members`
 			LEFT JOIN users ON `members`.id = users.uid
 			WHERE
-				users.uid IS NULL
+				users.groups IS NULL
 		)
 		UNION ALL
 		(
@@ -21,7 +21,7 @@ FROM
 				`invite-candidates`
 			LEFT JOIN users ON `invite-candidates`.userId = users.uid
 			WHERE
-				users.uid IS NULL
+				users.groups IS NULL
 		)
 		UNION ALL
 		(
@@ -32,7 +32,7 @@ FROM
 				invites
 			LEFT JOIN users ON invites.userId = users.uid
 			WHERE
-				users.uid IS NULL
+				users.groups IS NULL
 		)
 	) AS unino
 LIMIT 500;
