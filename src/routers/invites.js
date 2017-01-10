@@ -54,7 +54,7 @@ invitesRouter.get('/invites/:id', (req, res) => {
 
     let id = req.params.id;
 
-    Invite.findById(id)
+    Invite.find({where:{ userId: id }})
         .then((result)=> {
             if (result) res.json(result);
             else res.status(404).json({message: "Not found"});
