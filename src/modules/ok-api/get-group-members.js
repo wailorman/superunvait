@@ -212,14 +212,18 @@ const convertResponse = function (payload) {
 
 };
 
-const doMembersGetRequest = function (groupId, count, lastAnchor) {
+const doMembersGetRequest = function(groupId, count, lastAnchor) {
 
     count = count || 100;
 
     return okApi.get({
-            method: 'group.getMembers', count: count, uid: groupId, anchor: lastAnchor
-        })
-        .then((response)=> {
+        method: 'group.getMembers',
+        statuses: ['ADMIN', 'MODERATOR', 'ACTIVE'],
+        count: count,
+        uid: groupId,
+        anchor: lastAnchor
+    })
+        .then((response) => {
             return convertResponse(response);
         });
 };

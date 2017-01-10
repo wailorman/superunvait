@@ -106,9 +106,9 @@ const getRottenUserIds = () => {
 
 ///////// GETTING DATA FROM APIs ////////////
 
-const getAllMembersIds = () => {
+const getNewMembersIds = () => {
 
-    return getGroupMembers.getLastMembersUids(GROUP_ID);
+    return getGroupMembers.getLastMembersUids(GROUP_ID, 300);
 
 };
 
@@ -142,7 +142,7 @@ const getFullUsersInfo = function(uids) {
 };
 
 module.exports = {
-    getAllMembersIds,
+    getNewMembersIds,
     getFullUsersInfo,
     getUnfilledUserIds,
     writeNewMembersToDB,
