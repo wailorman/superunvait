@@ -205,11 +205,6 @@ export const invitingCtrl = {
         this.isScanningProceed = true;
         this.scanningInterval = setInterval(() => {
 
-            console.log(
-                'display',
-                $('.js-show-more').css('display')
-            );
-
             this.scanCandidates();
 
         }, 100);
@@ -264,7 +259,7 @@ export const invitingCtrl = {
                 .then(() => {
                     this.isPushingInProgress = false;
                 })
-                .catch((err) => {
+                .fail((err) => {
                     debugger;
                     this.isPushingInProgress = false;
                 });
