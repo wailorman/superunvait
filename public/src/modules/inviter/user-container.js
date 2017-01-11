@@ -24,6 +24,10 @@ export class UserContainer {
         $(this.avatar).css({border: `solid ${borderWidth} ${color}`});
     }
 
+    isStub() {
+        return this.jqElem.find('.stub-img').length > 0;
+    }
+
     getUserInfo() {
 
         return JSON.parse(this.jqElem.find('.hookData').comments().html());

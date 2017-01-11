@@ -17,11 +17,42 @@ const p_sId = () => {
 };
 
 
+const cities = [
+    'Москва',
+    'Санкт-Петербург',
+    'Новосибирск',
+    'Екатеринбург',
+    'Нижний Новгород',
+    'Казань',
+    'Челябинск',
+    'Омск',
+    'Самара',
+    'Ростов-на-Дону',
+    'Уфа',
+    'Красноярск',
+    'Пермь',
+    'Воронеж',
+    'Волгоград',
+    'Краснодар',
+    'Саратов',
+    'Тюмень',
+    'Тольятти',
+    'Ижевск',
+    'Барнаул',
+    'Иркутск',
+    'Ульяновск',
+    'Хабаровск',
+    'Владивосток',
+    'Ярославль',
+    'Махачкала'
+];
+
 const INVITING_RESULT = okApi.INVITING_RESULT;
 
 const CONTROL_PANEL__TOGGLE_INVITING_BTN = '#sk_auto';
 const CONTROL_PANEL__SET_FILTER_BTN = '#gotoBabyli';
 const CONTROL_PANEL__SCAN_CANDIDATES_BTN = '#scanInviteCandidates';
+const CONTROL_PANEL__CHANGE_CITY_BTN = '#changeCity';
 const USER_CONTAINER = 'div.photoWrapper';
 const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
 const USER_CONTAINER__CANDIDATE = `div.photoWrapper:not(.${SCANNED_CANDIDATE_CLASS})`;
@@ -39,6 +70,7 @@ const CONTROL_PANEL_HTML = require('raw!./control-panel-tpl.html');
 
 export const controlPanelCtrl = {
     invitedCounter: 0,
+    currentCityId: 0,
 
     mount() {
 
@@ -48,10 +80,13 @@ export const controlPanelCtrl = {
 
             this.injectHTML();
 
+            this.setFilter();
+
             $(CONTROL_PANEL__SET_FILTER_BTN).click(this.setFilter);
 
             $(CONTROL_PANEL__TOGGLE_INVITING_BTN).click(this.toggleInviting);
             $(CONTROL_PANEL__SCAN_CANDIDATES_BTN).click(this.toggleScanning);
+            $(CONTROL_PANEL__CHANGE_CITY_BTN).click(this.changeCity.bind(this));
 
             $(window).scroll(this.moveControlPanel);
 
@@ -71,6 +106,24 @@ export const controlPanelCtrl = {
         $('#field_ageTo').val(90).change();
         $('#field_ageFrom').val(50).change();
         $('#field_male').attr('checked', false).change();
+    },
+
+    changeCity(callback){
+        const city = cities[this.currentCityId];
+
+        $('#onSiteNowCityLink').click();
+        $('.portlet_h_title').find('input').focus();
+        $('.portlet_h_title').find('input').val(city).change();
+        $('.portlet_h_title').find('input').focus();
+        setTimeout(()=>{
+            $($('.sug_it-div')[0]).click();
+
+            setTimeout(() => {
+                callback();
+            }, 1000);
+        }, 1000);
+
+        this.currentCityId++;
     },
 
     toggleInviting(){
@@ -149,6 +202,11 @@ export const invitingCtrl = {
         this.isScanningProceed = true;
         this.scanningInterval = setInterval(() => {
 
+            console.log(
+                'display',
+                $('.js-show-more').css('display')
+            );
+
             this.scanCandidates();
 
         }, 100);
@@ -175,6 +233,18 @@ export const invitingCtrl = {
 
             const userContainer = new UserContainer(userContainerElem);
             const { userId } = userContainer.getUserInfo();
+
+            const isStub = userContainer.isStub();
+            if (isStub) {
+                console.log(`STOP SCANNING!!!`);
+                this.stopScanCandidates();
+
+                controlPanelCtrl.changeCity(() => {
+                    this.startScanCandidates();
+                });
+
+                return false; // stop .each()
+            }
 
             userContainer.paintIn('orange', '5px');
             userContainer.scrollTo();
