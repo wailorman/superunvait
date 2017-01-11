@@ -23,7 +23,7 @@ InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
 
     const data = inviteCandidates.map((id) => {
         return {
-            id: id
+            userId: id
         };
     });
 
