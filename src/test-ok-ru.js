@@ -5,6 +5,8 @@ require('babel-polyfill');
 const getGroupMembers = require('./modules/ok-api/get-group-members');
 const getUsersInfo = require('./modules/ok-api/get-users-info');
 
+const observer = require('./observer');
+
 const models = require('../models/index');
 const User = models.user;
 const Member = models.member;
@@ -51,7 +53,7 @@ const refreshMembersData = function() {
 
 const pullMembersInfo = () => {
 
-    getGroupMembers.getLastMembersUids(53396058603765, 10000)
+    getGroupMembers.getLastMembersUids(53396058603765)
         .then((membersList) => {
 
             getUsersInfo.bulkUpsert(Member, membersList.map((id) => ({ id: id })));
@@ -59,13 +61,7 @@ const pullMembersInfo = () => {
 
         })
         .then((membersList) =>
-            getUsersInfo.getAllUsersInfoFromOK(membersList)
-        )
-        .then((rawUsersData) =>
-
-            Promise.all(
-                rawUsersData.map(userData => getUsersInfo.adoptReceivedData(userData))
-            )
+            getUsersInfo.getAdoptedUsersInfo(membersList)
         )
         .then((adoptedData) =>
             getUsersInfo.bulkUpsert(User, adoptedData)
@@ -102,9 +98,28 @@ const pullInfoAboutInvites = () => {
 
 };
 
+observer.writeNewMembersToDB()
+    .then(() => {
+        console.log(`Members was successfully fetched`);
 
-pullMembersInfo();
+        observer.writeInfoAboutUnfilledUsers()
+            .then(() => {
+                console.log(`Users was successfully filled`);
+            })
+            .catch((err) => {
+                console.error(`Error in filling users: `, err);
+            });
 
+    })
+    .catch((err) => {
+        console.error(`Error in fetching members: `, err);
+    });
+
+
+
+
+// pullMembersInfo();
+//
 // const fetchHtml = require('./modules/ok-api/fetch-html-data');
 //
 // User.findAll({ limit: 1000, offset: 11000, order: 'createdAt DESC', raw: true })
