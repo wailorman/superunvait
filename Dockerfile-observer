@@ -10,7 +10,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 RUN mkdir /ibb
 WORKDIR /ibb
 ADD ./package.json ./yarn.lock /ibb/
-RUN yarn install --pure-lockfile
+RUN $HOME/.yarn/bin/yarn install --pure-lockfile
 ADD . /ibb
 
 CMD ["npm", "run", "observer", "&", "npm", "run", "observer:logs"]
