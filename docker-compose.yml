@@ -3,12 +3,12 @@ services:
   observer:
     dockerfile: Dockerfile-observer
     container_name: ibb-observer-node
-      build: .
-      image: "wailorman/ibb-observer:dev"
-      environment:
-        NODE_ENV: "production"
-        DB_CONNECTION_STRING:
-        OK_CREDENTIALS:
+    build: .
+    image: "wailorman/ibb-observer:dev"
+    environment:
+      NODE_ENV: "production"
+      DB_CONNECTION_STRING:
+      OK_CREDENTIALS:
   api:
     container_name: ibb-api-node
     build: .
