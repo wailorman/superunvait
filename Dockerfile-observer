@@ -1,0 +1,23 @@
+FROM node:6.9.2
+MAINTAINER Sergey Popov <wailorman@gmail.com>
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+    sudo apt-get update && sudo apt-get install -y yarn
+
+RUN mkdir /ibb
+ADD ./package.json /ibb/package.json
+ADD ./yarn.lock /ibb/yarn.lock
+WORKDIR /ibb
+RUN yarn
+ADD . /ibb
+
+CMD ["npm", "run", "observer", "&", "npm", "run", "observer:logs"]
+
+#docker rm -f mysql
+#docker run -p 3306:3306 --name mysql -v /root/ibb/db/data:/var/lib/mysql -v /root/ibb/db:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=yes -d mysql:latest
+#sleep 10
+
+#mysql://root:password@mysql_host.com/database_name
+
+#docker run -it -p 8050:8050 --name ibb-api-node --link mysql:mysql -e DB_CONNECTION_STRING=mysql://root:passs@mysql/ibb ibb-api
