@@ -184,6 +184,7 @@ export const invitingCtrl = {
 
     isScanningProceed: false,
     scanningInterval: null,
+    isPushingInProgress: false,
 
     ////    helpers:
 
@@ -224,6 +225,7 @@ export const invitingCtrl = {
     scanCandidates() {
 
         if (!this.isScanningProceed) return;
+        if (this.isPushingInProgress) return;
 
         let candidatesIds = [];
 
@@ -255,7 +257,15 @@ export const invitingCtrl = {
         });
 
         if (candidatesIds.length > 0) {
-            ibbApi.inviteCandidates.bulkTell(candidatesIds);
+            this.isPushingInProgress = true;
+            ibbApi.inviteCandidates.bulkTell(candidatesIds)
+                .then(() => {
+                    this.isPushingInProgress = false;
+                })
+                .catch((err) => {
+                    debugger;
+                    this.isPushingInProgress = false;
+                });
         }
 
     },
