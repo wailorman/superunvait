@@ -10,7 +10,9 @@ SELECT
 	users.photos,
 	users.groups,
 	users.games,
-	users.notes
+	users.notes,
+	users.lastOnline,
+	users.updatedAt
 FROM
 `invite-candidates`
 
