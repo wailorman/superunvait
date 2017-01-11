@@ -108,7 +108,10 @@ export const controlPanelCtrl = {
     },
 
     changeCity(callback){
-        const city = cities[this.currentCityId];
+
+        const getCity = (index)=>( cities[index] || getCity( index - cities.length ) );
+
+        const city = getCity(this.currentCityId);
 
         $('#onSiteNowCityLink').click();
         $('.portlet_h_title').find('input').focus();
