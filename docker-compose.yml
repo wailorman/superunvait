@@ -1,9 +1,10 @@
 version: '2'
 services:
   observer:
-    dockerfile: Dockerfile-observer
     container_name: ibb-observer-node
-    build: .
+    build:
+      dockerfile: Dockerfile-observer
+      context: .
     image: "wailorman/ibb-observer:dev"
     environment:
       NODE_ENV: "production"
