@@ -67,6 +67,9 @@ const TOGGLE_SCAN_BUTTON_TEXT__STOP = "ОТВЕРНУТЬСЯ!";
 
 const CONTROL_PANEL_HTML = require('raw!./control-panel-tpl.html');
 
+
+const WAIT_TIMEOUT = 10 * 1000;
+
 export const controlPanelCtrl = {
     invitedCounter: 0,
     currentCityId: 0,
@@ -121,7 +124,7 @@ export const controlPanelCtrl = {
             $($('.sug_it-div')[0]).click();
 
             setTimeout(() => {
-                callback();
+                if (typeof callback == 'function') callback();
             }, 1000);
         }, 1000);
 
@@ -187,6 +190,7 @@ export const invitingCtrl = {
     isScanningProceed: false,
     scanningInterval: null,
     isPushingInProgress: false,
+    lastPushTime: null,
 
     ////    helpers:
 
@@ -254,6 +258,10 @@ export const invitingCtrl = {
         });
 
         if (candidatesIds.length > 0) {
+            // есть новые бабули
+
+            this.lastPushTime = new Date();
+
             this.isPushingInProgress = true;
             ibbApi.inviteCandidates.bulkTell(candidatesIds)
                 .then(() => {
@@ -263,6 +271,22 @@ export const invitingCtrl = {
                     debugger;
                     this.isPushingInProgress = false;
                 });
+        }else{
+            // новых бабуль не отправили
+
+            const curTimeMs = new Date().getTime();
+            const lastPushTimeMs = this.lastPushTime.getTime();
+
+            const delta = curTimeMs - lastPushTimeMs;
+
+            if (delta > WAIT_TIMEOUT) {
+                console.log(`Scanning timeout expired`);
+                this.lastPushTime = new Date();
+                controlPanelCtrl.changeCity(() => {
+                    this.startScanCandidates();
+                });
+            }
+
         }
 
     },
