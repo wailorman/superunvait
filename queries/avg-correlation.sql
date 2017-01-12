@@ -1,17 +1,21 @@
 SELECT
     joinedAt IS NOT NULL    AS joined,
-    AVG(age)                as avg_age,
-    AVG(groups)             as avg_groups,
-    AVG(games)              as avg_games,
-    AVG(friends)            as avg_friends,
-    AVG(notes)              as avg_notes,
-    AVG(photos)             as avg_photos,
-    AVG(
-        DATEDIFF(
-            NOW(),
-            registeredDate
+    TRUNCATE( AVG(age) , 2)                as avg_age,
+    TRUNCATE( AVG(groups) , 2)             as avg_groups,
+    TRUNCATE( AVG(games) , 2)              as avg_games,
+    TRUNCATE( AVG(friends) , 2)            as avg_friends,
+    TRUNCATE( AVG(notes) , 2)              as avg_notes,
+    TRUNCATE( AVG(photos) , 2)             as avg_photos,
+
+    TRUNCATE(
+        AVG(
+            DATEDIFF(
+                NOW(),
+                registeredDate
+            )
         )
-    )                       as avg_daysBetwReg
+    , 2)
+    as avg_daysBetwReg
 
 FROM
     extended_invites
