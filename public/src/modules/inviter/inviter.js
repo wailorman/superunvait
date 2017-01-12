@@ -17,7 +17,7 @@ const p_sId = () => {
 };
 
 
-const cities = [
+const cities = _.shuffle([
     'Санкт-Петербург',
     'Новосибирск',
     'Екатеринбург',
@@ -44,7 +44,7 @@ const cities = [
     'Владивосток',
     'Ярославль',
     'Махачкала'
-];
+]);
 
 const INVITING_RESULT = okApi.INVITING_RESULT;
 
@@ -231,6 +231,15 @@ export const invitingCtrl = {
         let candidatesIds = [];
 
         $(SHOW_MORE_BUTTON).click();
+
+        if ($(USER_CONTAINER).length > 2000) {
+            console.log(`STOP SCANNING!!! too much grannies`);
+            this.stopScanCandidates();
+
+            controlPanelCtrl.changeCity(() => {
+                this.startScanCandidates();
+            });
+        }
 
         $(USER_CONTAINER__CANDIDATE).each((i, userContainerElem) => {
 
