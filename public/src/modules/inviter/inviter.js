@@ -52,9 +52,9 @@ const CONTROL_PANEL__TOGGLE_INVITING_BTN = '#sk_auto';
 const CONTROL_PANEL__SET_FILTER_BTN = '#gotoBabyli';
 const CONTROL_PANEL__SCAN_CANDIDATES_BTN = '#scanInviteCandidates';
 const CONTROL_PANEL__CHANGE_CITY_BTN = '#changeCity';
-const USER_CONTAINER = 'div.photoWrapper';
+const USER_CONTAINER = '.userCard';
 const SCANNED_CANDIDATE_CLASS = '__ibb_scanned';
-const USER_CONTAINER__CANDIDATE = `div.photoWrapper:not(.${SCANNED_CANDIDATE_CLASS})`;
+const USER_CONTAINER__CANDIDATE = `.userCard:not(.${SCANNED_CANDIDATE_CLASS})`;
 const CONTROL_PANEL = '#inviterControlPanel';
 const FILTER_FORM = '#hook_Form_OnSiteNowUsersRBFormForm';
 const SHOW_MORE_BUTTON = '.js-show-more.link-show-more';
@@ -211,7 +211,7 @@ export const invitingCtrl = {
 
             this.scanCandidates();
 
-        }, 100);
+        }, 500);
 
     },
     stopScanCandidates() {
@@ -263,6 +263,8 @@ export const invitingCtrl = {
             userContainer.jqElem.addClass(SCANNED_CANDIDATE_CLASS);
 
             candidatesIds.push(userId);
+
+            userContainer.removeFromDOM();
 
         });
 

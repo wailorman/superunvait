@@ -28,6 +28,10 @@ export class UserContainer {
         return this.jqElem.find('.stub-img').length > 0;
     }
 
+    removeFromDOM() {
+        return this.jqElem.remove();
+    }
+
     getUserInfo() {
 
         return JSON.parse(this.jqElem.find('.hookData').comments().html());
