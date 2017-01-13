@@ -1,11 +1,13 @@
 FROM node:6.9.2
 MAINTAINER Sergey Popov <wailorman@gmail.com>
 
+# yarn
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
 RUN mkdir /ibb
-ADD ./package.json /ibb/package.json
 WORKDIR /ibb
-RUN npm i -g yarn
-RUN yarn
+ADD ./package.json ./yarn.lock /ibb/
+RUN $HOME/.yarn/bin/yarn install --pure-lockfile
 ADD . /ibb
 
 #RUN npm run migrate
