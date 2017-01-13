@@ -8,8 +8,7 @@ const observer = require('./observer');
 const format = require('date-fns/format');
 
 
-const FETCH_UNFILLED_INTERVAL = 30 * 1000;
-// const FETCH_UNFILLED_INTERVAL = 0;
+const FETCH_UNFILLED_INTERVAL = 0;
 const FETCH_FRESH_INTERVAL = 60 * 1000;
 const FETCH_MEMBERS_INTERVAL = 10 * 60 * 1000;
 
