@@ -40,7 +40,7 @@
 --        ) AS unino;
 
 SELECT
-    uid,
+    uid AS id,
     name,
     groups,
     updatedAt
