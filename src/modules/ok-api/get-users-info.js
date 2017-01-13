@@ -8,7 +8,7 @@ const Q = require('q');
 const okApiHelpers = require('./helpers');
 const async = require('async');
 
-const fieldsRequiredForUsersGetInfo = [
+const okApiFields = [
     'uid',
     'name',
     'age',
@@ -26,7 +26,7 @@ const fieldsRequiredForUsersGetInfo = [
     'private'
     // '*'
 ];
-const requiredFieldsStr = fieldsRequiredForUsersGetInfo.join(',');
+const requiredFieldsStr = okApiFields.join(',');
 
 const adoptReceivedData = function (dataFromApi) {
 
@@ -37,16 +37,16 @@ const adoptReceivedData = function (dataFromApi) {
 
 };
 
-const getAdoptedUsersInfo = function(uids) {
+const getAdoptedUsersInfo = function(uids, fields) {
 
-    return getAllUsersInfoFromOK(uids)
+    return getAllUsersInfoFromOK(uids, fields)
         .then((rawUsersData) =>
             rawUsersData.map(userData => adoptReceivedData(userData))
         )
 
 };
 
-const getAllUsersInfoFromOK = function (userIds) {
+const getAllUsersInfoFromOK = function (userIds, fields) {
 
     const parts = Math.floor( userIds.length / 100 ) + 1;
 
@@ -54,7 +54,7 @@ const getAllUsersInfoFromOK = function (userIds) {
 
     return Promise.all(
         splittedUserIds.map((userIdsBlock) =>
-            getUsersInfoFromOK(userIdsBlock)
+            getUsersInfoFromOK(userIdsBlock, fields)
         )
     ).then((result) => {
         return [].concat.apply([], result)
@@ -62,7 +62,7 @@ const getAllUsersInfoFromOK = function (userIds) {
 
 };
 
-const getUsersInfoFromOK = function (userIds) {
+const getUsersInfoFromOK = function (userIds, fields = okApiFields) {
 
     return new Promise((resolve, reject) => {
 
@@ -71,7 +71,7 @@ const getUsersInfoFromOK = function (userIds) {
         let requestParameters = {
             method: 'users.getInfo',
             uids: userIds.join(',') || userIds,
-            fields: requiredFieldsStr
+            fields: fields.join(',')
         };
 
         return okApi.get(requestParameters)
@@ -121,7 +121,7 @@ const bulkUpsertParallel = function(model, dataArray, validationNecessity) {
 
         async.eachLimit(
             dataArray,
-            50,
+            200,
             (data, callback) => {
 
                 model.upsert(

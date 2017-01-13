@@ -14,9 +14,9 @@ const camelizeKeys = function (receivedData) {
 
 };
 
-const adoptLocation = function (_receivedData) {
+const adoptLocation = function (receivedData) {
 
-    const receivedData = _receivedData;
+    if (!receivedData.location) return receivedData;
 
     const resultData = _.cloneDeep(receivedData);
 
@@ -30,6 +30,8 @@ const adoptLocation = function (_receivedData) {
 };
 
 const adoptGender = function (receivedData) {
+
+    if (!receivedData.gender) return receivedData;
 
     const resultData = _.cloneDeep(receivedData);
 
