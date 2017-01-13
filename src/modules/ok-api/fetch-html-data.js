@@ -15,8 +15,7 @@ const fetchHtmlUserData = (uid) => {
             let data = [];
 
             $('a.mctc_navMenuSec').each((i, elem) => {
-                data.push(( $(elem).text().match(/\d+/) || ['0'] )[0] || 0);
-                // console.log( $(elem).text(), ' - ', ( $(elem).text().match(/\d+/) || ['0'] )[0] )
+                data.push((  $(elem).text().match(/\d+/g) || [] ).join('') || null);
             });
 
             const userInfo = {
