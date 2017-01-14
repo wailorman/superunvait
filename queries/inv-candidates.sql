@@ -22,4 +22,8 @@ ON `invite-candidates`.userId = users.uid
 LEFT JOIN invites
 ON `invite-candidates`.userId = invites.userId
 
+LEFT JOIN members
+ON `invite-candidates`.userId = members.id
+
 WHERE invites.id IS NULL
+  AND members.id IS NULL
