@@ -6,7 +6,12 @@ const fetchHtmlUserData = (uid) => {
 
     return new Promise((resolve, reject) => {
 
-        request(`https://ok.ru/profile/${uid}`, (err, res, body) => {
+        const reqParams = {
+            url: `https://ok.ru/profile/${uid}`,
+            timeout: 30 * 1000
+        };
+
+        request(reqParams, (err, res, body) => {
 
             if (err) return reject(err);
 
