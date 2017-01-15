@@ -12,7 +12,7 @@ SELECT
         WHEN    groups BETWEEN   400 and 500  THEN '400 .. 500'
         WHEN    groups BETWEEN   500 and 600  THEN '500 .. 600'
         WHEN    groups BETWEEN   600 and 700  THEN '600 .. 700'
-        WHEN    groups           >  700       THEN '700 .. 999'
+        WHEN    groups           >  700       THEN '700 .. ∞'
     END as      groupsS,
 
 
@@ -35,7 +35,7 @@ SELECT
         WHEN    games BETWEEN   400 and 500  THEN '400 .. 500'
         WHEN    games BETWEEN   500 and 600  THEN '500 .. 600'
         WHEN    games BETWEEN   600 and 700  THEN '600 .. 700'
-        WHEN    games           >  700       THEN '700 .. 999'
+        WHEN    games           >  700       THEN '700 .. ∞'
     END as      gamesS,
 
 
@@ -49,7 +49,7 @@ SELECT
         WHEN    friends BETWEEN   400 and 500  THEN '400 .. 500'
         WHEN    friends BETWEEN   500 and 600  THEN '500 .. 600'
         WHEN    friends BETWEEN   600 and 700  THEN '600 .. 700'
-        WHEN    friends           >  700       THEN '700 .. 999'
+        WHEN    friends           >  700       THEN '700 .. ∞'
     END as      friendsS,
 
 
@@ -63,7 +63,7 @@ SELECT
         WHEN    notes BETWEEN   400 and 500  THEN '400 .. 500'
         WHEN    notes BETWEEN   500 and 600  THEN '500 .. 600'
         WHEN    notes BETWEEN   600 and 700  THEN '600 .. 700'
-        WHEN    notes           >  700       THEN '700 .. 999'
+        WHEN    notes           >  700       THEN '700 .. ∞'
     END as      notesS,
 
 
@@ -77,7 +77,7 @@ SELECT
         WHEN    photos BETWEEN   400 and 500  THEN '400 .. 500'
         WHEN    photos BETWEEN   500 and 600  THEN '500 .. 600'
         WHEN    photos BETWEEN   600 and 700  THEN '600 .. 700'
-        WHEN    photos           >  700       THEN '700 .. 999'
+        WHEN    photos           >  700       THEN '700 .. ∞'
     END as      photosS,
 
 
@@ -93,7 +93,7 @@ SELECT
         WHEN    DATEDIFF( NOW(), registeredDate ) BETWEEN   4000 and 5000   THEN '4000 .. 5000'
         WHEN    DATEDIFF( NOW(), registeredDate ) BETWEEN   5000 and 6000   THEN '5000 .. 6000'
         WHEN    DATEDIFF( NOW(), registeredDate ) BETWEEN   6000 and 7000   THEN '6000 .. 7000'
-        WHEN    DATEDIFF( NOW(), registeredDate )           >  7000         THEN '7000 .. 9999'
+        WHEN    DATEDIFF( NOW(), registeredDate )           >  7000         THEN '7000 .. ∞9'
     END as      daysBetwRegS
 
 
