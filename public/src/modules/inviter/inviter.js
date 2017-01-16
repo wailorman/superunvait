@@ -232,7 +232,7 @@ export const invitingCtrl = {
 
         $(SHOW_MORE_BUTTON).click();
 
-        if ($(USER_CONTAINER).length > 2000) {
+        if ($(USER_CONTAINER).length > 1000) {
             console.log(`STOP SCANNING!!! too much grannies`);
             this.stopScanCandidates();
 
@@ -263,8 +263,6 @@ export const invitingCtrl = {
             userContainer.jqElem.addClass(SCANNED_CANDIDATE_CLASS);
 
             candidatesIds.push(userId);
-
-            userContainer.removeFromDOM();
 
         });
 
