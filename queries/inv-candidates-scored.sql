@@ -1,7 +1,7 @@
 SELECT
 	*,
-	(groups /100 * 3.65) +
-	(friends /100 * 3.65) AS score
+	(groups /100 * 10) +
+	(friends /100 * 1) AS score
 FROM
 	inv_candidates
 ORDER BY score DESC;
