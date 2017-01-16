@@ -33,7 +33,19 @@ SELECT
         `userNames`.`notes` AS `notes`,
         `userNames`.`games` AS `games`,
         `userNames`.`registeredDate` AS `registeredDate`,
-        `userNames`.`lastOnline` AS `lastOnline`
+        `userNames`.`lastOnline` AS `lastOnline`,
+
+        (
+            UNIX_TIMESTAMP(
+                convert_tz(
+                    `ibb`.`invites`.`createdAt`,
+                    '+00:00',
+                    '+03:00'
+                )
+            )
+            -
+            UNIX_TIMESTAMP(`userNames`.`lastOnline`)
+        ) / 3600 AS `hoursBetwSend&Online`
 FROM
 
 invites
@@ -70,4 +82,5 @@ LEFT JOIN
 ON invites.userId = joinedMembers.id
 
 
-WHERE invites.senderId IS NOT NULL;
+WHERE invites.senderId IS NOT NULL
+ORDER BY invites.id DESC;
