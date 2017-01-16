@@ -2,10 +2,9 @@ version: '2'
 services:
   observer:
     container_name: ibb-observer-node
-    build:
-      dockerfile: Dockerfile-observer
-      context: .
-    image: "wailorman/ibb-observer:dev"
+    build: .
+    image: "wailorman/ibb-api:dev"
+    command: bash -c "npm run observer && npm run observer:logs"
     environment:
       NODE_ENV: "production"
       DB_CONNECTION_STRING:
