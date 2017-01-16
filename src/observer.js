@@ -73,7 +73,7 @@ const writeNewMembersToDB = () => {
 // from all resources
 const getUnfilledUserIds = () => {
 
-    return fs.readFile(__dirname + '/../queries/unfilled-users.sql', 'utf8')
+    return fs.readFile(__dirname + '/../mysql/queries/unfilled-users.sql', 'utf8')
         .then((sqlQuery) => {
 
             return sequelize.query(sqlQuery, { type: sequelize.QueryTypes.SELECT });
@@ -89,7 +89,7 @@ const getUnfilledUserIds = () => {
 
 const getRottenUserIds = () => {
 
-    return fs.readFile(__dirname + '/../queries/rotten-users.sql', 'utf8')
+    return fs.readFile(__dirname + '/../mysql/queries/rotten-users.sql', 'utf8')
         .then((sqlQuery) => {
 
             return sequelize.query(sqlQuery, { type: sequelize.QueryTypes.SELECT });

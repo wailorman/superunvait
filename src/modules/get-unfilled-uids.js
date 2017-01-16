@@ -4,7 +4,7 @@ const sequelize = require('../../models/index').sequelize;
 // from all resources
 const fromAll = () => {
 
-    return fs.readFile(__dirname + '/../../queries/unfilled-users.sql', 'utf8')
+    return fs.readFile(__dirname + '/../../mysql/queries/unfilled-users.sql', 'utf8')
         .then((sqlQuery) => {
 
             return sequelize.query(sqlQuery, { type: sequelize.QueryTypes.SELECT });
