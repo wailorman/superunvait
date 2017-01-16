@@ -121,7 +121,7 @@ const bulkUpsertParallel = function(model, dataArray, validationNecessity) {
 
         async.eachLimit(
             dataArray,
-            200,
+            10,
             (data, callback) => {
 
                 model.upsert(
