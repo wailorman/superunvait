@@ -20,4 +20,6 @@ SELECT
 FROM
     extended_invites
 
+WHERE createdAt >= '2017-01-11 00:00:00'
+
 GROUP BY joined
