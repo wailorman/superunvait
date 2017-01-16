@@ -27,6 +27,8 @@ services:
       - ~/db/data:/var/lib/mysql
     ports:
       - "3306:3306"
+    restart: on-failure
+    mem_limit: 800M
     environment:
       MYSQL_ROOT_PASSWORD:
       MYSQL_DATABASE: ibb
