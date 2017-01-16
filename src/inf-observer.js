@@ -58,35 +58,35 @@ async.forever(
 
 
 
-async.forever(
-    function(next) {
-
-        // console.log('\t', new Date().toString(), '\t');
-
-        observer.writeFreshUsersInfo()
-            .then(() => {
-
-                console.log(
-                    format(new Date(), 'DD MMM YYYY  HH:mm'),
-                    `Users was successfully refreshed`
-                );
-
-                setTimeout(() => {
-
-                    next();
-
-                }, FETCH_FRESH_INTERVAL);
-            })
-            .catch((err) => {
-                next(err);
-            });
-
-    },
-    function(err) {
-        console.error(`Error in refreshing users: `, err);
-        process.exit(1);
-    }
-);
+// async.forever(
+//     function(next) {
+//
+//         // console.log('\t', new Date().toString(), '\t');
+//
+//         observer.writeFreshUsersInfo()
+//             .then(() => {
+//
+//                 console.log(
+//                     format(new Date(), 'DD MMM YYYY  HH:mm'),
+//                     `Users was successfully refreshed`
+//                 );
+//
+//                 setTimeout(() => {
+//
+//                     next();
+//
+//                 }, FETCH_FRESH_INTERVAL);
+//             })
+//             .catch((err) => {
+//                 next(err);
+//             });
+//
+//     },
+//     function(err) {
+//         console.error(`Error in refreshing users: `, err);
+//         process.exit(1);
+//     }
+// );
 
 
 
