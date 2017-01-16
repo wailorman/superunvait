@@ -5,6 +5,16 @@ SELECT
     SUM(members.id IS NOT NULL) AS joined,
 
 
+    TRUNCATE(IBB_SCORE(
+
+        AVG(friends),
+        AVG(photos),
+        AVG(groups),
+        AVG(notes),
+        AVG(games)
+
+    ), 2)                                  as avg_score,
+
 
     TRUNCATE( AVG(groups) , 2)             as avg_groups,
     TRUNCATE( AVG(notes) , 2)              as avg_notes,
