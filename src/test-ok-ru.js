@@ -8,6 +8,7 @@ const getUsersInfo = require('./modules/ok-api/get-users-info');
 const observer = require('./observer');
 
 const models = require('../models/index');
+const sequelize = require('../models/index').sequelize;
 const User = models.user;
 const Member = models.member;
 const Invite = models.invite;
@@ -98,23 +99,77 @@ const pullInfoAboutInvites = () => {
 
 };
 
-observer.writeNewMembersToDB()
-    .then(() => {
-        console.log(`Members was successfully fetched`);
+sequelize.query(
+    "SELECT uid FROM users ORDER BY updatedAt ASC LIMIT 50000",
+    {
+        type: sequelize.QueryTypes.SELECT,
+        raw: true
+    }
+)
+    .then((res) => {
 
-        observer.writeInfoAboutUnfilledUsers()
-            .then(() => {
-                console.log(`Users was successfully filled`);
+        const uids = res.map((candidate) => {
+            return candidate.uid;
+        });
+
+        debugger;
+
+        getUsersInfo.getAllUsersInfoFromOK(uids, ['last_online'])
+            .then((apiRes) => {
+
+                const data = apiRes.map((user) => {
+                    return {
+                        uid: user.uid,
+                        lastOnline: user.last_online
+                    };
+                });
+
+                debugger;
+
+
+
+                // return getUsersInfo.bulkUpsertParallel(User, data, true);
+
+                return User.bulkCreate(
+                    data,
+                    {
+                        updateOnDuplicate: ['lastOnline', 'updatedAt']
+                    }
+                );
+
+                //
+                // return Promise.all(apiRes.map((user) => {
+                //
+                //    return sequelize.query(
+                //        `
+                //         UPDATE LOW_PRIORITY
+                //             users
+                //         SET lastOnline='${user.last_online}'
+                //         WHERE uid = '${user.uid}';
+                //         `,
+                //        {type: sequelize.QueryTypes.UPDATE, raw: true}
+                //    )
+                //
+                // }));
+
+            })
+            .then((updRes) => {
+                debugger;
+                // console.log(updRes);
+                process.exit(0);
             })
             .catch((err) => {
-                console.error(`Error in filling users: `, err);
-            });
+                debugger;
+                console.error(err);
+                process.exit(1);
+            })
 
     })
     .catch((err) => {
-        console.error(`Error in fetching members: `, err);
+        debugger;
+        console.error(err);
+        process.exit(1);
     });
-
 
 
 

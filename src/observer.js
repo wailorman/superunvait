@@ -30,7 +30,37 @@ const writeInfoAboutUnfilledUsers = () => {
         })
         .then((fullUsersInfo) => {
 
-            return getUsersInfo.bulkUpsertParallel(User, fullUsersInfo);
+            // return getUsersInfo.bulkUpsertParallel(User, fullUsersInfo);
+
+            return User.bulkCreate(
+                fullUsersInfo,
+                {
+                    updateOnDuplicate:  [
+                        'name',
+                        'age',
+                        'allowsAnonymAccess',
+                        'allowsMessagingOnlyForFriends',
+                        'birthday',
+                        'gender',
+                        'lastOnline',
+                        'registeredDate',
+                        'city',
+                        'country',
+                        'photoId',
+                        'pic5',
+                        'picFull',
+                        'hasServiceInvisible',
+                        'private',
+                        'friends',
+                        'photos',
+                        'groups',
+                        'games',
+                        'notes',
+                        'updatedAt'
+                    ],
+                    validate: true
+                }
+            );
 
         })
         .then(() => {
