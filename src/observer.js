@@ -30,8 +30,6 @@ const writeInfoAboutUnfilledUsers = () => {
         })
         .then((fullUsersInfo) => {
 
-            // return getUsersInfo.bulkUpsertParallel(User, fullUsersInfo);
-
             return User.bulkCreate(
                 fullUsersInfo,
                 {
@@ -78,7 +76,16 @@ const writeFreshUsersInfo = () => {
             return getUsersInfo.getAdoptedUsersInfo(rottenUids);
         })
         .then((apiResponse) => {
-            return getUsersInfo.bulkUpsertParallel(User, apiResponse);
+            return User.bulkCreate(
+                apiResponse,
+                {
+                    updateOnDuplicate:  [
+                        'lastOnline',
+                        'updatedAt'
+                    ],
+                    validate: true
+                }
+            );
         });
 
 };
@@ -91,7 +98,7 @@ const writeNewMembersToDB = () => {
 
             const membersUidsCollection = membersUids.map((id) => ({ id: id }));
 
-            return getUsersInfo.bulkUpsertParallel(Member, membersUidsCollection);
+            return Member.bulkCreate(membersUidsCollection, {validate: true})
 
         });
 

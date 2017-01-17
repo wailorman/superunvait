@@ -7,8 +7,6 @@ const _ = require('lodash');
 const InviteCandidate = models['invite-candidate'];
 const InviteCandidateRouter = express.Router();
 
-const bulkUpsertParallel = require('../modules/ok-api/get-users-info').bulkUpsertParallel;
-
 InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
 
     if (
@@ -27,7 +25,7 @@ InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
         };
     });
 
-    bulkUpsertParallel(InviteCandidate, data, true)
+    InviteCandidate.bulkCreate(data, {validate: true})
         .then((result)=> {
             res.json({inviteCandidates: inviteCandidates});
         })
