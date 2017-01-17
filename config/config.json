@@ -2,8 +2,8 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "ibb_development",
-    "host": "127.0.0.1",
+    "database": "ibb",
+    "host": "192.168.213.128",
     "dialect": "mysql",
     "charset": "utf8"
   },
@@ -15,8 +15,9 @@
   "production": {
     "use_env_variable": "DB_CONNECTION_STRING",
     "charset": "utf8",
+    "dialect": "mysql",
     "pool": {
-      "maxIdleTime": 10000000
+      "maxIdleTime": 1
     }
   }
 }
