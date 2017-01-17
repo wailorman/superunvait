@@ -1,6 +1,9 @@
 'use strict';
+
+const retry = require('../src/lib/sequelize-retry');
+
 module.exports = function(sequelize, DataTypes) {
-    const InviteCandidate = sequelize.define('invite-candidate', {
+    return sequelize.define('invite-candidate', {
         userId: {
             type: DataTypes.STRING,
             primaryKey: true
@@ -9,8 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 // associations can be defined here
-            }
+            },
+            bulkCreate: retry.call(this, 'bulkCreate')
         }
     });
-    return InviteCandidate;
 };
