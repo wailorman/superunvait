@@ -25,7 +25,7 @@ InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
         };
     });
 
-    InviteCandidate.bulkCreate(data, {validate: true})
+    InviteCandidate.bulkCreate(data, {validate: true, ignoreDuplicates: true})
         .then((result)=> {
             res.json({inviteCandidates: inviteCandidates});
         })

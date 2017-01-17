@@ -98,7 +98,13 @@ const writeNewMembersToDB = () => {
 
             const membersUidsCollection = membersUids.map((id) => ({ id: id }));
 
-            return Member.bulkCreate(membersUidsCollection, {validate: true})
+            return Member.bulkCreate(
+                membersUidsCollection,
+                {
+                    validate: true,
+                    ignoreDuplicates: true
+                }
+            )
 
         });
 
