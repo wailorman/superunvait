@@ -1,8 +1,8 @@
 const sequelize = require('sequelize');
 
-const msecRetry = 25000;
+const msecRetryDefault = 25000;
 
-const keepRetry = (func) => (...args) => {
+const keepRetry = (func, msecRetry = msecRetryDefault) => (...args) => {
 
     const isConnectionError = (err) => {
         return err instanceof sequelize.DatabaseError
@@ -28,7 +28,8 @@ const keepRetry = (func) => (...args) => {
                     if (diffSec < msecRetry) {
 
                         keepRetry(func, (msecRetry - diffSec))(...args)
-                            .then(resolve);
+                            .then(resolve)
+                            .catch(reject);
 
                     } else {
                         return reject(err);
@@ -43,4 +44,10 @@ const keepRetry = (func) => (...args) => {
 
 };
 
-module.exports = keepRetry;
+const forSequelize = (methodName) => function(...args) {
+    return keepRetry(
+        this.constructor.prototype[methodName].bind(this)
+    )(...args);
+};
+
+module.exports = forSequelize;

@@ -12,21 +12,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 // associations can be defined here
             },
-            findAll: function(...args) {
-                return retry(
-                    this.constructor.prototype.findAll.bind(this)
-                )(...args);
-            },
-            create: function(...args) {
-                return retry(
-                    this.constructor.prototype.create.bind(this)
-                )(...args);
-            },
-            find: function(...args) {
-                return retry(
-                    this.constructor.prototype.find.bind(this)
-                )(...args);
-            }
+            findAll: retry.call(this, 'findAll'),
+            create: retry.call(this, 'create'),
+            find: retry.call(this, 'find')
         }
     });
 };
