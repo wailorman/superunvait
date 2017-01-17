@@ -21,6 +21,11 @@ module.exports = function(sequelize, DataTypes) {
                 return retry(
                     this.constructor.prototype.create.bind(this)
                 )(...args);
+            },
+            find: function(...args) {
+                return retry(
+                    this.constructor.prototype.find.bind(this)
+                )(...args);
             }
         }
     });
