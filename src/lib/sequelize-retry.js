@@ -50,4 +50,7 @@ const forSequelize = (methodName) => function(...args) {
     )(...args);
 };
 
-module.exports = forSequelize;
+module.exports = {
+    keepRetry,
+    forSequelize
+};

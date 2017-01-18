@@ -1,6 +1,6 @@
 'use strict';
 
-const retry = require('../src/lib/sequelize-retry');
+const retry = require('../src/lib/sequelize-retry').forSequelize;
 
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('invite-candidate', {
