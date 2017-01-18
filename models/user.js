@@ -4,7 +4,7 @@ module.exports = function (sequelize, DataTypes) {
         uid: {
             primaryKey: true,
             allowNull: false,
-            type: DataTypes.STRING
+            type: DataTypes.BIGINT.UNSIGNED
         },
         name: DataTypes.STRING,
         age: DataTypes.INTEGER,
