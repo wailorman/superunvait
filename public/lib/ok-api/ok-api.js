@@ -1,4 +1,5 @@
 import * as ibbApi from '../ibb-api/ibb-api'
+import { UserContainer, USER_CONTAINER } from '../../src/modules/inviter/user-container';
 
 export const INVITING_RESULT = {
     SUCCESS: 'SUCCESS',
@@ -6,6 +7,47 @@ export const INVITING_RESULT = {
     TOO_OFTEN: 'TOO_OFTEN',
     UNEXPECTED_RESPONSE: 'UNEXPECTED_RESPONSE',
     ALREADY_INVITED: 'ALREADY_INVITED'
+};
+
+export const usersOnline = {
+
+    getByCity(city) {
+
+        return new Promise((resolve, reject) => {
+
+            $.ajax({
+                url: 'https://ok.ru/online?cmd=OnSiteNowUsersRB&gwt.requested=' + pageCtx.gwtHash + '&st.cmd=userFriendLive&st.ageFrom=50&st.ageTo=90&st.female=2&nsshownIds=&st.city=' + city,
+                type: "POST",
+                beforeSend: xhr => {
+                    xhr.setRequestHeader('TKN', OK.tkn.get());
+                }
+            })
+                .success((data) => {
+
+                    const containers = $(data).find(USER_CONTAINER);
+
+                    let users = [];
+
+                    $(containers).map((i, elem) => {
+                        users.push((new UserContainer(elem)).getUserInfo());
+                    });
+
+                    if (users.length > 0)
+                        return resolve(users);
+                    else
+                        return reject(new Error(`OK.RU returned empty body. It can be bad request. Try to refresh page or change city`));
+
+                })
+                .fail((err) => {
+
+                    return reject(err);
+
+                });
+
+        });
+
+    }
+
 };
 
 export const invites = {
