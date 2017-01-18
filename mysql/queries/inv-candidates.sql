@@ -21,3 +21,4 @@ ON users.uid = members.id
 
 WHERE invites.id IS NULL
   AND members.id IS NULL
+  AND users.groups > 100
