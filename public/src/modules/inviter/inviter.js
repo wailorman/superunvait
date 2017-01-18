@@ -1,4 +1,7 @@
+import async from 'async';
+
 import '../../../vendor/jquery-comments'
+
 import { assignThisScriptToUrl } from '../../../lib/spa-url-observer'
 import * as okApi from '../../../lib/ok-api/ok-api'
 import * as ibbApi from '../../../lib/ibb-api/ibb-api'
@@ -74,6 +77,8 @@ export const controlPanelCtrl = {
     invitedCounter: 0,
     currentCityId: 0,
 
+    totalScanned: 0,
+
     mount() {
 
         if ($(CONTROL_PANEL).length == 0) {
@@ -110,6 +115,16 @@ export const controlPanelCtrl = {
         $('#field_male').attr('checked', false).change();
     },
 
+    getCity(index){
+        return cities[index] || this.getCity(index - cities.length);
+    },
+
+    getNextCity(){
+        this.currentCityId++;
+
+        return this.getCity(this.currentCityId);
+    },
+
     changeCity(callback){
 
         const getCity = (index)=>( cities[index] || getCity( index - cities.length ) );
@@ -144,11 +159,12 @@ export const controlPanelCtrl = {
     },
 
     toggleScanning(){
-        if (invitingCtrl) {
-            if (invitingCtrl.isScanningProceed == false) {
-                invitingCtrl.startScanCandidates();
+
+        if (scanningCtrl) {
+            if (scanningCtrl.isScanningProceed == false) {
+                scanningCtrl.startScanCandidates();
             } else {
-                invitingCtrl.stopScanCandidates();
+                scanningCtrl.stopScanCandidates();
             }
         }else{
             console.error(`toggleInviting(): Inviting Controller hasn't yet initialized`);
@@ -170,6 +186,12 @@ export const controlPanelCtrl = {
         $('#invitedDiv').text(this.invitedCounter);
     },
 
+    incrementScannedCounter(amount = 1){
+        this.totalScanned += amount;
+        $('#scannedCounter').text(this.totalScanned);
+    },
+
+
     updateInvitingToggleButtonText(newText) {
         $(CONTROL_PANEL__TOGGLE_INVITING_BTN).text(newText);
     },
@@ -181,16 +203,108 @@ export const controlPanelCtrl = {
 };
 
 
+export const scanningCtrl = {
+
+    isScanningProceed: false,
+
+    letsScan() {
+
+        const NEXT_CITY_PLZ = 'next_city_plz';
+
+        async.whilst(
+            () => this.isScanningProceed,
+            (callback1) => {
+
+                const city = controlPanelCtrl.getNextCity();
+
+                console.log(city);
+
+                const USERS_PER_CITY_LIMIT = 10000;
+
+                let previousUids = [],
+                    page,
+                    loaderId;
+
+                async.whilst(
+                    ()=> previousUids.length < USERS_PER_CITY_LIMIT && this.isScanningProceed,
+                    (callback2) => {
+
+                        okApi.usersOnline.getByCity({
+                            city,
+                            loaderId,
+                            previousUids,
+                            page
+                        })
+                            .then((uids, newLoaderId) => {
+
+                                loaderId = newLoaderId;
+
+                                previousUids = previousUids.concat(uids);
+
+                                if (!page)
+                                    page = 2;
+                                else
+                                    page++;
+
+                                if (uids.length == 0){
+                                    console.log(NEXT_CITY_PLZ);
+                                    return callback2(NEXT_CITY_PLZ)
+                                }
+
+                                console.debug(uids.join(', '));
+
+                                return ibbApi.inviteCandidates.bulkTell(uids)
+                                    .then(() => {
+                                        controlPanelCtrl.incrementScannedCounter(uids.length);
+                                        callback2();
+                                    });
+
+                            })
+                            .catch((err) => {
+                                callback2(err);
+                            });
+
+                    },
+                    (err) => {
+                        if (err !== NEXT_CITY_PLZ && err !== null) return callback1(err);
+                        return callback1();
+                    }
+                );
+
+            },
+            (err) => {
+                debugger;
+                console.error(err);
+            }
+        );
+
+    },
+
+    startScanCandidates() {
+
+        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__STOP);
+
+        this.isScanningProceed = true;
+
+        this.letsScan();
+
+    },
+    stopScanCandidates() {
+
+        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__CONTINUE);
+
+        this.isScanningProceed = false;
+
+    }
+
+};
+
+
 export const invitingCtrl = {
 
     isInvitingProceed: false,
     invitingInterval: null,
     userContainerIndex: 0,
-
-    isScanningProceed: false,
-    scanningInterval: null,
-    isPushingInProgress: false,
-    lastPushTime: null,
 
     ////    helpers:
 
@@ -201,104 +315,6 @@ export const invitingCtrl = {
     },
 
     //////////////////////////////////////////////////////
-
-    startScanCandidates() {
-
-        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__STOP);
-
-        this.isScanningProceed = true;
-        this.scanningInterval = setInterval(() => {
-
-            this.scanCandidates();
-
-        }, 500);
-
-    },
-    stopScanCandidates() {
-
-        controlPanelCtrl.updateScanningToggleButtonText(TOGGLE_SCAN_BUTTON_TEXT__CONTINUE);
-
-        this.isScanningProceed = false;
-        clearInterval(this.scanningInterval);
-
-    },
-
-    scanCandidates() {
-
-        if (!this.isScanningProceed) return;
-        if (this.isPushingInProgress) return;
-
-        let candidatesIds = [];
-
-        $(SHOW_MORE_BUTTON).click();
-
-        if ($(USER_CONTAINER).length > 1000) {
-            console.log(`STOP SCANNING!!! too much grannies`);
-            this.stopScanCandidates();
-
-            controlPanelCtrl.changeCity(() => {
-                this.startScanCandidates();
-            });
-        }
-
-        $(USER_CONTAINER__CANDIDATE).each((i, userContainerElem) => {
-
-            const userContainer = new UserContainer(userContainerElem);
-            const { userId } = userContainer.getUserInfo();
-
-            const isStub = userContainer.isStub();
-            if (isStub) {
-                console.log(`STOP SCANNING!!!`);
-                this.stopScanCandidates();
-
-                controlPanelCtrl.changeCity(() => {
-                    this.startScanCandidates();
-                });
-
-                return false; // stop .each()
-            }
-
-            userContainer.paintIn('orange', '5px');
-            userContainer.scrollTo();
-            userContainer.jqElem.addClass(SCANNED_CANDIDATE_CLASS);
-
-            candidatesIds.push(userId);
-
-        });
-
-        if (candidatesIds.length > 0) {
-            // есть новые бабули
-
-            this.lastPushTime = new Date();
-
-            this.isPushingInProgress = true;
-            ibbApi.inviteCandidates.bulkTell(candidatesIds)
-                .then(() => {
-                    this.isPushingInProgress = false;
-                })
-                .fail((err) => {
-                    debugger;
-                    this.isPushingInProgress = false;
-                });
-        }else{
-            // новых бабуль не отправили
-
-            const curTimeMs = new Date().getTime();
-            const lastPushTimeMs = this.lastPushTime.getTime();
-
-            const delta = curTimeMs - lastPushTimeMs;
-
-            if (delta > WAIT_TIMEOUT) {
-                console.log(`Scanning timeout expired`);
-                this.lastPushTime = new Date();
-                controlPanelCtrl.changeCity(() => {
-                    this.startScanCandidates();
-                });
-            }
-
-        }
-
-    },
 
     startInviting() {
 

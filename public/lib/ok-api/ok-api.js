@@ -1,5 +1,4 @@
 import * as ibbApi from '../ibb-api/ibb-api'
-import { UserContainer, USER_CONTAINER } from '../../src/modules/inviter/user-container';
 
 export const INVITING_RESULT = {
     SUCCESS: 'SUCCESS',
@@ -11,31 +10,60 @@ export const INVITING_RESULT = {
 
 export const usersOnline = {
 
-    getByCity(city) {
+    deserializeResponse(html) {
+
+        const loaderId = ( $(html).find('input').attr('id') || "" ).split("_")[2] || null;
+
+        const uidsString = $(html).find('input').attr('value');
+
+        let uids;
+
+        if (uidsString){
+            uids = uidsString.split(";");
+        }else{
+            uids = [];
+        }
+
+        return {
+            loaderId,
+            uids
+        };
+
+    },
+
+    getByCity({city, loaderId, previousUids, page}) {
 
         return new Promise((resolve, reject) => {
 
+            const requestData = {
+                'st.ageFrom': "50",
+                'st.ageTo': "90",
+                'st.female': "2",
+                'st.city': city,
+                'fetch': "false"
+            };
+
+
+            if (previousUids) requestData['nsshownIds'] = previousUids.join(';');
+            if (page) requestData['st.page'] = page;
+            if (loaderId) requestData['st.loaderid'] = loaderId;
+
+
+
             $.ajax({
-                url: 'https://ok.ru/online?cmd=OnSiteNowUsersRB&gwt.requested=' + pageCtx.gwtHash + '&st.cmd=userFriendLive&st.ageFrom=50&st.ageTo=90&st.female=2&nsshownIds=&st.city=' + city,
+                url: 'https://ok.ru/online?cmd=OnSiteNowUsersRB&gwt.requested=' + pageCtx.gwtHash + '&st.cmd=userFriendLive',
                 type: "POST",
+                data: requestData,
                 beforeSend: xhr => {
                     xhr.setRequestHeader('TKN', OK.tkn.get());
                 }
             })
                 .success((data) => {
 
-                    const containers = $(data).find(USER_CONTAINER);
+                    const { loaderId, uids } = this.deserializeResponse(data);
 
-                    let users = [];
+                    return resolve(uids, loaderId);
 
-                    $(containers).map((i, elem) => {
-                        users.push((new UserContainer(elem)).getUserInfo());
-                    });
-
-                    if (users.length > 0)
-                        return resolve(users);
-                    else
-                        return reject(new Error(`OK.RU returned empty body. It can be bad request. Try to refresh page or change city`));
 
                 })
                 .fail((err) => {
