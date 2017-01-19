@@ -6,7 +6,7 @@ services:
     image: "wailorman/ibb-api:dev"
     command: bash -c "npm run observer && npm run observer:logs"
     environment:
-      NODE_ENV: "production"
+      NODE_ENV:
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
   api:
@@ -14,6 +14,7 @@ services:
     build: .
     image: "wailorman/ibb-api:dev"
     environment:
+      NODE_ENV:
       PORT: 80
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
