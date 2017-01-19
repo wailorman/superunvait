@@ -438,7 +438,9 @@ export const scanningCtrl = {
                                 return ibbApi.inviteCandidates.bulkTell(uids)
                                     .then(() => {
                                         controlPanelCtrl.incrementScannedCounter(uids.length);
-                                        callback2();
+                                        setTimeout(() => {
+                                            callback2();
+                                        }, 100);
                                     });
 
                             })
