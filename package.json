@@ -20,7 +20,7 @@
     "serve:browser-sync": "node ./node_modules/.bin/browser-sync start --server --files \"public/dist/*\"",
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "build:watch": "node ./node_modules/webpack/bin/webpack.js --watch",
-    "start:docker": "node_modules/forever/bin/forever start -c \"node --harmony\" ./src/app.js && node node_modules/forever/bin/forever --fifo logs 0",
+    "start:docker": "node --harmony ./src/app.js",
     "observer": "node ./node_modules/forever/bin/forever start src/inf-observer.js",
     "observer:logs": "node ./node_modules/forever/bin/forever --fifo logs 0",
     "start:heroku": "node --harmony ./src/app.js",
