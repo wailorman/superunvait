@@ -12,7 +12,7 @@ router.get('/invite-candidates', (req, res, next) => {
 
     const limit = parseInt(req.query.limit) || 500;
 
-    keepRetry(sequelize.query/*.bind(sequelize)*/)(
+    keepRetry(sequelize.query.bind(sequelize))(
         `SELECT * FROM inv_candidates_scored LIMIT ${limit}`,
         { type: sequelize.QueryTypes.SELECT }
     )
