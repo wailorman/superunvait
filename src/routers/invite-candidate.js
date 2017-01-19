@@ -3,11 +3,29 @@ const models = require('../../models/');
 const sequelize = require('../../models/index').sequelize;
 const Q = require('q');
 const _ = require('lodash');
+const keepRetry = require('../lib/sequelize-retry').keepRetry;
 
 const InviteCandidate = models['invite-candidate'];
-const InviteCandidateRouter = express.Router();
+const router = express.Router();
 
-InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
+router.get('/invite-candidates', (req, res, next) => {
+
+    const limit = parseInt(req.query.limit) || 500;
+
+    keepRetry(sequelize.query/*.bind(sequelize)*/)(
+        `SELECT * FROM inv_candidates_scored LIMIT ${limit}`,
+        { type: sequelize.QueryTypes.SELECT }
+    )
+        .then((result) => {
+            res.status(200).json(result);
+        })
+        .catch((err) => {
+            next(err);
+        });
+
+});
+
+router.post('/invite-candidates', (req, res, next) => {
 
     if (
         !req.body.inviteCandidates ||
@@ -36,4 +54,4 @@ InviteCandidateRouter.post('/invite-candidates', (req, res, next) => {
 
 });
 
-module.exports = InviteCandidateRouter;
+module.exports = router;
