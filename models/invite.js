@@ -5,6 +5,11 @@ const retry = require('../src/lib/sequelize-retry').forSequelize;
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('invite', {
         userId: DataTypes.STRING,
+        status: {
+            type: DataTypes.ENUM('SENT', 'FAILURE'),
+            defaultValue: 'SENT',
+            allowNull: false
+        },
         city: DataTypes.STRING,
         senderId: DataTypes.STRING
     }, {
