@@ -23,7 +23,7 @@ app.use(apiRoute);
 https.createServer({
     key: fs.readFileSync( 'ssl/privkey.pem' ),
     cert: fs.readFileSync( 'ssl/cert.pem' )
-}, app).listen(process.env.PORT || 8050, function () {
-    console.log(`server started on port ${process.env.PORT}`);
+}, app).listen(3000, function () {
+    console.log(`server started on port 3000`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
