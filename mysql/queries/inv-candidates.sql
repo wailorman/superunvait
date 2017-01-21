@@ -8,6 +8,7 @@ SELECT
 	users.groups,
 	users.games,
 	users.notes,
+	users.score,
 	users.lastOnline,
 	users.updatedAt
 FROM
