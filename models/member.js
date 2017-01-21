@@ -4,7 +4,7 @@ module.exports = function (sequelize, DataTypes) {
         id: {
             primaryKey: true,
             allowNull: false,
-            type: DataTypes.STRING
+            type: DataTypes.BIGINT.UNSIGNED
         },
         fio: DataTypes.STRING,
         gender: DataTypes.ENUM('F', 'M')

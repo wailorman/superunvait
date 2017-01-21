@@ -5,7 +5,7 @@ const retry = require('../src/lib/sequelize-retry').forSequelize;
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('invite-candidate', {
         userId: {
-            type: DataTypes.STRING,
+            type: DataTypes.BIGINT.UNSIGNED,
             primaryKey: true
         },
         label: {
