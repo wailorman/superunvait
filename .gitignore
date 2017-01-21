@@ -3,3 +3,4 @@ node_modules/
 /db/development.sqlite
 dist/crx/*.build.js
 dist/test/*.build.js
+ssl/
