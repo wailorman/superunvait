@@ -4,6 +4,8 @@ require('babel-polyfill');
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const https = require('https');
+const fs = require('fs');
 
 const apiRoute = require('./routers/api');
 const corsMiddleware = require('./middlewares/cors');
@@ -18,7 +20,10 @@ app.use(bodyParser.json({limit: BODY_LIMIT}));
 
 app.use(apiRoute);
 
-app.listen(process.env.PORT || 8050, function () {
+https.createServer({
+    key: fs.readFileSync( 'ssl/privkey.pem' ),
+    cert: fs.readFileSync( 'ssl/cert.pem' )
+}, app).listen(process.env.PORT || 8050, function () {
     console.log(`server started on port ${process.env.PORT}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });

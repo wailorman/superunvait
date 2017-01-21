@@ -4,6 +4,10 @@ services:
     container_name: ibb-observer-node
     build: .
     image: "wailorman/ibb-api:dev"
+    volumes:
+      - ~/ssl:/ibb/ssl
+    restart: on-failure
+    mem_limit: 400M
     command: bash -c "npm run observer && npm run observer:logs"
     environment:
       NODE_ENV:
@@ -13,6 +17,10 @@ services:
     container_name: ibb-api-node
     build: .
     image: "wailorman/ibb-api:dev"
+    volumes:
+      - ~/ssl:/ibb/ssl
+    restart: on-failure
+    mem_limit: 400M
     environment:
       NODE_ENV:
       PORT: 80
@@ -32,4 +40,5 @@ services:
     mem_limit: 800M
     environment:
       MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD:
       MYSQL_DATABASE: ibb
