@@ -7,6 +7,11 @@ module.exports = function(sequelize, DataTypes) {
         userId: {
             type: DataTypes.STRING,
             primaryKey: true
+        },
+        label: {
+            type: DataTypes.ENUM('NORMAL', 'BAD'),
+            defaultValue: 'NORMAL',
+            allowNull: false
         }
     }, {
         classMethods: {
