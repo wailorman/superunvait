@@ -25,7 +25,8 @@ module.exports = function (sequelize, DataTypes) {
         photos: DataTypes.INTEGER,
         groups: DataTypes.INTEGER,
         games: DataTypes.INTEGER,
-        notes: DataTypes.INTEGER
+        notes: DataTypes.INTEGER,
+        score: DataTypes.FLOAT(2)
     }, {
         classMethods: {
             associate: function (models) {
