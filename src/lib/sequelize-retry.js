@@ -5,8 +5,7 @@ const msecRetryDefault = 25000;
 const keepRetry = (func, msecRetry = msecRetryDefault) => (...args) => {
 
     const isConnectionError = (err) => {
-        return err instanceof sequelize.DatabaseError
-            || err instanceof sequelize.ConnectionError
+        return err instanceof sequelize.ConnectionError
             || err instanceof sequelize.ConnectionRefusedError
             || err instanceof sequelize.HostNotFoundError
             || err instanceof sequelize.ConnectionTimedOutError;
