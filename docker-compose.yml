@@ -3,34 +3,33 @@ services:
   observer:
     container_name: ibb-observer-node
     build: .
-    image: "wailorman/ibb-api:dev"
-    volumes:
-      - ~/ssl:/ibb/ssl
+    image: "wailorman/ibb-api"
     restart: on-failure
     mem_limit: 400M
-    command: bash -c "npm run observer && npm run observer:logs"
+    command: npm run observer && npm run observer:logs
     environment:
-      NODE_ENV:
+      NODE_ENV: "production"
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
   api:
     container_name: ibb-api-node
     build: .
-    image: "wailorman/ibb-api:dev"
+    image: "wailorman/ibb-api"
     volumes:
-      - ~/ssl:/ibb/ssl
+      - ./ssl:/ibb/ssl
     restart: on-failure
     mem_limit: 400M
+    command: npm run start
     environment:
-      NODE_ENV:
-      PORT: 80
+      NODE_ENV: "production"
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
     ports:
-      - "80:80"
+      - "443:3000"
   mysql:
     container_name: ibb-mysql-node
-    image: "mysql:latest"
+    image: "mysql:5.7"
+
     volumes:
       - ./bin/mysql-config:/etc/mysql/conf.d
       - ~/db/data:/var/lib/mysql
@@ -40,5 +39,4 @@ services:
     mem_limit: 800M
     environment:
       MYSQL_ROOT_PASSWORD:
-      MYSQL_ALLOW_EMPTY_PASSWORD:
       MYSQL_DATABASE: ibb
