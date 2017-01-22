@@ -21,8 +21,9 @@ FROM
             FROM
                 `invite-candidates`
             LEFT JOIN users ON `invite-candidates`.userId = users.uid
-            WHERE
-                users.groups IS NULL
+            WHERE users.groups IS NULL
+              AND `invite-candidates`.label = 'NORMAL'
+
             LIMIT 100
         )
         UNION ALL
