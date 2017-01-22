@@ -83,4 +83,6 @@ ON invites.userId = joinedMembers.id
 
 
 WHERE invites.senderId IS NOT NULL
+  AND invites.status = 'SENT'
+
 ORDER BY invites.id DESC;

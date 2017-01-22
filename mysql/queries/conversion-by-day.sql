@@ -39,6 +39,8 @@ FROM
 LEFT JOIN members ON invites.userId = members.id
 LEFT JOIN users ON invites.userId = users.uid
 
+WHERE invites.status = 'SENT'
+
 GROUP BY day
 
 ORDER BY day DESC;
