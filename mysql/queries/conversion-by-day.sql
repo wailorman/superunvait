@@ -1,8 +1,9 @@
 SELECT
     DATE(invites.createdAt) AS day,
-    TRUNCATE( SUM(members.id IS NOT NULL) / COUNT(*) * 100, 2) AS conversion,
-    COUNT(*) AS invites,
+    TRUNCATE( SUM(members.id IS NOT NULL) / SUM(invites.status = 'SENT') * 100, 2) AS conversion,
+    SUM(invites.status = 'SENT') AS invites,
     SUM(members.id IS NOT NULL) AS joined,
+    SUM(invites.status = 'FAILURE') AS loss,
 
 
     TRUNCATE(IBB_SCORE(
@@ -38,8 +39,6 @@ FROM
 
 LEFT JOIN members ON invites.userId = members.id
 LEFT JOIN users ON invites.userId = users.uid
-
-WHERE invites.status = 'SENT'
 
 GROUP BY day
 

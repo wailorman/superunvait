@@ -6,3 +6,4 @@ UPDATE users
     notes,
     games
   )
+WHERE score = 0
