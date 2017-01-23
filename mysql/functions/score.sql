@@ -4,8 +4,7 @@ CREATE FUNCTION IBB_SCORE(
     photos FLOAT,
     groups FLOAT,
     notes FLOAT,
-    games FLOAT,
-    registeredDate DATETIME
+    games FLOAT
 ) RETURNS FLOAT
 
 BEGIN
@@ -14,8 +13,7 @@ BEGIN
 
     SELECT
         (groups /100 * 10) +
-        (friends /100 * 1) +
-        ( IBB_JOINING_SPEED( NOW(), registeredDate, groups ) ) AS score
+        (friends /100 * 1) AS score
     INTO score;
 
   RETURN score;

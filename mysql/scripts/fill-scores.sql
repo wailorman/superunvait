@@ -4,7 +4,6 @@ UPDATE users
     photos,
     groups,
     notes,
-    games,
-    registeredDate
+    games
   )
 WHERE score = 0
