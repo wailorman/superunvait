@@ -9,6 +9,7 @@ SELECT
 	users.games,
 	users.notes,
 	users.score,
+	users.registeredDate,
 	users.lastOnline,
 	users.updatedAt
 FROM

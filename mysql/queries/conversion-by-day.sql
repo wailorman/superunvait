@@ -6,15 +6,7 @@ SELECT
     SUM(invites.status = 'FAILURE') AS loss,
 
 
-    TRUNCATE(IBB_SCORE(
-
-        AVG(friends),
-        AVG(photos),
-        AVG(groups),
-        AVG(notes),
-        AVG(games)
-
-    ), 2)                                  as avg_score,
+    TRUNCATE(AVG(score), 2)                                  as avg_score,
 
 
     TRUNCATE( AVG(groups) , 2)             as avg_groups,
