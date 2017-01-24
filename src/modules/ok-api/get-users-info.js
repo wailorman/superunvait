@@ -8,6 +8,8 @@ const Q = require('q');
 const okApiHelpers = require('./helpers');
 const async = require('async');
 
+const PARALLEL_HTTP_REQUESTS = process.env.PARALLEL_HTTP_REQUESTS || 3;
+
 const okApiFields = [
     'uid',
     'name',
@@ -48,16 +50,32 @@ const getAdoptedUsersInfo = function(uids, fields) {
 
 const getAllUsersInfoFromOK = function (userIds, fields) {
 
-    const parts = Math.floor( userIds.length / 100 ) + 1;
+    return new Promise((resolve, reject) => {
 
-    const splittedUserIds = chunkify(userIds, parts, true);
+        const parts = Math.floor( userIds.length / 100 ) + 1;
 
-    return Promise.all(
-        splittedUserIds.map((userIdsBlock) =>
-            getUsersInfoFromOK(userIdsBlock, fields)
-        )
-    ).then((result) => {
-        return [].concat.apply([], result)
+        const splittedUserIds = chunkify(userIds, parts, true);
+
+        async.mapLimit(
+            splittedUserIds,
+            PARALLEL_HTTP_REQUESTS,
+            (uidsBlock, callback) => {
+
+                getUsersInfoFromOK(uidsBlock, fields)
+                    .then((result) => {
+                        callback(null, result);
+                    })
+                    .catch((err) => {
+                        callback(err);
+                    })
+
+            },
+            (err, results) => {
+                if (err) return reject(err);
+                return resolve( [].concat.apply([], results) );
+            }
+        );
+
     });
 
 };

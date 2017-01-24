@@ -2,6 +2,8 @@ const request = require('request');
 const cheerio = require("cheerio");
 const async = require('async');
 
+const PARALLEL_HTTP_REQUESTS = process.env.PARALLEL_HTTP_REQUESTS || 3;
+
 const fetchHtmlUserData = (uid) => {
 
     return new Promise((resolve, reject) => {
@@ -24,12 +26,12 @@ const fetchHtmlUserData = (uid) => {
             });
 
             const userInfo = {
-                uid: uid,
-                friends: data[1],
-                photos: data[2],
-                groups: data[3],
-                games: data[4],
-                notes: data[5]
+                uid: +uid,
+                friends: +data[1],
+                photos: +data[2],
+                groups: +data[3],
+                games: +data[4],
+                notes: +data[5]
             };
 
             /*
@@ -58,7 +60,7 @@ const multipleFetchHtmlUserData = async (uidsArray) => {
 
         async.mapLimit(
             uidsArray,
-            3,
+            PARALLEL_HTTP_REQUESTS,
             (uid, callback) => {
                 fetchHtmlUserData(uid)
                     .then((res) => {
