@@ -182,6 +182,18 @@ const getFullUsersInfo = function(uids) {
             });
 
         })
+        .then((fullUsersInfo) => {
+
+            return fullUsersInfo.map((userInfo) => {
+
+                return {
+                    ...userInfo,
+                    score: (userInfo.groups /100 * 10) + (userInfo.friends / 100)
+                };
+
+            });
+
+        })
 };
 
 module.exports = {
