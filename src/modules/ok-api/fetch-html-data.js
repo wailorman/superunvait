@@ -25,13 +25,24 @@ const fetchHtmlUserData = (uid) => {
                 data.push((  $(elem).text().match(/\d+/g) || [] ).join('') || null);
             });
 
+            const numberifyString = (str) => {
+                const res = +str;
+                if (res) {
+                    return res;
+                } else if (res === 0) {
+                    return 0;
+                } else {
+                    return null;
+                }
+            };
+
             const userInfo = {
-                uid: +uid,
-                friends: +data[1],
-                photos: +data[2],
-                groups: +data[3],
-                games: +data[4],
-                notes: +data[5]
+                uid: uid,
+                friends:    numberifyString( data[1] ),
+                photos:     numberifyString( data[2] ),
+                groups:     numberifyString( data[3] ),
+                games:      numberifyString( data[4] ),
+                notes:      numberifyString( data[5] )
             };
 
             /*
