@@ -51,6 +51,17 @@ const adoptGender = function (receivedData) {
 
 };
 
+const adoptLastOnline = function(data) {
+    if (!data.lastOnline || data.lastOnline == '0000-00-00 00:00:00'){
+        return {
+            ...data,
+            lastOnline: '1970-01-01 00:00:00'
+        };
+    }else{
+        return data;
+    }
+};
+
 //todo: verify credentials str
 
 const getCredentialsByStr = function (str) {
@@ -86,5 +97,6 @@ module.exports = {
     camelizeKeys,
     adoptLocation,
     adoptGender,
+    adoptLastOnline,
     getCredentialsByStr
 };

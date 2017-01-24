@@ -7,6 +7,7 @@ const sequelize = require('../../../models/index').sequelize;
 const Q = require('q');
 const okApiHelpers = require('./helpers');
 const async = require('async');
+const _ = require('lodash');
 
 const PARALLEL_HTTP_REQUESTS = process.env.PARALLEL_HTTP_REQUESTS || 3;
 
@@ -30,14 +31,12 @@ const okApiFields = [
 ];
 const requiredFieldsStr = okApiFields.join(',');
 
-const adoptReceivedData = function (dataFromApi) {
-
-    const camelized = okApiHelpers.camelizeKeys(dataFromApi);
-    const adoptedLocation = okApiHelpers.adoptLocation(camelized);
-
-    return okApiHelpers.adoptGender(adoptedLocation);
-
-};
+const adoptReceivedData = _.flow([
+    okApiHelpers.camelizeKeys,
+    okApiHelpers.adoptLocation,
+    okApiHelpers.adoptGender,
+    okApiHelpers.adoptLastOnline
+]);
 
 const getAdoptedUsersInfo = function(uids, fields) {
 
