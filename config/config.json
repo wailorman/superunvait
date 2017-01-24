@@ -3,7 +3,7 @@
     "username": "root",
     "password": null,
     "database": "ibb",
-    "host": "192.168.213.128",
+    "host": "stag.wailorman.ru",
     "dialect": "mysql",
     "charset": "utf8"
   },
