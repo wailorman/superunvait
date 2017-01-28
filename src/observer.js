@@ -130,9 +130,6 @@ const writeNewCandidates = () => {
                 })
 
         })
-        .catch((err) => {
-            debugger;
-        });
 };
 
 
@@ -140,15 +137,12 @@ const writeNewCandidates = () => {
 
 const whoseFriendsFetch = () => {
     return sequelize.query(
-        "SELECT userId FROM `invite-candidates` WHERE friendsStatus = 'NOT_FETCHED' LIMIT 500",
+        fs.readFileSync(__dirname + '/../mysql/queries/whose-friends-fetch.sql', 'utf8'),
         { type: sequelize.QueryTypes.SELECT, raw: true }
     )
         .then((candidatesInstances) => {
             return candidatesInstances.map(({ userId }) => userId);
         })
-        .catch((err) => {
-            debugger;
-        });
 };
 
 // from all resources
