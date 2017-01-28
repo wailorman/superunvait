@@ -47,6 +47,43 @@ const getAdoptedUsersInfo = function(uids, fields) {
 
 };
 
+const getAppropFriendsUids = (uid) => {
+    return getFriendsUids(uid)
+        .then((uids) => {
+            return getAdoptedUsersInfo(uids, ['age', 'gender', 'last_online']);
+        })
+        .then((friendsInfo) => {
+            return filterGrannies(friendsInfo)
+        })
+        .then((filteredFriends) => {
+            return filteredFriends.map((user) => {
+                return user.uid;
+            });
+        });
+};
+
+const filterGrannies = (users) => {
+    return users.filter((user) => {
+
+        const LAST_ONLINE_DAYS_MIN = 3;
+
+        const onlineDiff = new Date().getTime() - new Date(user.lastOnline).getTime();
+
+        return (
+            user.age > 50 && user.age < 90 &&
+            user.gender == 'F' &&
+            onlineDiff < LAST_ONLINE_DAYS_MIN * 24 * 60 * 60 * 1000
+        );
+    });
+};
+
+const getFriendsUids = (uid) => {
+    return okApi.get({
+        method: 'friends.get',
+        fid: uid
+    });
+};
+
 const getAllUsersInfoFromOK = function (userIds, fields) {
 
     return new Promise((resolve, reject) => {
@@ -228,5 +265,8 @@ module.exports = {
     requiredFieldsStr,
     bulkUpsert,
     getAdoptedUsersInfo,
-    bulkUpsertParallel
+    bulkUpsertParallel,
+    getAppropFriendsUids,
+    filterGrannies,
+    getFriendsUids
 };
