@@ -12,6 +12,11 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.ENUM('NORMAL', 'BAD'),
             defaultValue: 'NORMAL',
             allowNull: false
+        },
+        friendsStatus: {
+            type: DataTypes.ENUM('NOT_FETCHED', 'FETCHED', 'RESTRICTED', 'NOT_FOUND'),
+            defaultValue: 'NOT_FETCHED',
+            allowNull: false
         }
     }, {
         classMethods: {
