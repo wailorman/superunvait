@@ -8,7 +8,7 @@ const keepRetry = (func, msecRetry = msecRetryDefault) => (...args) => {
 
         const errorsToRetry = [
             err instanceof sequelize.ConnectionError,
-            err.original.code == 'ER_LOCK_DEADLOCK',
+            typeof err.original == 'object' && err.original.code == 'ER_LOCK_DEADLOCK',
             err instanceof sequelize.ConnectionRefusedError,
             err instanceof sequelize.HostNotFoundError,
             err instanceof sequelize.ConnectionTimedOutError
