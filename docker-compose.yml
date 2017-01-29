@@ -6,7 +6,7 @@ services:
     image: "wailorman/ibb-api"
     restart: on-failure
     mem_limit: 400M
-    command: npm run observer && npm run observer:logs
+    command: npm run observer
     environment:
       NODE_ENV: "production"
       DB_CONNECTION_STRING:
