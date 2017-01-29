@@ -120,14 +120,29 @@ const writeNewCandidates = () => {
         .then((uidsWithFriends) => {
             return newInvCandidatesFromFriends(uidsWithFriends);
         })
-        .then((candidates) => {
+        .then(([toCreate, toModify]) => {
 
-            return InviteCandidate.bulkCreate(
-                candidates,
-                {
-                    // validate: true,
-                    updateOnDuplicate:  [ 'friendsStatus' ]
-                })
+            return sequelize.transaction((t1) => {
+
+                return InviteCandidate.bulkCreate(
+                    toCreate,
+                    {
+                        validate: true,
+                        ignoreDuplicates: true,
+                        transaction: t1
+                    })
+                    .then(() => {
+                        return InviteCandidate.bulkCreate(
+                            toModify,
+                            {
+                                validate: true,
+                                updateOnDuplicate: ['updatedAt', 'friendsStatus'],
+                                transaction: t1
+                            }
+                        );
+                    });
+
+            });
 
         })
 };
@@ -207,15 +222,16 @@ const newInvCandidatesFromFriends = (uids) => {
 
                 getUsersInfo.getAppropFriendsUids(uid)
                     .then((uids) => {
-                        callback(null, mapResponse(uids).concat(mapResponse([uid], FETCHED)));
+                        own.push(mapResponse([uid], FETCHED)[0]);
+                        callback(null, mapResponse(uids));
                     })
                     .catch((err) => {
 
                         if (err.error_code == 300) {
-                            own = own.concat(mapResponse([uid], NOT_FOUND));
+                            own.push(mapResponse([uid], NOT_FOUND)[0]);
                             callback(null);
                         } else if (err.error_data == "FRIENDS_VISIBILITY") {
-                            own = own.concat(mapResponse([uid], RESTRICTED));
+                            own.push(mapResponse([uid], RESTRICTED)[0]);
                             callback(null);
                         } else {
                             callback(err);
@@ -226,12 +242,12 @@ const newInvCandidatesFromFriends = (uids) => {
             (err, results) => {
                 if (err) return reject(err);
 
-                const res = _.uniqBy(
+                const toCreate = _.uniqBy(
                     [].concat.apply([], results),
                     'userId'
-                ).concat(own);
+                );
 
-                resolve(res);
+                resolve([ toCreate, own ]);
 
             }
         );
