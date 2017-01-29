@@ -22,6 +22,8 @@ services:
 
 
   mysql:
-    command: mysqld --max-allowed-packet=30M --bind-address=0.0.0.0 --innodb-buffer-pool-size=256M --sql-mode=""
+    ports:
+        - "127.0.0.1:3301:3306"
+    command: mysqld
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
