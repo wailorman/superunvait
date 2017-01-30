@@ -16,6 +16,8 @@ services:
       NODE_ENV: "production"
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
+    ports:
+      - "127.0.0.1:3306:3306"
   api:
     container_name: ibb-api-node
     build: .
@@ -30,6 +32,7 @@ services:
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
     ports:
+      - "127.0.0.1:3306:3306"
       - "443:3000"
   mysql:
     container_name: ibb-mysql-node
