@@ -8,10 +8,10 @@ const observer = require('./observer');
 const format = require('date-fns/format');
 
 
-const FETCH_UNFILLED_INTERVAL = 10 * 1000;
-const FETCH_FRESH_INTERVAL = 60 * 1000;
-const FETCH_MEMBERS_INTERVAL = 10 * 60 * 1000;
-const FETCH_CANDIDATES_INTERVAL = 0;
+const FETCH_UNFILLED_INTERVAL = process.env.FETCH_UNFILLED_INTERVAL || 10 * 1000;
+const FETCH_FRESH_INTERVAL = process.env.FETCH_FRESH_INTERVAL || 60 * 1000;
+const FETCH_MEMBERS_INTERVAL = process.env.FETCH_MEMBERS_INTERVAL || 10 * 60 * 1000;
+const FETCH_CANDIDATES_INTERVAL = process.env.FETCH_CANDIDATES_INTERVAL || 0;
 
 
 console.log(
