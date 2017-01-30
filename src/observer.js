@@ -230,7 +230,7 @@ const newInvCandidatesFromFriends = (uids) => {
                         if (err.error_code == 300) {
                             own.push(mapResponse([uid], NOT_FOUND)[0]);
                             callback(null);
-                        } else if (err.error_data == "FRIENDS_VISIBILITY") {
+                        } else if (err.error_data == "FRIENDS_VISIBILITY" || err.error_code == '455') {
                             own.push(mapResponse([uid], RESTRICTED)[0]);
                             callback(null);
                         } else {
