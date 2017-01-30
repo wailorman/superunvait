@@ -8,6 +8,7 @@ services:
     mem_limit: 400M
     command: npm run observer
     environment:
+      PARALLEL_HTTP_REQUESTS:
       NODE_ENV: "production"
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
