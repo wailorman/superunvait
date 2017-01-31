@@ -41,7 +41,7 @@ services:
     ports:
       - "3306:3306"
     restart: on-failure
-    mem_limit: 1280M
+    mem_limit: 1400M
     network_mode: "host"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD:
