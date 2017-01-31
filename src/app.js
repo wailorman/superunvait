@@ -20,10 +20,12 @@ app.use(bodyParser.json({limit: BODY_LIMIT}));
 
 app.use(apiRoute);
 
+const port = process.env.PORT || 3000;
+
 https.createServer({
     key: fs.readFileSync( 'ssl/privkey.pem' ),
     cert: fs.readFileSync( 'ssl/cert.pem' )
-}, app).listen(3000, function () {
-    console.log(`server started on port 3000`);
+}, app).listen(port, function () {
+    console.log(`server started on port ${port}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
