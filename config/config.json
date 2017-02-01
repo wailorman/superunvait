@@ -4,7 +4,7 @@
     "password": null,
     "database": "ibb",
     "host": "localhost",
-    "port": "3301",
+    "port": "3306",
     "dialect": "mysql",
     "charset": "utf8"
   },

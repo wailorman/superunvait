@@ -1,22 +1,5 @@
 version: '2'
 services:
-  observer:
-    container_name: ibb-observer-node
-    build: .
-    image: "wailorman/ibb-api"
-    restart: on-failure
-    mem_limit: 400M
-    command: npm run observer
-    environment:
-      PARALLEL_HTTP_REQUESTS:
-      FETCH_UNFILLED_INTERVAL:
-      FETCH_FRESH_INTERVAL:
-      FETCH_MEMBERS_INTERVAL:
-      FETCH_CANDIDATES_INTERVAL:
-      NODE_ENV: "production"
-      DB_CONNECTION_STRING:
-      OK_CREDENTIALS:
-    network_mode: "host"
   api:
     container_name: ibb-api-node
     build: .
@@ -24,7 +7,7 @@ services:
     volumes:
       - ./ssl:/ibb/ssl
     restart: on-failure
-    mem_limit: 400M
+    mem_limit: 200M
     command: npm run start
     environment:
       PORT: "443"
@@ -32,18 +15,35 @@ services:
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
     network_mode: "host"
+
+  scrapper:
+    extends: api
+    container_name: ibb-scrapper-node
+    mem_limit: 300M
+    command: npm run scrapper
+    environment:
+      PARALLEL_HTTP_REQUESTS:
+      FETCH_UNFILLED_INTERVAL:
+      FETCH_CANDIDATES_INTERVAL:
+
+  mem-observer:
+    extends: scrapper
+    container_name: ibb-mem-observer-node
+    mem_limit: 200M
+    command: npm run mem-observer
+    environment:
+      FETCH_MEMBERS_INTERVAL:
+
   mysql:
     container_name: ibb-mysql-node
     image: "mysql:5.7"
-
     volumes:
       - ./bin/mysql-config:/etc/mysql/conf.d
       - ~/db/data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     restart: on-failure
     mem_limit: 1400M
-    network_mode: "host"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD:
       MYSQL_ROOT_PASSWORD:
