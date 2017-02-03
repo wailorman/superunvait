@@ -6,8 +6,8 @@ const async = require('async');
 const observer = require('./observer');
 
 
-const FETCH_UNFILLED_INTERVAL = process.env.FETCH_UNFILLED_INTERVAL || 10 * 1000;
-const FETCH_CANDIDATES_INTERVAL = process.env.FETCH_CANDIDATES_INTERVAL || 0;
+const FETCH_UNFILLED_INTERVAL = process.env.FETCH_UNFILLED_INTERVAL || 0;
+const FETCH_CANDIDATES_INTERVAL = process.env.FETCH_CANDIDATES_INTERVAL || 10 * 1000;
 
 
 console.log('FETCH_UNFILLED_INTERVAL', FETCH_UNFILLED_INTERVAL);
@@ -18,6 +18,8 @@ console.log(`Scrapper started`);
 
 async.forever(
     (next) => {
+
+        console.log(`Begin filling unfilled ...`);
 
         observer.writeInfoAboutUnfilledUsers()
             .then((newUserIds) => {
@@ -39,6 +41,8 @@ async.forever(
 
 async.forever(
     (next) => {
+
+        console.log(`Begin fetching new candidates ...`);
 
         observer.writeNewCandidates()
             .then(() => {
