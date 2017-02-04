@@ -24,7 +24,7 @@ FROM
             WHERE users.uid IS NULL
               AND `invite-candidates`.label = 'NORMAL'
 
-            LIMIT 300
+            LIMIT 150
         )
         UNION ALL
         (
