@@ -19,7 +19,7 @@ services:
   scrapper:
     extends: api
     container_name: ibb-scrapper-node
-    mem_limit: 400M
+    mem_limit: 500M
     command: npm run scrapper
     environment:
       PARALLEL_HTTP_REQUESTS:
@@ -29,7 +29,7 @@ services:
   mem-observer:
     extends: scrapper
     container_name: ibb-mem-observer-node
-    mem_limit: 400M
+    mem_limit: 300M
     command: npm run mem-observer
     environment:
       FETCH_MEMBERS_INTERVAL:
