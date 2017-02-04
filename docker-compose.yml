@@ -19,7 +19,7 @@ services:
   scrapper:
     extends: api
     container_name: ibb-scrapper-node
-    mem_limit: 500M
+    mem_limit: 700M
     command: npm run scrapper
     environment:
       PARALLEL_HTTP_REQUESTS:
