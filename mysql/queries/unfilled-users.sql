@@ -11,7 +11,7 @@ FROM
             LEFT JOIN users ON `members`.id = users.uid
             WHERE
                 users.groups IS NULL
-            LIMIT 100
+            LIMIT 20
         )
         UNION ALL
         (
@@ -24,7 +24,7 @@ FROM
             WHERE users.uid IS NULL
               AND `invite-candidates`.label = 'NORMAL'
 
-            LIMIT 100
+            LIMIT 150
         )
         UNION ALL
         (
@@ -36,6 +36,6 @@ FROM
             LEFT JOIN users ON invites.userId = users.uid
             WHERE
                 users.groups IS NULL
-            LIMIT 100
+            LIMIT 20
         )
     ) AS unino;
