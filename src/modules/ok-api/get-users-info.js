@@ -65,7 +65,7 @@ const getAppropFriendsUids = (uid) => {
 const filterGrannies = (users) => {
     return users.filter((user) => {
 
-        const LAST_ONLINE_DAYS_MIN = 30;
+        const LAST_ONLINE_DAYS_MIN = 14;
 
         const onlineDiff = new Date().getTime() - new Date(user.lastOnline).getTime();
 
