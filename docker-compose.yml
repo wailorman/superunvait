@@ -1,22 +1,23 @@
 version: '2'
 services:
   api:
-    container_name: ibb-api-node
+    container_name: ibb-api
     build: .
     image: "wailorman/ibb-api"
     restart: on-failure
     mem_limit: 400M
     command: npm run start
+    expose:
+      - "80"
     environment:
       PORT: "80"
       NODE_ENV: "production"
       DB_CONNECTION_STRING:
       OK_CREDENTIALS:
-    network_mode: "host"
 
   scrapper:
     extends: api
-    container_name: ibb-scrapper-node
+    container_name: ibb-scrapper
     mem_limit: 700M
     command: npm run scrapper
     environment:
@@ -26,24 +27,22 @@ services:
 
   mem-observer:
     extends: scrapper
-    container_name: ibb-mem-observer-node
+    container_name: ibb-mem-observer
     mem_limit: 300M
     command: npm run mem-observer
     environment:
       FETCH_MEMBERS_INTERVAL:
 
   mysql:
-    container_name: ibb-mysql-node
+    container_name: ibb-mysql
     image: "mysql:5.7"
     volumes:
       - ./bin/mysql-config:/etc/mysql/conf.d
       - ~/db/data:/var/lib/mysql
-      - ~/db/run:/var/run/mysqld
-    ports:
+    expose:
       - "127.0.0.1:3306:3306"
     restart: on-failure
     mem_limit: 1400M
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD:
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: ibb
