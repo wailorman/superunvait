@@ -39,6 +39,7 @@ services:
     volumes:
       - ./bin/mysql-config:/etc/mysql/conf.d
       - ~/db/data:/var/lib/mysql
+      - /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock
     network_mode: host
     restart: on-failure
     mem_limit: 1400M
