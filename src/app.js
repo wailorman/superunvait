@@ -6,6 +6,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
 
 const apiRoute = require('./routers/api');
 const corsMiddleware = require('./middlewares/cors');
@@ -23,9 +24,9 @@ app.use(apiRoute);
 const port = process.env.PORT || 3000;
 
 https.createServer({
-    key: fs.readFileSync( 'ssl/privkey.pem' ),
-    cert: fs.readFileSync( 'ssl/fullchain.pem' ),
-    ca: fs.readFileSync( 'ssl/chain.pem' )
+    key: fs.readFileSync( path.resolve(__dirname, '../ssl/privkey.pem') ),
+    cert: fs.readFileSync( path.resolve(__dirname, '../ssl/fullchain.pem') ),
+    ca: fs.readFileSync( path.resolve(__dirname, '../ssl/chain.pem') )
 }, app).listen(port, function () {
     console.log(`server started on port ${port}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
