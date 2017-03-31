@@ -23,11 +23,12 @@ app.use(apiRoute);
 
 const port = process.env.PORT || 3000;
 
-https.createServer({
-    key: fs.readFileSync( path.resolve(__dirname, '../ssl/privkey.pem') ),
-    cert: fs.readFileSync( path.resolve(__dirname, '../ssl/fullchain.pem') ),
-    ca: fs.readFileSync( path.resolve(__dirname, '../ssl/chain.pem') )
-}, app).listen(port, function () {
+// https.createServer({
+//     key: fs.readFileSync( path.resolve(__dirname, '../ssl/privkey.pem') ),
+//     cert: fs.readFileSync( path.resolve(__dirname, '../ssl/fullchain.pem') ),
+//     ca: fs.readFileSync( path.resolve(__dirname, '../ssl/chain.pem') )
+// }, app).listen(port, function () {
+app.listen(port, ()=>{
     console.log(`server started on port ${port}`);
     console.log(`production: ${process.env.NODE_ENV ? 'yes' : 'no'}`);
 });
