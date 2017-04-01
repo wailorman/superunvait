@@ -43,5 +43,6 @@ services:
     restart: on-failure
     mem_limit: 1400M
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: ibb
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD:
+      MYSQL_DATABASE:
