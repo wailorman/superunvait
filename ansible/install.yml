@@ -1,0 +1,28 @@
+---
+
+- name: Install some deps
+  hosts: all
+  roles:
+    - preinstall
+
+- name: Install docker
+  hosts: all
+  roles:
+    - angstwad.docker_ubuntu
+
+- name: SSH config
+  hosts: all
+  roles:
+    - ssh
+
+- name: Renew SSL certificates
+  hosts: app
+  roles:
+   - role: thefinn93.ansible-letsencrypt
+     letsencrypt_email: wailorman@yandex.ru
+     letsencrypt_cert_domains:
+      - "{{ domain }}"
+     letsencrypt_renewal_command_args: '--standalone-supported-challenges dns-01'
+
+# sudo mkdir -p /home/ibb/db; sudo mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_db-state-ibb /home/ibb/db; echo /dev/disk/by-id/scsi-0DO_Volume_db-state-ibb /home/ibb/db ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
+# sudo chown ibb:ibb -R /home/ibb/db

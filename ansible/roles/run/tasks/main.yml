@@ -1,0 +1,21 @@
+---
+
+- name: Start db services
+  when: inventory_hostname in groups['db']
+  shell: |
+    docker-compose up -d --force-recreate mysql
+  args:
+    chdir: ~/app
+  environment: "{{docker_env}}"
+
+
+- name: Start api compose
+  when: inventory_hostname in groups['app']
+  shell: |
+    docker-compose up -d --force-recreate api
+  args:
+    chdir: ~/app
+  environment: "{{docker_env}}"
+
+- name: Remove old images
+  shell: docker system prune -f

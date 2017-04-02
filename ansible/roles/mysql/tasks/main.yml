@@ -1,0 +1,29 @@
+---
+
+- name: Wait until mysql starts
+  wait_for:
+    port: 3306
+    delay: 5
+    timeout: 30
+
+- name: "Create ibb@% user"
+  mysql_user:
+    name: "ibb"
+    password: "{{ MYSQL_PASSWORD }}"
+    priv: '*.*:ALL'
+    state: present
+    host: '%'
+    login_user: 'root'
+    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_host: '127.0.0.1'
+
+- name: Create ibb-ro@% user
+  mysql_user:
+    name: ibb-ro
+    password: "{{ MYSQL_IBB_RO_PASSWORD }}"
+    priv: 'ibb.*:SELECT/ibb.*:EXECUTE/ibb.*:SHOW VIEW'
+    state: present
+    host: '%'
+    login_user: 'root'
+    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_host: '127.0.0.1'

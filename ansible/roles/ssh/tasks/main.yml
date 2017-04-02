@@ -1,0 +1,35 @@
+---
+
+- name: Create keys directory
+  file:
+    path: /etc/ssh/authorized_keys
+    state: directory
+    owner: 0
+    group: 0
+    mode: 0755
+
+- name: upload user key
+  with_items:
+    - root
+    - ibb
+  copy:
+    src: ./roles/ssh/files/keys/{{item}}.pub
+    dest: /etc/ssh/authorized_keys/
+    owner: 0
+    group: 0
+    mode: 644
+
+- name: sshd configuration file update
+  copy:
+    src: ./roles/ssh/files/sshd_config
+    dest: /etc/ssh/sshd_config
+    backup: yes
+    owner: 0
+    group: 0
+    mode: 0644
+    validate: '/usr/sbin/sshd -T -f %s'
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

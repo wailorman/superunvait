@@ -1,0 +1,13 @@
+---
+
+MYSQL_USER: "ibb"
+MYSQL_DATABASE: "ibb"
+MYSQL_PORT: "3306"
+
+docker_env:
+  PORT: 80
+  NODE_ENV: production
+  OK_CREDENTIALS: "{{ OK_CREDENTIALS }}"
+  DB_CONNECTION_STRING: mysql://{{ MYSQL_USER }}:{{ MYSQL_PASSWORD }}@{{ hostvars['db1'].ansible_host }}:{{ MYSQL_PORT }}/{{ MYSQL_DATABASE }}
+  MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
+  MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT_PASSWORD }}"

@@ -1,0 +1,8 @@
+---
+
+- name: Change mysql credentials
+  vars:
+    ansible_ssh_user: ibb
+  hosts: db
+  roles:
+    - mysql

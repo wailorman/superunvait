@@ -1,0 +1,13 @@
+---
+
+- name: git pull
+  git:
+    repo: https://github.com/wailorman/superunvait.git
+    dest: ~/app
+    force: yes
+    update: yes
+
+- name: docker-compose pull
+  shell: docker-compose pull
+  args:
+    chdir: ~/app

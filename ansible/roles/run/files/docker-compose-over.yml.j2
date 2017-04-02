@@ -1,0 +1,11 @@
+version: '2'
+services:
+  mysql:
+    volumes:
+      - ./bin/mysql-config:/etc/mysql/conf.d
+      - ~/db/data:/var/lib/mysql
+    mem_limit: 1400M
+
+# sudo mkdir -p /home/ibb/db; sudo mount -o uid=1000,gid=1000,rw,dev,exec,auto /dev/disk/by-id/scsi-0DO_Volume_db-state-ibb /home/ibb/db
+#
+# sudo mkdir -p /home/ibb/db; sudo mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_db-state-ibb /home/ibb/db; echo /dev/disk/by-id/scsi-0DO_Volume_db-state-ibb /home/ibb/db ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab

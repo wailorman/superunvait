@@ -1,0 +1,39 @@
+---
+
+- name: Install python & mysql deps
+  apt: name={{item}} state=installed
+  with_items:
+      - python-pip
+      - python
+      - python-dev
+      - libmysqlclient-dev
+
+- name: Install python mysqldb
+  pip:
+    name: 'MySQL-python'
+
+- name: Add ibb user
+  user:
+    name: ibb
+    state: present
+    shell: /bin/bash
+
+- name: Add ibb user to sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%ibb'
+    line: '%ibb ALL=(ALL) NOPASSWD: ALL'
+
+- name: Beautify bash
+  with_items:
+    - root
+    - ibb
+  lineinfile:
+    dest: "~{{item}}/.bashrc"
+    state: present
+    regexp: '^PS1'
+    line: |
+      PS1="\n\[\e[0;32m\]\u\[\e[m\]\[\e[0;36m\]\e[39m@\[\e[0;36m\]$(hostname) \[\e[m\]\[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]#\[\e[m\] "
+
+# PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[0;36m\]@ \h\[\e[m\]  \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]#\[\e[m\] '

@@ -1,0 +1,8 @@
+---
+
+- name: Print inventory vars
+  hosts: app
+  tasks:
+    - name: Debug
+      debug:
+        msg: "{{ MYSQL_ROOT_PASSWORD }}"
