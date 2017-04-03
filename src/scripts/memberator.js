@@ -1,7 +1,3 @@
-require('babel-core/register');
-require('babel-polyfill');
-
-
 const async = require('async');
 const observer = require('./observer');
 

@@ -4,6 +4,7 @@ const sequelize = require('../../models/index').sequelize;
 const Q = require('q');
 const _ = require('lodash');
 const keepRetry = require('../lib/sequelize-retry').keepRetry;
+const modelsLayer = require('../models-layer');
 
 const InviteCandidate = models['invite-candidate'];
 const router = express.Router();
@@ -12,12 +13,24 @@ router.get('/invite-candidates', (req, res, next) => {
 
     const limit = parseInt(req.query.limit) || 500;
 
-    keepRetry(sequelize.query.bind(sequelize))(
-        `SELECT * FROM inv_candidates_scored LIMIT ${limit}`,
-        { type: sequelize.QueryTypes.SELECT }
-    )
+    modelsLayer.getInviteCandidates({ limit })
         .then((result) => {
             res.status(200).json(result);
+        })
+        .catch((err) => {
+            next(err);
+        });
+
+});
+
+router.get('/invite-candidates/array', (req, res, next) => {
+
+    const limit = parseInt(req.query.limit) || 500;
+
+    modelsLayer.getInviteCandidates({ limit })
+        .then((result) => {
+            res.status(200)
+               .json(result.map((candidate) => candidate.userId));
         })
         .catch((err) => {
             next(err);

@@ -1,47 +1,63 @@
 version: '2'
 services:
   api:
-    container_name: ibb-api
     build: .
     image: "wailorman/ibb-api"
     restart: on-failure
-    mem_limit: 400M
+    container_name: ibb-api
     command: npm run start
+    links:
+      - "mysql:mysql"
     ports:
-      - "80:3000"
+      - "3000:3000"
     environment:
       NODE_ENV: "production"
-      DB_CONNECTION_STRING:
+      DB_CONNECTION_STRING: mysql://root@mysql/ibb
       OK_CREDENTIALS:
 
   scrapper:
-    extends: api
+    build: .
+    image: "wailorman/ibb-api"
+    restart: on-failure
     container_name: ibb-scrapper
-    mem_limit: 700M
     command: npm run scrapper
+    links:
+      - "mysql:mysql"
     environment:
-      PARALLEL_HTTP_REQUESTS:
-      FETCH_UNFILLED_INTERVAL:
-      FETCH_CANDIDATES_INTERVAL:
+      NODE_ENV: "production"
+      DB_CONNECTION_STRING: mysql://root@mysql/ibb
+      OK_CREDENTIALS:
+      PARALLEL_HTTP_REQUESTS: 1
+      FETCH_UNFILLED_INTERVAL: 0
+      FETCH_CANDIDATES_INTERVAL: 0
 
   mem-observer:
-    extends: scrapper
+    build: .
+    image: "wailorman/ibb-api"
+    restart: on-failure
     container_name: ibb-mem-observer
-    mem_limit: 300M
     command: npm run mem-observer
+    links:
+      - "mysql:mysql"
     environment:
-      FETCH_MEMBERS_INTERVAL:
+      NODE_ENV: "production"
+      DB_CONNECTION_STRING: mysql://root@mysql/ibb
+      OK_CREDENTIALS:
+      PARALLEL_HTTP_REQUESTS: 1
+      FETCH_MEMBERS_INTERVAL: 0
+
+
+
 
   mysql:
     container_name: ibb-mysql
     image: "mysql:5.7"
     volumes:
-      - ./bin/mysql-config:/etc/mysql/conf.d
+      - ./bin/mysql-config/my.dev.cnf:/etc/mysql/conf.d/my.cnf:ro
       - ~/db/data:/var/lib/mysql
-    network_mode: host
     restart: on-failure
-    mem_limit: 1400M
+    ports:
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD:
-      MYSQL_ALLOW_EMPTY_PASSWORD:
-      MYSQL_DATABASE:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ibb
